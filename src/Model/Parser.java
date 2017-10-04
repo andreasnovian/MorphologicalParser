@@ -13,12 +13,6 @@ public class Parser {
     //an object of a lexicon
     public Lexicon lexicon;
 
-    //to save all the possible result
-    public ArrayList<String> result;
-
-    //the root word of currently parsed word
-    public String rootWord;
-
     public Parser() throws IOException {
         this.lexicon = new Lexicon();
     }
@@ -34,8 +28,228 @@ public class Parser {
         return lexicon.searchInTree(word.toLowerCase());
     }
 
+    public String convertToWord(String rootWord, String component) {
+        String result = rootWord;
+        String[] comp = component.split("\\+");
+        char symbol;
+
+        for (String i : comp) {
+            symbol = i.charAt(0);
+            i = i.substring(1);
+
+            switch (symbol) {
+                case '@':
+                    result += " " + i;
+                    break;
+                case '^':
+                    result += "-" + i;
+                    break;
+                case '[':
+                    result = prefiksasi(result, i);
+                    break;
+                case ']':
+                    result = sufiksasi(result, i);
+                    break;
+                case '#':
+                    result = konfiksasi(result, i);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return result;
+    }
+
+    private String prefiksasi(String rootWord, String prefiks) {
+        String result = "";
+        char c1 = rootWord.charAt(0);
+        char c2 = rootWord.charAt(1);
+
+        //to determine whether rootWord is one syllable or not
+        boolean oneSyl = false;
+        int countSyl = 0;
+        char temp;
+        for (int i = 0; i < rootWord.length(); i++) {
+            temp = rootWord.charAt(i);
+            if (temp == 'a' || temp == 'i' || temp == 'u' || temp == 'e' || temp == 'o') {
+                countSyl++;
+            }
+        }
+        if (countSyl == 1) {
+            oneSyl = true;
+        }
+
+        if (prefiks.equalsIgnoreCase("me")) {
+            switch (c1) {
+                case 'b':
+                case 'f':
+                case 'v':
+                    result = "mem" + rootWord;
+                    break;
+                case 'c':
+                case 'd':
+                case 'j':
+                    result = "men" + rootWord;
+                    break;
+                case 's':
+                    if (c2 == 'y') {
+                        result = "men" + rootWord;
+                    } else {
+                        result = "meny" + rootWord.substring(1);
+                    }
+                    break;
+                case 'g':
+                case 'h':
+                case 'a':
+                case 'i':
+                case 'u':
+                case 'e':
+                case 'o':
+                case 'q':
+                    result = "meng" + rootWord;
+                    break;
+                case 'k':
+                    if (c2 == 'h') {
+                        result = "meng" + rootWord;
+                    } else {
+                        result = "meng" + rootWord.substring(1);
+                    }
+                    break;
+                case 'p':
+                    result = "mem" + rootWord.substring(1);
+                    break;
+                case 't':
+                    result = "men" + rootWord.substring(1);
+                    break;
+                default:
+                    result = "me" + rootWord;
+                    break;
+            }
+            if (oneSyl) {
+                result = "menge" + rootWord;
+            }
+        } else if (prefiks.equalsIgnoreCase("pe")) {
+            switch (c1) {
+                case 'b':
+                case 'f':
+                case 'v':
+                    result = "pem" + rootWord;
+                    break;
+                case 'c':
+                case 'd':
+                case 'j':
+                    result = "pen" + rootWord;
+                    break;
+                case 's':
+                    if (c2 == 'y') {
+                        result = "pen" + rootWord;
+                    } else {
+                        result = "peny" + rootWord.substring(1);
+                    }
+                    break;
+                case 'g':
+                case 'h':
+                case 'a':
+                case 'i':
+                case 'u':
+                case 'e':
+                case 'o':
+                case 'q':
+                    result = "peng" + rootWord;
+                    break;
+                case 'k':
+                    if (c2 == 'h') {
+                        result = "peng" + rootWord;
+                    } else {
+                        result = "peng" + rootWord.substring(1);
+                    }
+                    break;
+                case 'p':
+                    result = "pem" + rootWord.substring(1);
+                    break;
+                case 't':
+                    result = "pen" + rootWord.substring(1);
+                    break;
+                default:
+                    result = "pe" + rootWord;
+                    break;
+            }
+            if (oneSyl) {
+                result = "menge" + rootWord;
+            }
+        } else if (prefiks.equalsIgnoreCase("per")) {
+            String syl = rootWord.substring(0, 3);
+            boolean erSyl = syl.contains("er");
+            switch (c1) {
+                case 'r':
+                    result = "pe" + rootWord;
+                    break;
+                default:
+                    result = "per" + rootWord;
+                    break;
+            }
+            if (rootWord.equalsIgnoreCase("ajar")) {
+                result = "pelajar";
+            }
+            if (erSyl) {
+                result = "pe" + rootWord;
+            }
+        } else if (prefiks.equalsIgnoreCase("ber")) {
+            String syl = rootWord.substring(0, 3);
+            boolean erSyl = syl.contains("er");
+            switch (c1) {
+                case 'r':
+                    result = "be" + rootWord;
+                    break;
+                default:
+                    result = "ber" + rootWord;
+                    break;
+            }
+            if (rootWord.equalsIgnoreCase("ajar")) {
+                result = "belajar";
+            }
+            if (erSyl) {
+                result = "be" + rootWord;
+            }
+        } else if (prefiks.equalsIgnoreCase("ter")) {
+            switch (c1) {
+                case 'r':
+                    result = "te" + rootWord;
+                    break;
+                default:
+                    result = "ter" + rootWord;
+                    break;
+            }
+        }
+        
+        //for prefix other than specified above
+        if (result.equalsIgnoreCase("")){
+            result = prefiks + rootWord;
+        }
+
+        return result;
+    }
+
+    private String sufiksasi(String rootWord, String sufiks) {
+        String result = rootWord;
+
+        result = result + sufiks;
+
+        return result;
+    }
+
+    private String konfiksasi(String rootWord, String konfiks) {
+        String[] comp = konfiks.split("-");
+
+        String result = prefiksasi(rootWord, comp[0]);
+        result = sufiksasi(result, comp[1]);
+
+        return result;
+    }
+
     public ArrayList<String> process(String text) {
-        result = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
         String word[] = text.split(" ");
         String parseResult;
 
@@ -55,11 +269,12 @@ public class Parser {
      */
     private String parse(String word) {
         String parseResult = "";
+        String rootWord = "";
 
         //if word is found in lexicon
         if (isRootWord(word)) {
             parseResult = word;
-            this.rootWord = word;
+            rootWord = word;
         }
 
         //if word is a reduplication
