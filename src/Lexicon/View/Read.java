@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  * @author Andreas Novian
  */
 public class Read extends javax.swing.JFrame {
-    
+
     private final Home home;
     private String root;
     private String component;
@@ -32,9 +32,15 @@ public class Read extends javax.swing.JFrame {
         this.root = root;
         this.rootValue.setText(root);
         this.component = this.home.lexc.getComponent(root);
-        this.componentList.setListData(this.component.split("\n"));
+        String[] comp = this.component.split("\n");
+        if (!this.component.equalsIgnoreCase("")) {
+            for (int i = 0; i < comp.length; i++) {
+                comp[i] = this.home.lexc.convertToWord(root, comp[i]);
+            }
+        }
+        this.componentList.setListData(comp);
     }
-    
+
     private Read() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -73,7 +79,7 @@ public class Read extends javax.swing.JFrame {
         rootLabel.setText("Root :");
 
         componentLabel.setFont(new java.awt.Font("Constantia", 0, 18)); // NOI18N
-        componentLabel.setText("Component :");
+        componentLabel.setText("Derivation:");
 
         componentList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };

@@ -107,7 +107,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Constantia" size="18" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Component :"/>
+        <Property name="text" type="java.lang.String" value="Derivation:"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">

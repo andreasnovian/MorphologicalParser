@@ -42,7 +42,7 @@ public class Parser {
                     result += " " + i;
                     break;
                 case '^':
-                    result += "-" + i;
+                    result = duplikasi(result, i);
                     break;
                 case '[':
                     result = prefiksasi(result, i);
@@ -221,10 +221,28 @@ public class Parser {
                     result = "ter" + rootWord;
                     break;
             }
+        } else if (prefiks.equalsIgnoreCase("memper")) {
+            String syl = rootWord.substring(0, 3);
+            boolean erSyl = syl.contains("er");
+
+            if (erSyl) {
+                result = "mempe" + rootWord;
+            } else {
+                result = "memper" + rootWord;
+            }
+        } else if (prefiks.equalsIgnoreCase("diper")) {
+            String syl = rootWord.substring(0, 3);
+            boolean erSyl = syl.contains("er");
+
+            if (erSyl) {
+                result = "dipe" + rootWord;
+            } else {
+                result = "diper" + rootWord;
+            }
         }
-        
+
         //for prefix other than specified above
-        if (result.equalsIgnoreCase("")){
+        if (result.equalsIgnoreCase("")) {
             result = prefiks + rootWord;
         }
 
@@ -244,6 +262,18 @@ public class Parser {
 
         String result = prefiksasi(rootWord, comp[0]);
         result = sufiksasi(result, comp[1]);
+
+        return result;
+    }
+
+    private String duplikasi(String rootWord, String duplikasi) {
+        String result = rootWord;
+
+        if (duplikasi.equalsIgnoreCase("2")) {
+            result = result + "-" + rootWord;
+        } else {
+            result = result + "-" + duplikasi;
+        }
 
         return result;
     }

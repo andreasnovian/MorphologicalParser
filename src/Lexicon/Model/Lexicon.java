@@ -11,22 +11,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Class to represent the lexicon used in Morphological Parser
- * Lexicon keeps root words in Bahasa Indonesia and it's morphological component 
- * 
+ * Class to represent the lexicon used in Morphological Parser Lexicon keeps
+ * root words in Bahasa Indonesia and it's morphological component
+ *
  * @author Andreas Novian
  */
 public class Lexicon {
 
     //each letter of a roots stored in a single node
     private final HashMap<Character, Node> roots;
-    
+
     //to read from file
     private BufferedReader br;
-    
+
     //to write into file
     private BufferedWriter bw;
-    
+
     //the folder where the lxc file is in the project folder
     private final String folder;
 
@@ -55,10 +55,10 @@ public class Lexicon {
 
     /**
      * Method to write a String into a lexicon file (.lxc)
-     * 
+     *
      * @param fileName name of the lexicon file
      * @param key String to be entered
-     * 
+     *
      * @throws IOException
      */
     private void writeToFile(String fileName, String key) throws IOException {
@@ -73,10 +73,10 @@ public class Lexicon {
 
     /**
      * Method to delete a String from a lexicon file
-     * 
+     *
      * @param fileName name of the lexicon file
      * @param key String to be deleted
-     * 
+     *
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -99,7 +99,7 @@ public class Lexicon {
      * Method to make a new lexicon file for a new root word entry
      *
      * @param fileName new root word entry, as the new lexicon file name
-     * 
+     *
      * @throws IOException
      */
     private void createFile(String fileName) throws IOException {
@@ -130,7 +130,7 @@ public class Lexicon {
      * Method to clear the content of a lexicon file
      *
      * @param fileName name of the lexicon file
-     * 
+     *
      * @throws IOException
      */
     private void clearFile(String fileName) throws IOException {
@@ -146,7 +146,7 @@ public class Lexicon {
      *
      * @param root root word, name of the lexicon file
      * @return String containing all components from a single root
-     * 
+     *
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -204,7 +204,7 @@ public class Lexicon {
      * @param fileName name of the file
      * @param key String to search
      * @return true if and only if key String is in the file
-     * 
+     *
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -221,8 +221,8 @@ public class Lexicon {
     }
 
     /**
-     * Method to insert a new root word to lexicon, 
-     * including creating a new file for the entry
+     * Method to insert a new root word to lexicon, including creating a new
+     * file for the entry
      *
      * @param root the root word to be entered
      * @throws IOException
@@ -277,12 +277,12 @@ public class Lexicon {
     }
 
     /**
-     * Method to write morphological component of a root word 
-     * into the lexicon file
+     * Method to write morphological component of a root word into the lexicon
+     * file
      *
      * @param root root word, also the name of the lexicon file
      * @param component morphological component to be entered
-     * 
+     *
      * @throws IOException
      */
     public void insertComponent(String root, String component) throws IOException {
@@ -292,11 +292,11 @@ public class Lexicon {
     }
 
     /**
-     * Method to delete a root word from lexicon
-     * Delete root from the tree and from the file
+     * Method to delete a root word from lexicon Delete root from the tree and
+     * from the file
      *
      * @param root root word to be deleted
-     * 
+     *
      * @throws IOException
      */
     public void deleteRoot(String root) throws IOException {
@@ -330,7 +330,7 @@ public class Lexicon {
      *
      * @param root root word, also name of the file
      * @param component morphological component to be deleted
-     * 
+     *
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -343,7 +343,7 @@ public class Lexicon {
      *
      * @param oldRoot root to update
      * @param newRoot new updated root
-     * 
+     *
      * @throws IOException
      */
     public void updateRoot(String oldRoot, String newRoot) throws IOException {
@@ -376,7 +376,7 @@ public class Lexicon {
      * @param root root to update
      * @param oldComponent morphological component to update
      * @param newComponent new updated morphological component
-     * 
+     *
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -443,6 +443,256 @@ public class Lexicon {
             result += words.get(i) + "\n";
         }
         result = result.trim();
+        return result;
+    }
+
+    public String convertToWord(String rootWord, String component) {
+        String result = rootWord;
+        String[] comp = component.split("\\+");
+        char symbol;
+
+        for (String i : comp) {
+            symbol = i.charAt(0);
+            i = i.substring(1);
+
+            switch (symbol) {
+                case '@':
+                    result += " " + i;
+                    break;
+                case '^':
+                    result = duplikasi(result, i);
+                    break;
+                case '[':
+                    result = prefiksasi(result, i);
+                    break;
+                case ']':
+                    result = sufiksasi(result, i);
+                    break;
+                case '#':
+                    result = konfiksasi(result, i);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return result;
+    }
+
+    private String prefiksasi(String rootWord, String prefiks) {
+        String result = "";
+        char c1 = rootWord.charAt(0);
+        char c2 = rootWord.charAt(1);
+
+        //to determine whether rootWord is one syllable or not
+        boolean oneSyl = false;
+        int countSyl = 0;
+        char temp;
+        for (int i = 0; i < rootWord.length(); i++) {
+            temp = rootWord.charAt(i);
+            if (temp == 'a' || temp == 'i' || temp == 'u' || temp == 'e' || temp == 'o') {
+                countSyl++;
+            }
+        }
+        if (countSyl == 1) {
+            oneSyl = true;
+        }
+
+        if (prefiks.equalsIgnoreCase("me")) {
+            switch (c1) {
+                case 'b':
+                case 'f':
+                case 'v':
+                    result = "mem" + rootWord;
+                    break;
+                case 'c':
+                case 'd':
+                case 'j':
+                    result = "men" + rootWord;
+                    break;
+                case 's':
+                    if (c2 == 'y') {
+                        result = "men" + rootWord;
+                    } else {
+                        result = "meny" + rootWord.substring(1);
+                    }
+                    break;
+                case 'g':
+                case 'h':
+                case 'a':
+                case 'i':
+                case 'u':
+                case 'e':
+                case 'o':
+                case 'q':
+                    result = "meng" + rootWord;
+                    break;
+                case 'k':
+                    if (c2 == 'h') {
+                        result = "meng" + rootWord;
+                    } else {
+                        result = "meng" + rootWord.substring(1);
+                    }
+                    break;
+                case 'p':
+                    result = "mem" + rootWord.substring(1);
+                    break;
+                case 't':
+                    result = "men" + rootWord.substring(1);
+                    break;
+                default:
+                    result = "me" + rootWord;
+                    break;
+            }
+            if (oneSyl) {
+                result = "menge" + rootWord;
+            }
+        } else if (prefiks.equalsIgnoreCase("pe")) {
+            switch (c1) {
+                case 'b':
+                case 'f':
+                case 'v':
+                    result = "pem" + rootWord;
+                    break;
+                case 'c':
+                case 'd':
+                case 'j':
+                    result = "pen" + rootWord;
+                    break;
+                case 's':
+                    if (c2 == 'y') {
+                        result = "pen" + rootWord;
+                    } else {
+                        result = "peny" + rootWord.substring(1);
+                    }
+                    break;
+                case 'g':
+                case 'h':
+                case 'a':
+                case 'i':
+                case 'u':
+                case 'e':
+                case 'o':
+                case 'q':
+                    result = "peng" + rootWord;
+                    break;
+                case 'k':
+                    if (c2 == 'h') {
+                        result = "peng" + rootWord;
+                    } else {
+                        result = "peng" + rootWord.substring(1);
+                    }
+                    break;
+                case 'p':
+                    result = "pem" + rootWord.substring(1);
+                    break;
+                case 't':
+                    result = "pen" + rootWord.substring(1);
+                    break;
+                default:
+                    result = "pe" + rootWord;
+                    break;
+            }
+            if (oneSyl) {
+                result = "menge" + rootWord;
+            }
+        } else if (prefiks.equalsIgnoreCase("per")) {
+            String syl = rootWord.substring(0, 3);
+            boolean erSyl = syl.contains("er");
+            switch (c1) {
+                case 'r':
+                    result = "pe" + rootWord;
+                    break;
+                default:
+                    result = "per" + rootWord;
+                    break;
+            }
+            if (rootWord.equalsIgnoreCase("ajar")) {
+                result = "pelajar";
+            }
+            if (erSyl) {
+                result = "pe" + rootWord;
+            }
+        } else if (prefiks.equalsIgnoreCase("ber")) {
+            String syl = rootWord.substring(0, 3);
+            boolean erSyl = syl.contains("er");
+            switch (c1) {
+                case 'r':
+                    result = "be" + rootWord;
+                    break;
+                default:
+                    result = "ber" + rootWord;
+                    break;
+            }
+            if (rootWord.equalsIgnoreCase("ajar")) {
+                result = "belajar";
+            }
+            if (erSyl) {
+                result = "be" + rootWord;
+            }
+        } else if (prefiks.equalsIgnoreCase("ter")) {
+            switch (c1) {
+                case 'r':
+                    result = "te" + rootWord;
+                    break;
+                default:
+                    result = "ter" + rootWord;
+                    break;
+            }
+        } else if (prefiks.equalsIgnoreCase("memper")) {
+            String syl = rootWord.substring(0, 3);
+            boolean erSyl = syl.contains("er");
+
+            if (erSyl) {
+                result = "mempe" + rootWord;
+            } else {
+                result = "memper" + rootWord;
+            }
+        } else if (prefiks.equalsIgnoreCase("diper")) {
+            String syl = rootWord.substring(0, 3);
+            boolean erSyl = syl.contains("er");
+
+            if (erSyl) {
+                result = "dipe" + rootWord;
+            } else {
+                result = "diper" + rootWord;
+            }
+        }
+
+        //for prefix other than specified above
+        if (result.equalsIgnoreCase("")) {
+            result = prefiks + rootWord;
+        }
+
+        return result;
+    }
+
+    private String sufiksasi(String rootWord, String sufiks) {
+        String result = rootWord;
+
+        result = result + sufiks;
+
+        return result;
+    }
+
+    private String konfiksasi(String rootWord, String konfiks) {
+        String[] comp = konfiks.split("-");
+
+        String result = prefiksasi(rootWord, comp[0]);
+        result = sufiksasi(result, comp[1]);
+
+        return result;
+    }
+    
+    private String duplikasi(String rootWord, String duplikasi) {
+        String result = rootWord;
+
+        if (duplikasi.equalsIgnoreCase("2")) {
+            result = result + "-" + rootWord;
+        } else {
+            result = result + "-" + duplikasi;
+        }
+
         return result;
     }
 }
