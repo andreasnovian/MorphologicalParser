@@ -16,8 +16,8 @@ public class Tester {
     public static void main(String[] args) throws IOException {
         Parser p = new Parser();
         
-        System.out.println(p.convertToWord("erat", "[per"));
-
+        System.out.println(p.convertToWord("punya", "#me-i"));
+        
 //        MorphologicalParser mp = new MorphologicalParser();
 //        String text = "Andreas sedang memakan makanan kaleng";
 //        String word[] = text.split(" ");

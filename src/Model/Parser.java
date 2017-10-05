@@ -282,7 +282,7 @@ public class Parser {
         }
 
         //for prefix other than specified above
-        if (result.equalsIgnoreCase("")) {
+        if (result.equalsIgnoreCase(rootWord)) {
             result = prefiks + rootWord;
         }
 
