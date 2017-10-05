@@ -13,8 +13,11 @@ public class Parser {
     //an object of a lexicon
     public Lexicon lexicon;
 
+    private String rootWord;
+
     public Parser() throws IOException {
         this.lexicon = new Lexicon();
+        this.rootWord = "";
     }
 
     /**
@@ -29,6 +32,7 @@ public class Parser {
     }
 
     public String convertToWord(String rootWord, String component) {
+        this.rootWord = rootWord;
         String result = rootWord;
         String[] comp = component.split("\\+");
         char symbol;
@@ -96,7 +100,11 @@ public class Parser {
                     if (c2 == 'y') {
                         result = "men" + rootWord;
                     } else {
-                        result = "meny" + rootWord.substring(1);
+                        if (result.equalsIgnoreCase(this.rootWord)) {
+                            result = "meny" + rootWord.substring(1);
+                        } else {
+                            result = "meny" + rootWord;
+                        }
                     }
                     break;
                 case 'g':
@@ -113,14 +121,26 @@ public class Parser {
                     if (c2 == 'h') {
                         result = "meng" + rootWord;
                     } else {
-                        result = "meng" + rootWord.substring(1);
+                        if (result.equalsIgnoreCase(this.rootWord)) {
+                            result = "meng" + rootWord.substring(1);
+                        } else {
+                            result = "meng" + rootWord;
+                        }
                     }
                     break;
                 case 'p':
-                    result = "mem" + rootWord.substring(1);
+                    if (result.equalsIgnoreCase(this.rootWord)) {
+                        result = "mem" + rootWord.substring(1);
+                    } else {
+                        result = "mem" + rootWord;
+                    }
                     break;
                 case 't':
-                    result = "men" + rootWord.substring(1);
+                    if (result.equalsIgnoreCase(this.rootWord)) {
+                        result = "men" + rootWord.substring(1);
+                    } else {
+                        result = "men" + rootWord;
+                    }
                     break;
                 default:
                     result = "me" + rootWord;
@@ -145,7 +165,11 @@ public class Parser {
                     if (c2 == 'y') {
                         result = "pen" + rootWord;
                     } else {
-                        result = "peny" + rootWord.substring(1);
+                        if (result.equalsIgnoreCase(this.rootWord)) {
+                            result = "peny" + rootWord.substring(1);
+                        } else {
+                            result = "peny" + rootWord;
+                        }
                     }
                     break;
                 case 'g':
@@ -162,14 +186,26 @@ public class Parser {
                     if (c2 == 'h') {
                         result = "peng" + rootWord;
                     } else {
-                        result = "peng" + rootWord.substring(1);
+                        if (result.equalsIgnoreCase(this.rootWord)) {
+                            result = "peng" + rootWord.substring(1);
+                        } else {
+                            result = "peng" + rootWord;
+                        }
                     }
                     break;
                 case 'p':
-                    result = "pem" + rootWord.substring(1);
+                    if (result.equalsIgnoreCase(this.rootWord)) {
+                        result = "pem" + rootWord.substring(1);
+                    } else {
+                        result = "pem" + rootWord;
+                    }
                     break;
                 case 't':
-                    result = "pen" + rootWord.substring(1);
+                    if (result.equalsIgnoreCase(this.rootWord)) {
+                        result = "pen" + rootWord.substring(1);
+                    } else {
+                        result = "pen" + rootWord;
+                    }
                     break;
                 default:
                     result = "pe" + rootWord;
@@ -223,7 +259,7 @@ public class Parser {
             }
         } else if (prefiks.equalsIgnoreCase("memper")) {
             String syl = rootWord.substring(0, 3);
-            boolean erSyl = syl.contains("er");
+            boolean erSyl = syl.substring(1).equalsIgnoreCase("er");
 
             if (erSyl) {
                 result = "mempe" + rootWord;
