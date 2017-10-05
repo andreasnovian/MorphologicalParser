@@ -66,7 +66,7 @@ public class Parser {
     }
 
     private String prefiksasi(String rootWord, String prefiks) {
-        String result = "";
+        String result = rootWord;
         char c1 = rootWord.charAt(0);
         char c2 = rootWord.charAt(1);
 
@@ -132,6 +132,10 @@ public class Parser {
                     if (result.equalsIgnoreCase(this.rootWord)) {
                         result = "mem" + rootWord.substring(1);
                     } else {
+                        result = "mem" + rootWord;
+                    }
+
+                    if (rootWord.equalsIgnoreCase("punya") || rootWord.equalsIgnoreCase("perkara")) {
                         result = "mem" + rootWord;
                     }
                     break;
@@ -296,10 +300,10 @@ public class Parser {
     private String konfiksasi(String rootWord, String konfiks) {
         String[] comp = konfiks.split("-");
 
-        if (rootWord.contains(" ")){
+        if (rootWord.contains(" ")) {
             rootWord = rootWord.replace(" ", "");
         }
-        
+
         String result = prefiksasi(rootWord, comp[0]);
         result = sufiksasi(result, comp[1]);
 
@@ -339,12 +343,11 @@ public class Parser {
      */
     private String parse(String word) {
         String parseResult = "";
-        String rootWord = "";
 
         //if word is found in lexicon
         if (isRootWord(word)) {
             parseResult = word;
-            rootWord = word;
+            this.rootWord = word;
         }
 
         //if word is a reduplication
