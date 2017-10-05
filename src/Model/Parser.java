@@ -212,11 +212,11 @@ public class Parser {
                     break;
             }
             if (oneSyl) {
-                result = "menge" + rootWord;
+                result = "penge" + rootWord;
             }
         } else if (prefiks.equalsIgnoreCase("per")) {
             String syl = rootWord.substring(0, 3);
-            boolean erSyl = syl.contains("er");
+            boolean erSyl = syl.substring(1).equalsIgnoreCase("er");
             switch (c1) {
                 case 'r':
                     result = "pe" + rootWord;
@@ -233,7 +233,7 @@ public class Parser {
             }
         } else if (prefiks.equalsIgnoreCase("ber")) {
             String syl = rootWord.substring(0, 3);
-            boolean erSyl = syl.contains("er");
+            boolean erSyl = syl.substring(1).equalsIgnoreCase("er");
             switch (c1) {
                 case 'r':
                     result = "be" + rootWord;
@@ -268,7 +268,7 @@ public class Parser {
             }
         } else if (prefiks.equalsIgnoreCase("diper")) {
             String syl = rootWord.substring(0, 3);
-            boolean erSyl = syl.contains("er");
+            boolean erSyl = syl.substring(1).equalsIgnoreCase("er");
 
             if (erSyl) {
                 result = "dipe" + rootWord;
