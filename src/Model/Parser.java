@@ -296,6 +296,10 @@ public class Parser {
     private String konfiksasi(String rootWord, String konfiks) {
         String[] comp = konfiks.split("-");
 
+        if (rootWord.contains(" ")){
+            rootWord = rootWord.replace(" ", "");
+        }
+        
         String result = prefiksasi(rootWord, comp[0]);
         result = sufiksasi(result, comp[1]);
 
