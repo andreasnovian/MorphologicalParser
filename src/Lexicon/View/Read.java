@@ -27,6 +27,7 @@ public class Read extends javax.swing.JFrame {
      */
     public Read(Home home, String root) throws IOException {
         initComponents();
+        this.setSize(450, 600);
         this.setLocationRelativeTo(null);
         this.home = home;
         this.root = root;
@@ -102,7 +103,7 @@ public class Read extends javax.swing.JFrame {
                         .addComponent(homeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(131, 131, 131)
                         .addComponent(ReadTitleLabel)
-                        .addGap(0, 182, Short.MAX_VALUE))
+                        .addGap(0, 173, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(componentLabel)

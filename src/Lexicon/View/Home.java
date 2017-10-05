@@ -29,10 +29,15 @@ public class Home extends javax.swing.JFrame {
      */
     public Home() throws IOException {
         initComponents();
+        this.setSize(450, 600);
         this.setLocationRelativeTo(null);
         this.lexc = new Lexicon();
         String[] in = lexc.printAllWordInTree().split("\n");
         this.rootsList.setListData(in);
+
+        this.createButton.setVisible(false);
+        this.updateButton.setVisible(false);
+        this.deleteButton.setVisible(false);
     }
 
     /**
@@ -51,6 +56,7 @@ public class Home extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         rootsList = new javax.swing.JList<>();
         readButton = new javax.swing.JButton();
+        editorCheckBox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("LEXICON");
@@ -106,6 +112,14 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        editorCheckBox.setFont(new java.awt.Font("Constantia", 0, 14)); // NOI18N
+        editorCheckBox.setText("Editor Mode");
+        editorCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editorCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,35 +127,43 @@ public class Home extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lexiconTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
+                        .addComponent(editorCheckBox)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(createButton, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                                 .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(readButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(readButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(124, 124, 124)
+                .addComponent(lexiconTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(lexiconTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(27, 27, 27)
+                .addGap(28, 28, 28)
+                .addComponent(lexiconTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(createButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(readButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(createButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2))
-                .addGap(284, 284, 284))
+                .addGap(233, 233, 233)
+                .addComponent(editorCheckBox)
+                .addGap(28, 28, 28))
         );
 
         pack();
@@ -155,7 +177,7 @@ public class Home extends javax.swing.JFrame {
         } else {
             this.setVisible(false);
             try {
-                this.update = new Update(this,selectedText);
+                this.update = new Update(this, selectedText);
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -198,13 +220,25 @@ public class Home extends javax.swing.JFrame {
         } else {
             this.setVisible(false);
             try {
-                this.read = new Read(this,selectedText);
+                this.read = new Read(this, selectedText);
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             }
             this.read.setVisible(true);
         }
     }//GEN-LAST:event_readButtonActionPerformed
+
+    private void editorCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editorCheckBoxActionPerformed
+        if (this.editorCheckBox.isSelected()) {
+            this.createButton.setVisible(true);
+            this.updateButton.setVisible(true);
+            this.deleteButton.setVisible(true);
+        } else {
+            this.createButton.setVisible(false);
+            this.updateButton.setVisible(false);
+            this.deleteButton.setVisible(false);
+        }
+    }//GEN-LAST:event_editorCheckBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -253,6 +287,7 @@ public class Home extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createButton;
     private javax.swing.JButton deleteButton;
+    private javax.swing.JCheckBox editorCheckBox;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lexiconTitleLabel;
     private javax.swing.JButton readButton;
