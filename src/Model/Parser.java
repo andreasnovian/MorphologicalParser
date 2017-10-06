@@ -64,6 +64,7 @@ public class Parser {
      * @param word word to parse
      */
     private void parse(String word) {
+        String temp;
         boolean isAWord = true;
         boolean haveResult = false;
         for (int i = 0; i < word.length(); i++) {
@@ -115,21 +116,23 @@ public class Parser {
                 //sufix check
                 if (!haveResult) {
                     if (word.substring(word.length() - 3).equalsIgnoreCase("kan")) {
-                        word = word.substring(0, word.length() - 3);
-                        if (sufiksKan(word)) {
-                            this.tempResult.add("Bentuk Dasar [" + word + "]" + " + Sufiks [kan]");
+                        temp = word.substring(0, word.length() - 3);
+                        if (sufiksKan(temp)) {
+                            this.tempResult.add("Bentuk Dasar [" + temp + "]" + " + Sufiks [kan]");
                             haveResult = true;
                         }
-                    } else if (word.substring(word.length() - 2).equalsIgnoreCase("an")) {
-                        word = word.substring(0, word.length() - 2);
-                        if (sufiksAn(word)) {
-                            this.tempResult.add("Bentuk Dasar [" + word + "]" + " + Sufiks [an]");
+                    }
+                    if (word.substring(word.length() - 2).equalsIgnoreCase("an")) {
+                        temp = word.substring(0, word.length() - 2);
+                        if (sufiksAn(temp)) {
+                            this.tempResult.add("Bentuk Dasar [" + temp + "]" + " + Sufiks [an]");
                             haveResult = true;
                         }
-                    } else if (word.substring(word.length() - 1).equalsIgnoreCase("i")) {
-                        word = word.substring(0, word.length() - 1);
-                        if (sufiksI(word)) {
-                            this.tempResult.add("Bentuk Dasar [" + word + "]" + " + Sufiks [i]");
+                    }
+                    if (word.substring(word.length() - 1).equalsIgnoreCase("i")) {
+                        temp = word.substring(0, word.length() - 1);
+                        if (sufiksI(temp)) {
+                            this.tempResult.add("Bentuk Dasar [" + temp + "]" + " + Sufiks [i]");
                             haveResult = true;
                         }
                     }
@@ -147,6 +150,7 @@ public class Parser {
     }
 
     private boolean prefiksBer(String word) {
+        String temp;
         boolean haveResult = false;
 
         //ex. beragam
@@ -156,35 +160,37 @@ public class Parser {
             haveResult = true;
         }
 
-        word = word.substring(1);
+        temp = word.substring(1);
         //ex. beranak, belajar
-        if (isRootWord(word)) {
-            this.rootWord = word;
-            this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + word + "]");
+        if (isRootWord(temp)) {
+            this.rootWord = temp;
+            this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + temp + "]");
             haveResult = true;
         }
 
         boolean sufiksStatus = false;
 
         if (word.substring(word.length() - 3).equalsIgnoreCase("kan")) {
-            word = word.substring(0, word.length() - 3);
-            sufiksStatus = sufiksKan(word);
+            temp = word.substring(0, word.length() - 3);
+            sufiksStatus = sufiksKan(temp);
             if (sufiksStatus) {
-                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + word + "]" + " + Sufiks [kan]");
+                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + temp + "]" + " + Sufiks [kan]");
                 haveResult = sufiksStatus;
             }
-        } else if (word.substring(word.length() - 2).equalsIgnoreCase("an")) {
-            word = word.substring(0, word.length() - 2);
-            sufiksStatus = sufiksAn(word);
+        }
+        if (word.substring(word.length() - 2).equalsIgnoreCase("an")) {
+            temp = word.substring(0, word.length() - 2);
+            sufiksStatus = sufiksAn(temp);
             if (sufiksStatus) {
-                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + word + "]" + " + Sufiks [an]");
+                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + temp + "]" + " + Sufiks [an]");
                 haveResult = sufiksStatus;
             }
-        } else if (word.substring(word.length() - 1).equalsIgnoreCase("i")) {
-            word = word.substring(0, word.length() - 1);
-            sufiksStatus = sufiksI(word);
+        }
+        if (word.substring(word.length() - 1).equalsIgnoreCase("i")) {
+            temp = word.substring(0, word.length() - 1);
+            sufiksStatus = sufiksI(temp);
             if (sufiksStatus) {
-                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + word + "]" + " + Sufiks [i]");
+                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + temp + "]" + " + Sufiks [i]");
                 haveResult = sufiksStatus;
             }
         }
@@ -284,20 +290,40 @@ public class Parser {
     private boolean sufiksKu(String word) {
         boolean haveResult = false;
 
+        if (isRootWord(word)) {
+            haveResult = true;
+        }
+
         return haveResult;
     }
 
     private boolean sufiksMu(String word) {
         boolean haveResult = false;
 
+        if (isRootWord(word)) {
+            haveResult = true;
+        }
+
         return haveResult;
     }
 
     private boolean sufiksNya(String word) {
-        return true;
+        boolean haveResult = false;
+
+        if (isRootWord(word)) {
+            haveResult = true;
+        }
+
+        return haveResult;
     }
 
     private boolean sufiksLah(String word) {
-        return true;
+        boolean haveResult = false;
+
+        if (isRootWord(word)) {
+            haveResult = true;
+        }
+
+        return haveResult;
     }
 }

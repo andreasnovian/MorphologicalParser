@@ -19,7 +19,9 @@ public class Tester {
         
 //        System.out.println(p.convertToWord("punya", "#me-i"));
 
-        System.out.print(p.process("makanan"));
+        System.out.print(p.process("berakitan"));
+        System.out.print(p.process("berakitkan"));
+        System.out.print(p.process("berakiti"));
 
 //        MorphologicalParser mp = new MorphologicalParser();
 //        String text = "Andreas sedang melakukan tari-menari";
