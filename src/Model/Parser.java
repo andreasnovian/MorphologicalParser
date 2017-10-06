@@ -89,8 +89,11 @@ public class Parser {
         for (String word1 : word) {
             this.tempResult.clear();
             parse(word1.toLowerCase());
-            this.componentValidator();
+            //this.componentValidator();
             System.out.println(word1.toUpperCase() + ": ");
+            if (this.tempResult.isEmpty()){
+                System.out.println("Bentuk Asing [" + word1 + "];");
+            }
             for (int i = 0; i < this.tempResult.size(); i++) {
                 System.out.println(this.tempResult.get(i) + ";");
             }

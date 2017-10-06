@@ -17,7 +17,7 @@ public class Tester {
 
     public static void main(String[] args) throws IOException {
         Parser p = new Parser();
-        Combiner c = new Combiner();
+//        Combiner c = new Combiner();
         
 //        System.out.println(p.convertToWord("punya", "#me-i"));
 
