@@ -6,6 +6,7 @@
 package Model;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,10 +17,12 @@ public class Tester {
     public static void main(String[] args) throws IOException {
         Parser p = new Parser();
         
-        System.out.println(p.convertToWord("punya", "#me-i"));
-        
+//        System.out.println(p.convertToWord("punya", "#me-i"));
+
+        System.out.print(p.process("makanan"));
+
 //        MorphologicalParser mp = new MorphologicalParser();
-//        String text = "Andreas sedang memakan makanan kaleng";
+//        String text = "Andreas sedang melakukan tari-menari";
 //        String word[] = text.split(" ");
 //        ArrayList<String> parseResult;
 //
