@@ -5,6 +5,7 @@
  */
 package Model;
 
+import Lexicon.Model.Combiner;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -16,12 +17,15 @@ public class Tester {
 
     public static void main(String[] args) throws IOException {
         Parser p = new Parser();
+        Combiner c = new Combiner();
         
 //        System.out.println(p.convertToWord("punya", "#me-i"));
 
-        System.out.print(p.process("berakitan"));
-        System.out.print(p.process("berakitkan"));
-        System.out.print(p.process("berakiti"));
+        System.out.print(p.process("berduaan"));
+        System.out.print(p.process("belajarkan"));
+        System.out.print(p.process("beruang"));
+
+//          System.out.println(c.convertToWord("pesona", "[me"));
 
 //        MorphologicalParser mp = new MorphologicalParser();
 //        String text = "Andreas sedang melakukan tari-menari";

@@ -13,13 +13,10 @@ public class Parser {
     //an object of a lexicon
     public Lexicon lexicon;
 
-    private String rootWord;
-
     private final ArrayList<String> tempResult;
 
     public Parser() throws IOException {
         this.lexicon = new Lexicon();
-        this.rootWord = "";
         this.tempResult = new ArrayList<>();
     }
 
@@ -35,19 +32,64 @@ public class Parser {
     }
 
     /**
+     * Check each component in tempResult, cross check with lexicon, delete from
+     * tempResult if not valid based on lexicon
+     *
+     * @throws IOException
+     */
+    private void componentValidator() throws IOException {
+        String rootWord = "";
+        String component;
+        String line;
+        boolean valid;
+
+        for (int i = 0; i < this.tempResult.size(); i++) {
+            component = "";
+            line = this.tempResult.get(i);
+            String[] word = line.split(" \\+ ");
+            for (String word1 : word) {
+                if (word1.contains("Bentuk Dasar")) {
+                    rootWord = word1.substring(14, word1.length() - 1);
+                } else if (word1.contains("Prefiks")) {
+                    component += "+[" + word1.substring(9, word1.length() - 1);
+                } else if (word1.contains("Sufiks")) {
+                    component += "+]" + word1.substring(8, word1.length() - 1);
+                } else if (word1.contains("Konfiks")) {
+                    component += "+#" + word1.substring(9, word1.length() - 1);
+                } else if (word1.contains("Komposisi")) {
+                    component += "+@" + word1.substring(11, word1.length() - 1);
+                } else if (word1.contains("Reduplikasi")) {
+                    component += "+^" + word1.substring(13, word1.length() - 1);
+                }
+            }
+            if (!component.equalsIgnoreCase("")) {
+                component = component.substring(1);
+                valid = this.lexicon.searchInFile(rootWord, component);
+                if (!valid) {
+                    this.tempResult.remove(line);
+                    i--;
+                }
+            }
+        }
+    }
+
+    /**
      * Method to do parsing process a line of text by divide them into each word
      * separated by space character, then parse each word
      *
      * @param text line of text to parse
      * @return a list of all the possible parse of each word in text
+     *
+     * @throws java.io.IOException
      */
-    public String process(String text) {
+    public String process(String text) throws IOException {
         String result = "";
         String word[] = text.split(" ");
 
         for (String word1 : word) {
             this.tempResult.clear();
             parse(word1.toLowerCase());
+            this.componentValidator();
             System.out.println(word1.toUpperCase() + ": ");
             for (int i = 0; i < this.tempResult.size(); i++) {
                 System.out.println(this.tempResult.get(i) + ";");
@@ -77,7 +119,6 @@ public class Parser {
         if (isAWord) {
             //if word is found in lexicon
             if (isRootWord(word)) {
-                this.rootWord = word;
                 this.tempResult.add("Bentuk Dasar [" + word + "]");
                 haveResult = true;
             }
@@ -115,26 +156,73 @@ public class Parser {
 
                 //sufix check
                 if (!haveResult) {
-                    if (word.substring(word.length() - 3).equalsIgnoreCase("kan")) {
-                        temp = word.substring(0, word.length() - 3);
-                        if (sufiksKan(temp)) {
-                            this.tempResult.add("Bentuk Dasar [" + temp + "]" + " + Sufiks [kan]");
+                    String result = "";
+                    c2 = word.substring(word.length() - 2);
+                    c3 = word.substring(word.length() - 3);
+                    String c1 = word.substring(word.length() - 1);
+
+                    w2 = word.substring(0, word.length() - 2);
+                    w3 = word.substring(0, word.length() - 3);
+                    String w1 = word.substring(0, word.length() - 1);
+
+                    if (c3.equalsIgnoreCase("kan")) {
+                        temp = sufiksKan(w3);
+                        if (!temp.equalsIgnoreCase("")) {
+                            result += "Bentuk Dasar [" + w3 + "]";
+                            result += temp;
                             haveResult = true;
                         }
                     }
-                    if (word.substring(word.length() - 2).equalsIgnoreCase("an")) {
-                        temp = word.substring(0, word.length() - 2);
-                        if (sufiksAn(temp)) {
-                            this.tempResult.add("Bentuk Dasar [" + temp + "]" + " + Sufiks [an]");
+                    if (c2.equalsIgnoreCase("an")) {
+                        temp = sufiksAn(w2);
+                        if (!temp.equalsIgnoreCase("")) {
+                            result += "Bentuk Dasar [" + w2 + "]";
+                            result += temp;
                             haveResult = true;
                         }
                     }
-                    if (word.substring(word.length() - 1).equalsIgnoreCase("i")) {
-                        temp = word.substring(0, word.length() - 1);
-                        if (sufiksI(temp)) {
-                            this.tempResult.add("Bentuk Dasar [" + temp + "]" + " + Sufiks [i]");
+                    if (c1.equalsIgnoreCase("i")) {
+                        temp = sufiksI(w1);
+                        if (!temp.equalsIgnoreCase("")) {
+                            result += "Bentuk Dasar [" + w1 + "]";
+                            result += temp;
                             haveResult = true;
                         }
+                    }
+                    if (c2.equalsIgnoreCase("ku")) {
+                        temp = sufiksKu(w2);
+                        if (!temp.equalsIgnoreCase("")) {
+                            result += "Bentuk Dasar [" + w2 + "]";
+                            result += temp;
+                            haveResult = true;
+                        }
+                    }
+                    if (c2.equalsIgnoreCase("mu")) {
+                        temp = sufiksMu(w2);
+                        if (!temp.equalsIgnoreCase("")) {
+                            result += "Bentuk Dasar [" + w2 + "]";
+                            result += temp;
+                            haveResult = true;
+                        }
+                    }
+                    if (c3.equalsIgnoreCase("nya")) {
+                        temp = sufiksNya(w3);
+                        if (!temp.equalsIgnoreCase("")) {
+                            result += "Bentuk Dasar [" + w3 + "]";
+                            result += temp;
+                            haveResult = true;
+                        }
+                    }
+                    if (c3.equalsIgnoreCase("lah")) {
+                        temp = sufiksLah(w3);
+                        if (!temp.equalsIgnoreCase("")) {
+                            result += "Bentuk Dasar [" + w3 + "]";
+                            result += temp;
+                            haveResult = true;
+                        }
+                    }
+                    if (!result.equalsIgnoreCase("")) {
+                        this.tempResult.add(result);
                     }
                 }
 
@@ -155,7 +243,6 @@ public class Parser {
 
         //ex. beragam
         if (isRootWord(word)) {
-            this.rootWord = word;
             this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + word + "]");
             haveResult = true;
         }
@@ -163,40 +250,60 @@ public class Parser {
         temp = word.substring(1);
         //ex. beranak, belajar
         if (isRootWord(temp)) {
-            this.rootWord = temp;
             this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + temp + "]");
             haveResult = true;
         }
 
-        boolean sufiksStatus = false;
-
         if (word.substring(word.length() - 3).equalsIgnoreCase("kan")) {
-            temp = word.substring(0, word.length() - 3);
-            sufiksStatus = sufiksKan(temp);
-            if (sufiksStatus) {
-                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + temp + "]" + " + Sufiks [kan]");
-                haveResult = sufiksStatus;
+            //ex. be + rootWord + kan
+            temp = sufiksKan(word.substring(0, word.length() - 3));
+            if (!temp.equalsIgnoreCase("")) {
+                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
+                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + word.substring(0, word.length() - 3) + "]" + temp);
+                haveResult = true;
             }
+            //ex. ber + rootWord + kan
+            temp = sufiksKan(word.substring(1, word.length() - 3));
+            if (!temp.equalsIgnoreCase("")) {
+                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
+                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + word.substring(1, word.length() - 3) + "]" + temp);
+                haveResult = true;
+            }
+
         }
         if (word.substring(word.length() - 2).equalsIgnoreCase("an")) {
-            temp = word.substring(0, word.length() - 2);
-            sufiksStatus = sufiksAn(temp);
-            if (sufiksStatus) {
-                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + temp + "]" + " + Sufiks [an]");
-                haveResult = sufiksStatus;
+            //ex. be + rootWord + an
+            temp = sufiksAn(word.substring(0, word.length() - 2));
+            if (!temp.equalsIgnoreCase("")) {
+                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
+                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + word.substring(0, word.length() - 2) + "]" + temp);
+                haveResult = true;
             }
+            //ex. ber + rootWord + an
+            temp = sufiksAn(word.substring(1, word.length() - 2));
+            if (!temp.equalsIgnoreCase("")) {
+                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
+                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + word.substring(1, word.length() - 2) + "]" + temp);
+                haveResult = true;
+            }
+
         }
         if (word.substring(word.length() - 1).equalsIgnoreCase("i")) {
-            temp = word.substring(0, word.length() - 1);
-            sufiksStatus = sufiksI(temp);
-            if (sufiksStatus) {
-                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + temp + "]" + " + Sufiks [i]");
-                haveResult = sufiksStatus;
+            //ex. be + rootWord + i
+            temp = sufiksI(word.substring(0, word.length() - 1));
+            if (!temp.equalsIgnoreCase("")) {
+                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
+                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + word.substring(0, word.length() - 1) + "]" + temp);
+                haveResult = true;
             }
-        }
+            //ex. ber + rootWord + i
+            temp = sufiksI(word.substring(1, word.length() - 1));
+            if (!temp.equalsIgnoreCase("")) {
+                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
+                this.tempResult.add("Prefiks [ber] + Bentuk Dasar [" + word.substring(1, word.length() - 1) + "]" + temp);
+                haveResult = true;
+            }
 
-        if (sufiksStatus) {
-            //check konfiks or klofiks
         }
 
         return haveResult;
@@ -256,74 +363,73 @@ public class Parser {
         return haveResult;
     }
 
-    //true if valid sufiks appear
-    private boolean sufiksKan(String word) {
-        boolean haveResult = false;
+    private String sufiksKan(String word) {
+        String result = "";
 
         if (isRootWord(word)) {
-            haveResult = true;
+            result = " + Sufiks [kan]";
         }
 
-        return haveResult;
+        return result;
     }
 
-    private boolean sufiksAn(String word) {
-        boolean haveResult = false;
+    private String sufiksAn(String word) {
+        String result = "";
 
         if (isRootWord(word)) {
-            haveResult = true;
+            result = " + Sufiks [an]";
         }
 
-        return haveResult;
+        return result;
     }
 
-    private boolean sufiksI(String word) {
-        boolean haveResult = false;
+    private String sufiksI(String word) {
+        String result = "";
 
         if (isRootWord(word)) {
-            haveResult = true;
+            result = " + Sufiks [i]";
         }
 
-        return haveResult;
+        return result;
     }
 
-    private boolean sufiksKu(String word) {
-        boolean haveResult = false;
+    private String sufiksKu(String word) {
+        String result = "";
 
         if (isRootWord(word)) {
-            haveResult = true;
+            result = " + Klitika [ku]";
         }
 
-        return haveResult;
+        return result;
     }
 
-    private boolean sufiksMu(String word) {
-        boolean haveResult = false;
+    private String sufiksMu(String word) {
+        String result = "";
 
         if (isRootWord(word)) {
-            haveResult = true;
+            result = " + Klitika [mu]";
         }
 
-        return haveResult;
+        return result;
     }
 
-    private boolean sufiksNya(String word) {
-        boolean haveResult = false;
+    private String sufiksNya(String word) {
+        String result = "";
 
         if (isRootWord(word)) {
-            haveResult = true;
+            result = " + Klitika [nya]";
         }
 
-        return haveResult;
+        return result;
     }
 
-    private boolean sufiksLah(String word) {
-        boolean haveResult = false;
+    private String sufiksLah(String word) {
+        String result = "";
 
         if (isRootWord(word)) {
-            haveResult = true;
+            result = " + Klitika [lah]";
         }
 
-        return haveResult;
+        return result;
     }
 }
