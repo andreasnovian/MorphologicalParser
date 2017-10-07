@@ -86,7 +86,7 @@ public class Parser {
             proklitika = "";
             enklitika = "";
             result = "";
-            
+
             line = this.tempResult.get(i);
             words = line.split("\\+");
             rootWord = words[0];
@@ -128,15 +128,15 @@ public class Parser {
                 result += "Bentuk Asing [" + rootWord.substring(1) + "] + ";
             } else {
                 result += "Bentuk Dasar [" + rootWord + "] + ";
-            }      
-            if (!komposisi.equalsIgnoreCase("")){
+            }
+            if (!komposisi.equalsIgnoreCase("")) {
                 komposisi = komposisi.substring(0, komposisi.length() - 1);
                 temp = komposisi.split("\\+");
                 for (String word : temp) {
                     result += "Komposisi [" + word + "] + ";
                 }
-            }     
-            if (!reduplikasi.equalsIgnoreCase("")){
+            }
+            if (!reduplikasi.equalsIgnoreCase("")) {
                 reduplikasi = reduplikasi.substring(0, reduplikasi.length() - 1);
                 temp = reduplikasi.split("\\+");
                 for (String word : temp) {
@@ -229,7 +229,7 @@ public class Parser {
             //afixed word must be 3 or more letters
             if (word.length() > 2) {
                 //prefiks check, including sufiks check
-                prefiksCheck(word, "");
+                prefiksCheck(word, "", "");
 
                 //only sufiks check
                 sufiksCheck(word, "", "");
@@ -252,9 +252,7 @@ public class Parser {
      * @param word word to check
      * @param klitika any klitika found
      */
-    private void prefiksCheck(String word, String klitika) {
-        String temp;
-
+    private void prefiksCheck(String word, String klitika, String prefiks) {
         String c2 = word.substring(0, 2);
         String c3 = word.substring(0, 3);
 
@@ -263,7 +261,7 @@ public class Parser {
 
         //prefix check
         if (c2.equalsIgnoreCase("be")) {
-            prefiksBer(w2);
+            prefiksBer(w2, klitika, prefiks);
         } else if (c2.equalsIgnoreCase("me")) {
             prefiksMe(w2);
         } else if (c2.equalsIgnoreCase("di")) {
@@ -271,13 +269,7 @@ public class Parser {
         } else if (c2.equalsIgnoreCase("ke")) {
             prefiksKe(w2);
         } else if (c2.equalsIgnoreCase("ku")) {
-            temp = prefiksKu(w2);
-            if (!temp.equalsIgnoreCase("")) {
-                temp = w2 + temp;
-                this.tempResult.add(temp);
-            }
-            prefiksCheck(w2, "+$ku");
-            sufiksCheck(w2, "+$ku", "");
+            prefiksKu(w2);
         } else if (c2.equalsIgnoreCase("se")) {
             prefiksSe(w2);
         } else if (c2.equalsIgnoreCase("pe")) {
@@ -287,13 +279,7 @@ public class Parser {
         } else if (c3.equalsIgnoreCase("per")) {
             prefiksPer(w3);
         } else if (c3.equalsIgnoreCase("kau")) {
-            temp = prefiksKau(w3);
-            if (!temp.equalsIgnoreCase("")) {
-                temp = w3 + temp;
-                this.tempResult.add(temp);
-            }
-            prefiksCheck(w3, "+$kau");
-            sufiksCheck(w3, "+$kau", "");
+            prefiksKau(w3);
         }
     }
 
@@ -378,64 +364,23 @@ public class Parser {
         }
     }
 
-    private void prefiksBer(String word) {
+    private void prefiksBer(String word, String klitika, String prefiks) {
         String temp;
 
         //ex. beragam
         if (isRootWord(word)) {
-            this.tempResult.add(word + "+[ber");
+            this.tempResult.add(word + "+[ber" + prefiks + klitika);
         }
+        prefiksCheck(word, klitika, "+[ber");
+        sufiksCheck(word, klitika, "+[ber");
 
         temp = word.substring(1);
         //ex. beranak, belajar
         if (isRootWord(temp)) {
-            this.tempResult.add(temp + "+[ber");
+            this.tempResult.add(temp + "+[ber" + prefiks + klitika);
         }
-
-        if (word.substring(word.length() - 3).equalsIgnoreCase("kan")) {
-            //ex. be + rootWord + kan
-            temp = sufiksKan(word.substring(0, word.length() - 3));
-            if (!temp.equalsIgnoreCase("")) {
-                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
-                this.tempResult.add(word.substring(0, word.length() - 3) + "+[ber" + temp);
-            }
-            //ex. ber + rootWord + kan
-            temp = sufiksKan(word.substring(1, word.length() - 3));
-            if (!temp.equalsIgnoreCase("")) {
-                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
-                this.tempResult.add(word.substring(1, word.length() - 3) + "+[ber" + temp);
-            }
-
-        }
-        if (word.substring(word.length() - 2).equalsIgnoreCase("an")) {
-            //ex. be + rootWord + an
-            temp = sufiksAn(word.substring(0, word.length() - 2));
-            if (!temp.equalsIgnoreCase("")) {
-                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
-                this.tempResult.add(word.substring(0, word.length() - 2) + "+[ber" + temp);
-            }
-            //ex. ber + rootWord + an
-            temp = sufiksAn(word.substring(1, word.length() - 2));
-            if (!temp.equalsIgnoreCase("")) {
-                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
-                this.tempResult.add(word.substring(1, word.length() - 2) + "+[ber" + temp);
-            }
-
-        }
-        if (word.substring(word.length() - 1).equalsIgnoreCase("i")) {
-            //ex. be + rootWord + i
-            temp = sufiksI(word.substring(0, word.length() - 1));
-            if (!temp.equalsIgnoreCase("")) {
-                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
-                this.tempResult.add(word.substring(0, word.length() - 1) + "+[ber" + temp);
-            }
-            //ex. ber + rootWord + i
-            temp = sufiksI(word.substring(1, word.length() - 1));
-            if (!temp.equalsIgnoreCase("")) {
-                //check lexicon component for either prefiks only and sufiks only, if either valid, it's klofiks, otherwise it's konfiks
-                this.tempResult.add(word.substring(1, word.length() - 1) + "+[ber" + temp);
-            }
-        }
+        prefiksCheck(temp, klitika, "+[ber");
+        sufiksCheck(temp, klitika, "+[ber");
     }
 
     private void prefiksMe(String word) {
@@ -462,14 +407,17 @@ public class Parser {
         }
     }
 
-    private String prefiksKu(String word) {
-        String result = "";
+    private void prefiksKu(String word) {
+        String result;
 
         if (isRootWord(word)) {
             result = "+$ku";
+            result = word + result;
+            this.tempResult.add(result);
         }
 
-        return result;
+        prefiksCheck(word, "+$ku", "");
+        sufiksCheck(word, "+$ku", "");
     }
 
     private void prefiksSe(String word) {
@@ -504,14 +452,17 @@ public class Parser {
         }
     }
 
-    private String prefiksKau(String word) {
-        String result = "";
+    private void prefiksKau(String word) {
+        String result;
 
         if (isRootWord(word)) {
             result = "+$kau";
+            result = word + result;
+            this.tempResult.add(result);
         }
 
-        return result;
+        prefiksCheck(word, "+$kau", "");
+        sufiksCheck(word, "+$kau", "");
     }
 
     private String sufiksKan(String word) {
