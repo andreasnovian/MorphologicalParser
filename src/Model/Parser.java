@@ -200,11 +200,11 @@ public class Parser {
 
             //afixed word must be 3 or more letters
             if (word.length() > 2) {
-                prefiksCheck(word);
+                prefiksCheck(word, "");
 
                 //sufix only check
                 if (this.tempResult.isEmpty()) {
-                    sufiksCheck(word, "");
+                    sufiksCheck(word, "", "");
                 }
 
                 //if word is a reduplication
@@ -219,7 +219,15 @@ public class Parser {
         }
     }
 
-    private void prefiksCheck(String word) {
+    /**
+     * Check all the possible prefiks, including klitika, even when combined
+     *
+     * @param word word to check
+     * @param klitika any klitika found
+     */
+    private void prefiksCheck(String word, String klitika) {
+        String temp;
+
         String c2 = word.substring(0, 2);
         String c3 = word.substring(0, 3);
 
@@ -236,7 +244,12 @@ public class Parser {
         } else if (c2.equalsIgnoreCase("ke")) {
             prefiksKe(w2);
         } else if (c2.equalsIgnoreCase("ku")) {
-            prefiksKu(w2);
+            temp = prefiksKu(w2);
+            if (!temp.equalsIgnoreCase("")) {
+                temp = w2 + temp;
+                this.tempResult.add(temp);
+            }
+            prefiksCheck(w2, "+$ku");
         } else if (c2.equalsIgnoreCase("se")) {
             prefiksSe(w2);
         } else if (c2.equalsIgnoreCase("pe")) {
@@ -246,11 +259,24 @@ public class Parser {
         } else if (c3.equalsIgnoreCase("per")) {
             prefiksPer(w3);
         } else if (c3.equalsIgnoreCase("kau")) {
-            prefiksKau(w3);
+            temp = prefiksKau(w3);
+            if (!temp.equalsIgnoreCase("")) {
+                temp = w3 + temp;
+                this.tempResult.add(temp);
+            }
+            prefiksCheck(w3, "+$kau");
         }
     }
 
-    private void sufiksCheck(String word, String prevResult) {
+    /**
+     * Check all the possible sufiks, including klitika, even when combined ex.
+     * makananmu
+     *
+     * @param word word to check
+     * @param klitika any klitika found
+     * @param prefiks any prefiks found previously
+     */
+    private void sufiksCheck(String word, String klitika, String prefiks) {
         String temp;
 
         if (word.length() > 2) {
@@ -260,7 +286,7 @@ public class Parser {
             if (c3.equalsIgnoreCase("kan")) {
                 temp = sufiksKan(w3);
                 if (!temp.equalsIgnoreCase("")) {
-                    temp = w3 + temp + prevResult;
+                    temp = w3 + prefiks + temp + klitika;
                     this.tempResult.add(temp);
                 }
             }
@@ -270,7 +296,7 @@ public class Parser {
                     temp = w3 + temp;
                     this.tempResult.add(temp);
                 }
-                sufiksCheck(w3, "+$nya");
+                sufiksCheck(w3, "+$nya", prefiks);
             }
             if (c3.equalsIgnoreCase("lah")) {
                 temp = sufiksLah(w3);
@@ -278,7 +304,7 @@ public class Parser {
                     temp = w3 + temp;
                     this.tempResult.add(temp);
                 }
-                sufiksCheck(w3, "+$lah");
+                sufiksCheck(w3, "+$lah", prefiks);
             }
         }
         if (word.length() > 1) {
@@ -288,7 +314,7 @@ public class Parser {
             if (c2.equalsIgnoreCase("an")) {
                 temp = sufiksAn(w2);
                 if (!temp.equalsIgnoreCase("")) {
-                    temp = w2 + temp + prevResult;
+                    temp = w2 + prefiks + temp + klitika;
                     this.tempResult.add(temp);
                 }
             }
@@ -298,7 +324,7 @@ public class Parser {
                     temp = w2 + temp;
                     this.tempResult.add(temp);
                 }
-                sufiksCheck(w2, "+$ku");
+                sufiksCheck(w2, "+$ku", prefiks);
             }
             if (c2.equalsIgnoreCase("mu")) {
                 temp = sufiksMu(w2);
@@ -306,7 +332,7 @@ public class Parser {
                     temp = w2 + temp;
                     this.tempResult.add(temp);
                 }
-                sufiksCheck(w2, "+$mu");
+                sufiksCheck(w2, "+$mu", prefiks);
             }
         }
         if (word.length() > 0) {
@@ -316,7 +342,7 @@ public class Parser {
             if (c1.equalsIgnoreCase("i")) {
                 temp = sufiksI(w1);
                 if (!temp.equalsIgnoreCase("")) {
-                    temp = w1 + temp + prevResult;
+                    temp = w1 + prefiks + temp + klitika;
                     this.tempResult.add(temp);
                 }
             }
@@ -407,12 +433,14 @@ public class Parser {
         }
     }
 
-    private void prefiksKu(String word) {
+    private String prefiksKu(String word) {
         String result = "";
 
         if (isRootWord(word)) {
             result = "+$ku";
         }
+        
+        return result;
     }
 
     private void prefiksSe(String word) {
@@ -447,12 +475,14 @@ public class Parser {
         }
     }
 
-    private void prefiksKau(String word) {
+    private String prefiksKau(String word) {
         String result = "";
 
         if (isRootWord(word)) {
             result = "+$kau";
         }
+        
+        return result;
     }
 
     private String sufiksKan(String word) {
