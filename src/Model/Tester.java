@@ -18,15 +18,12 @@ public class Tester {
     public static void main(String[] args) throws IOException {
         Parser p = new Parser();
 //        Combiner c = new Combiner();
-        
-//        System.out.println(p.convertToWord("punya", "#me-i"));
+//        MorphologicalParser mp = new MorphologicalParser();
 
-        System.out.print(p.process("berduaan"));
-        System.out.print(p.process("belajarkan"));
-        System.out.print(p.process("beruang"));
+//        System.out.println(p.convertToWord("punya", "#me-i"));
+        System.out.print(p.process("makananmu"));
 
 //          System.out.println(c.convertToWord("pesona", "[me"));
-
 //        MorphologicalParser mp = new MorphologicalParser();
 //        String text = "Andreas sedang melakukan tari-menari";
 //        String word[] = text.split(" ");

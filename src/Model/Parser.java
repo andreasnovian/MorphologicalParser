@@ -38,38 +38,107 @@ public class Parser {
      * @throws IOException
      */
     private void componentValidator() throws IOException {
-        String rootWord = "";
+        String rootWord;
         String component;
         String line;
         boolean valid;
+        String[] words;
 
         for (int i = 0; i < this.tempResult.size(); i++) {
             component = "";
             line = this.tempResult.get(i);
-            String[] word = line.split(" \\+ ");
-            for (String word1 : word) {
-                if (word1.contains("Bentuk Dasar")) {
-                    rootWord = word1.substring(14, word1.length() - 1);
-                } else if (word1.contains("Prefiks")) {
-                    component += "+[" + word1.substring(9, word1.length() - 1);
-                } else if (word1.contains("Sufiks")) {
-                    component += "+]" + word1.substring(8, word1.length() - 1);
-                } else if (word1.contains("Konfiks")) {
-                    component += "+#" + word1.substring(9, word1.length() - 1);
-                } else if (word1.contains("Komposisi")) {
-                    component += "+@" + word1.substring(11, word1.length() - 1);
-                } else if (word1.contains("Reduplikasi")) {
-                    component += "+^" + word1.substring(13, word1.length() - 1);
+            words = line.split("\\+");
+            rootWord = words[0];
+            for (int j = 1; j < words.length; j++) {
+                if (words[j].charAt(0) != '$') {
+                    component += words[j] + "+";
                 }
             }
+
             if (!component.equalsIgnoreCase("")) {
-                component = component.substring(1);
+                component = component.substring(0, component.length() - 1);
                 valid = this.lexicon.searchInFile(rootWord, component);
                 if (!valid) {
                     this.tempResult.remove(line);
                     i--;
                 }
             }
+        }
+    }
+
+    /**
+     * To convert from String "malu+#per-kan+[me+$mu" to "Prefiks [me] + Bentuk
+     * Dasar [malu] + Konfiks [per-kan] + Klitika [mu]"
+     */
+    private void convertToWord() {
+        String rootWord;
+        String prefiks, sufiks, konfiks, klitika;
+        String line, result;
+        String[] words;
+        String[] temp;
+
+        for (int i = 0; i < this.tempResult.size(); i++) {
+            prefiks = "";
+            sufiks = "";
+            konfiks = "";
+            klitika = "";
+            result = "";
+            line = this.tempResult.get(i);
+            words = line.split("\\+");
+            rootWord = words[0];
+            for (String word : words) {
+                switch (word.charAt(0)) {
+                    case '[':
+                        prefiks += word.substring(1) + "+";
+                        break;
+                    case ']':
+                        sufiks += word.substring(1) + "+";
+                        break;
+                    case '#':
+                        konfiks += word.substring(1) + "+";
+                        break;
+                    case '$':
+                        klitika += word.substring(1) + "+";
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (!prefiks.equalsIgnoreCase("")) {
+                prefiks = prefiks.substring(0, prefiks.length() - 1);
+                temp = prefiks.split("\\+");
+                for (String word : temp) {
+                    result = "Prefiks [" + word + "] + " + result;
+                }
+            }
+
+            result += "Bentuk Dasar [" + rootWord + "] + ";
+
+            if (!sufiks.equalsIgnoreCase("")) {
+                sufiks = sufiks.substring(0, sufiks.length() - 1);
+                temp = sufiks.split("\\+");
+                for (String word : temp) {
+                    result += "Sufiks [" + word + "] + ";
+                }
+            }
+            if (!konfiks.equalsIgnoreCase("")) {
+                konfiks = konfiks.substring(0, konfiks.length() - 1);
+                temp = konfiks.split("\\+");
+                for (String word : temp) {
+                    result += "Konfiks [" + word + "] + ";
+                }
+            }
+            if (!klitika.equalsIgnoreCase("")) {
+                klitika = klitika.substring(0, klitika.length() - 1);
+                temp = klitika.split("\\+");
+                for (String word : temp) {
+                    result += "Klitika [" + word + "] + ";
+                }
+            }
+
+            result = result.substring(0, result.length() - 3);
+            this.tempResult.remove(i);
+            this.tempResult.add(i, result);
         }
     }
 
@@ -90,12 +159,14 @@ public class Parser {
             this.tempResult.clear();
             parse(word1.toLowerCase());
             //this.componentValidator();
+            //this.convertToWord();
             System.out.println(word1.toUpperCase() + ": ");
-            if (this.tempResult.isEmpty()){
+            if (this.tempResult.isEmpty()) {
                 System.out.println("Bentuk Asing [" + word1 + "];");
-            }
-            for (int i = 0; i < this.tempResult.size(); i++) {
-                System.out.println(this.tempResult.get(i) + ";");
+            } else {
+                for (int i = 0; i < this.tempResult.size(); i++) {
+                    System.out.println(this.tempResult.get(i) + ";");
+                }
             }
             System.out.println("");
         }
