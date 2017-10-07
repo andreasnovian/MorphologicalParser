@@ -227,7 +227,7 @@ public class Parser {
             }
 
             //afixed word must be 3 or more letters
-            if (word.length() > 2) {
+            if (word.length() > 3) {
                 //prefiks check, including sufiks check
                 prefiksCheck(word, "", "");
 
