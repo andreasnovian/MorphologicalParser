@@ -72,22 +72,32 @@ public class Parser {
      */
     private void convertToWord() {
         String rootWord;
-        String prefiks, sufiks, konfiks, klitika;
+        String komposisi, reduplikasi, prefiks, sufiks, konfiks, proklitika, enklitika;
         String line, result;
         String[] words;
         String[] temp;
 
         for (int i = 0; i < this.tempResult.size(); i++) {
+            komposisi = "";
+            reduplikasi = "";
             prefiks = "";
             sufiks = "";
             konfiks = "";
-            klitika = "";
+            proklitika = "";
+            enklitika = "";
             result = "";
+            
             line = this.tempResult.get(i);
             words = line.split("\\+");
             rootWord = words[0];
             for (String word : words) {
                 switch (word.charAt(0)) {
+                    case '@':
+                        komposisi += word.substring(1) + "+";
+                        break;
+                    case '^':
+                        reduplikasi += word.substring(1) + "+";
+                        break;
                     case '[':
                         prefiks += word.substring(1) + "+";
                         break;
@@ -98,7 +108,10 @@ public class Parser {
                         konfiks += word.substring(1) + "+";
                         break;
                     case '$':
-                        klitika += word.substring(1) + "+";
+                        proklitika += word.substring(1) + "+";
+                        break;
+                    case '%':
+                        enklitika += word.substring(1) + "+";
                         break;
                     default:
                         break;
@@ -111,13 +124,25 @@ public class Parser {
                     result = "Prefiks [" + word + "] + " + result;
                 }
             }
-
             if (rootWord.charAt(0) == '!') {
                 result += "Bentuk Asing [" + rootWord.substring(1) + "] + ";
             } else {
                 result += "Bentuk Dasar [" + rootWord + "] + ";
+            }      
+            if (!komposisi.equalsIgnoreCase("")){
+                komposisi = komposisi.substring(0, komposisi.length() - 1);
+                temp = komposisi.split("\\+");
+                for (String word : temp) {
+                    result += "Komposisi [" + word + "] + ";
+                }
+            }     
+            if (!reduplikasi.equalsIgnoreCase("")){
+                reduplikasi = reduplikasi.substring(0, reduplikasi.length() - 1);
+                temp = reduplikasi.split("\\+");
+                for (String word : temp) {
+                    result += "Reduplikasi [" + word + "] + ";
+                }
             }
-
             if (!sufiks.equalsIgnoreCase("")) {
                 sufiks = sufiks.substring(0, sufiks.length() - 1);
                 temp = sufiks.split("\\+");
@@ -132,11 +157,18 @@ public class Parser {
                     result += "Konfiks [" + word + "] + ";
                 }
             }
-            if (!klitika.equalsIgnoreCase("")) {
-                klitika = klitika.substring(0, klitika.length() - 1);
-                temp = klitika.split("\\+");
+            if (!proklitika.equalsIgnoreCase("")) {
+                proklitika = proklitika.substring(0, proklitika.length() - 1);
+                temp = proklitika.split("\\+");
                 for (String word : temp) {
-                    result += "Klitika [" + word + "] + ";
+                    result += "Proklitika [" + word + "] + ";
+                }
+            }
+            if (!enklitika.equalsIgnoreCase("")) {
+                enklitika = enklitika.substring(0, enklitika.length() - 1);
+                temp = enklitika.split("\\+");
+                for (String word : temp) {
+                    result += "Enklitika [" + word + "] + ";
                 }
             }
 
@@ -164,17 +196,13 @@ public class Parser {
             parse(word1.toLowerCase());
             //this.componentValidator();
             this.convertToWord();
-            System.out.println(word1.toUpperCase() + ": ");
-            if (this.tempResult.isEmpty()) {
-                System.out.println("Bentuk Asing [" + word1 + "];");
-            } else {
-                for (int i = 0; i < this.tempResult.size(); i++) {
-                    System.out.println(this.tempResult.get(i) + ";");
-                }
+            result += word1.toUpperCase() + ":\n";
+            for (int i = 0; i < this.tempResult.size(); i++) {
+                result += this.tempResult.get(i) + ";\n";
             }
-            System.out.println("");
+            result += "\n";
         }
-
+        result = result.trim();
         return result;
     }
 
@@ -200,12 +228,11 @@ public class Parser {
 
             //afixed word must be 3 or more letters
             if (word.length() > 2) {
+                //prefiks check, including sufiks check
                 prefiksCheck(word, "");
 
-                //sufix only check
-                if (this.tempResult.isEmpty()) {
-                    sufiksCheck(word, "", "");
-                }
+                //only sufiks check
+                sufiksCheck(word, "", "");
 
                 //if word is a reduplication
                 if (word.contains("-")) {
@@ -250,6 +277,7 @@ public class Parser {
                 this.tempResult.add(temp);
             }
             prefiksCheck(w2, "+$ku");
+            sufiksCheck(w2, "+$ku", "");
         } else if (c2.equalsIgnoreCase("se")) {
             prefiksSe(w2);
         } else if (c2.equalsIgnoreCase("pe")) {
@@ -265,6 +293,7 @@ public class Parser {
                 this.tempResult.add(temp);
             }
             prefiksCheck(w3, "+$kau");
+            sufiksCheck(w3, "+$kau", "");
         }
     }
 
@@ -296,7 +325,7 @@ public class Parser {
                     temp = w3 + temp;
                     this.tempResult.add(temp);
                 }
-                sufiksCheck(w3, "+$nya", prefiks);
+                sufiksCheck(w3, "+%nya", prefiks);
             }
             if (c3.equalsIgnoreCase("lah")) {
                 temp = sufiksLah(w3);
@@ -304,7 +333,7 @@ public class Parser {
                     temp = w3 + temp;
                     this.tempResult.add(temp);
                 }
-                sufiksCheck(w3, "+$lah", prefiks);
+                sufiksCheck(w3, "+%lah", prefiks);
             }
         }
         if (word.length() > 1) {
@@ -324,7 +353,7 @@ public class Parser {
                     temp = w2 + temp;
                     this.tempResult.add(temp);
                 }
-                sufiksCheck(w2, "+$ku", prefiks);
+                sufiksCheck(w2, "+%ku", prefiks);
             }
             if (c2.equalsIgnoreCase("mu")) {
                 temp = sufiksMu(w2);
@@ -332,7 +361,7 @@ public class Parser {
                     temp = w2 + temp;
                     this.tempResult.add(temp);
                 }
-                sufiksCheck(w2, "+$mu", prefiks);
+                sufiksCheck(w2, "+%mu", prefiks);
             }
         }
         if (word.length() > 0) {
@@ -439,7 +468,7 @@ public class Parser {
         if (isRootWord(word)) {
             result = "+$ku";
         }
-        
+
         return result;
     }
 
@@ -481,7 +510,7 @@ public class Parser {
         if (isRootWord(word)) {
             result = "+$kau";
         }
-        
+
         return result;
     }
 
@@ -519,7 +548,7 @@ public class Parser {
         String result = "";
 
         if (isRootWord(word)) {
-            result = "+$ku";
+            result = "+%ku";
         }
 
         return result;
@@ -529,7 +558,7 @@ public class Parser {
         String result = "";
 
         if (isRootWord(word)) {
-            result = "+$mu";
+            result = "+%mu";
         }
 
         return result;
@@ -539,7 +568,7 @@ public class Parser {
         String result = "";
 
         if (isRootWord(word)) {
-            result = "+$nya";
+            result = "+%nya";
         }
 
         return result;
@@ -549,7 +578,7 @@ public class Parser {
         String result = "";
 
         if (isRootWord(word)) {
-            result = "+$lah";
+            result = "+%lah";
         }
 
         return result;
