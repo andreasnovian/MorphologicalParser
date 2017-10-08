@@ -236,7 +236,7 @@ public class Parser {
      *
      * @param word word to parse
      */
-    private String parse(String word) throws IOException {
+    private ArrayList<String> parse(String word) throws IOException {
         boolean isAWord = true;
         for (int i = 0; i < word.length(); i++) {
             int c = (int) word.charAt(i);
@@ -256,7 +256,7 @@ public class Parser {
             this.parseResult.add("!" + word);
         }
 
-        String result = this.parseResult.get(this.parseResult.size() - 1);
+        ArrayList<String> result = this.parseResult;
         return result;
     }
 
@@ -410,9 +410,13 @@ public class Parser {
                     temp = words[0] + prefiks + klitika + "+^" + words[1];
                     this.parseResult.add(temp);
                 }
-                temp = new Parser().parse(words[1]);
-                if (temp.charAt(0) != '!') {
-                    this.check(words[0], klitika + "+^(" + temp + ")", prefiks);
+                
+                //to do parse on the second word and check each word on the result
+                ArrayList<String> list = new Parser().parse(words[1]);
+                for (String w : list) {
+                    if (w.charAt(0) != '!') {
+                        this.check(words[0], klitika + "+^(" + w + ")", prefiks);
+                    }
                 }
             }
         }
