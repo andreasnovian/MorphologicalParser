@@ -22,31 +22,45 @@ public class Combiner {
     public String convertToWord(String rootWord, String component) {
         this.rootWord = rootWord;
         String result = rootWord;
-        String[] comp = component.split("\\+");
-        char symbol;
+        String redup = "";
 
-        for (String i : comp) {
-            symbol = i.charAt(0);
-            i = i.substring(1);
+        if (component.contains("(")) {
+            redup = component.substring(component.indexOf("("), component.indexOf(")") + 1);
+            component = component.replace("+^" + redup, "+^");
+            component = component.replace("^" + redup, "^");
+        }
+        
+        if (!component.equalsIgnoreCase("")) {
+            String[] comp = component.split("\\+");
+            char symbol;
 
-            switch (symbol) {
-                case '@':
-                    result += " " + i;
-                    break;
-                case '^':
-                    result = duplikasi(result, i);
-                    break;
-                case '[':
-                    result = prefiksasi(result, i);
-                    break;
-                case ']':
-                    result = sufiksasi(result, i);
-                    break;
-                case '#':
-                    result = konfiksasi(result, i);
-                    break;
-                default:
-                    break;
+            for (String i : comp) {
+                symbol = i.charAt(0);
+                i = i.substring(1);
+
+                switch (symbol) {
+                    case '@':
+                        result += " " + i;
+                        break;
+                    case '^':
+                        if (redup.equalsIgnoreCase("")) {
+                            result = duplikasi(result, i);
+                        } else {
+                            result = duplikasi(result, redup);
+                        }
+                        break;
+                    case '[':
+                        result = prefiksasi(result, i);
+                        break;
+                    case ']':
+                        result = sufiksasi(result, i);
+                        break;
+                    case '#':
+                        result = konfiksasi(result, i);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -301,7 +315,22 @@ public class Combiner {
     private String duplikasi(String rootWord, String duplikasi) {
         String result = rootWord;
 
-        if (duplikasi.equalsIgnoreCase("2")) {
+        //must convert element in between (..) for reduplication
+        if (duplikasi.charAt(0) == '(') {
+            duplikasi = duplikasi.substring(1, duplikasi.length() - 1);
+            String[] temp = duplikasi.split("\\+");
+            rootWord = temp[0];
+            duplikasi = "";
+            for (int j = 1; j < temp.length; j++) {
+                if (temp[j].charAt(0) != '$') {
+                    duplikasi += temp[j] + "+";
+                }
+            }
+            if (!duplikasi.equalsIgnoreCase("")) {
+                duplikasi = duplikasi.substring(0, duplikasi.length() - 1);
+            }
+            result = result + "-" + this.convertToWord(rootWord, duplikasi);
+        } else if (duplikasi.equalsIgnoreCase("2")) {
             result = result + "-" + rootWord;
         } else {
             result = result + "-" + duplikasi;
