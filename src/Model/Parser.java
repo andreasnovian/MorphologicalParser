@@ -186,7 +186,7 @@ public class Parser {
     private void removeDuplicateResult() {
         String l1, l2;
 
-        //remove similar item
+        //remove same item
         for (int i = 0; i < this.parseResult.size(); i++) {
             l1 = this.parseResult.get(i);
             for (int j = i + 1; j < this.parseResult.size(); j++) {
@@ -219,7 +219,7 @@ public class Parser {
             this.parseResult.clear();
             parse(word1.toLowerCase());
             //this.componentValidator();
-            this.convertToWord();
+            //this.convertToWord();
             this.removeDuplicateResult();
             result += word1.toUpperCase() + ":\n";
             for (int i = 0; i < this.parseResult.size(); i++) {
@@ -323,7 +323,7 @@ public class Parser {
                     temp = w3 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
                 }
-                this.redupCheck(w3, klitika + "+]kan", prefiks);
+                this.check(w3, klitika + "+]kan", prefiks);
             }
             if (c3.equalsIgnoreCase("nya")) {
                 temp = sufiksNya(w3);
@@ -331,7 +331,7 @@ public class Parser {
                     temp = w3 + temp;
                     this.parseResult.add(temp);
                 }
-                sufiksCheck(w3, "+%nya", prefiks);
+                this.check(w3, klitika + "+%nya", prefiks);
             }
             if (c3.equalsIgnoreCase("lah")) {
                 temp = sufiksLah(w3);
@@ -339,7 +339,7 @@ public class Parser {
                     temp = w3 + temp;
                     this.parseResult.add(temp);
                 }
-                sufiksCheck(w3, "+%lah", prefiks);
+                this.check(w3, klitika + "+%lah", prefiks);
             }
         }
         if (word.length() > 1) {
@@ -352,7 +352,7 @@ public class Parser {
                     temp = w2 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
                 }
-                this.redupCheck(w2, klitika + "+]an", prefiks);
+                this.check(w2, klitika + "+]an", prefiks);
             }
             if (c2.equalsIgnoreCase("ku")) {
                 temp = sufiksKu(w2);
@@ -360,7 +360,7 @@ public class Parser {
                     temp = w2 + temp;
                     this.parseResult.add(temp);
                 }
-                sufiksCheck(w2, "+%ku", prefiks);
+                this.check(w2, klitika + "+%ku", prefiks);
             }
             if (c2.equalsIgnoreCase("mu")) {
                 temp = sufiksMu(w2);
@@ -368,7 +368,7 @@ public class Parser {
                     temp = w2 + temp;
                     this.parseResult.add(temp);
                 }
-                sufiksCheck(w2, "+%mu", prefiks);
+                this.check(w2, klitika + "+%mu", prefiks);
             }
         }
         if (word.length() > 0) {
@@ -381,7 +381,7 @@ public class Parser {
                     temp = w1 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
                 }
-                this.redupCheck(w1, klitika + "+]i", prefiks);
+                this.check(w1, klitika + "+]i", prefiks);
             }
         }
     }
