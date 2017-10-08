@@ -146,9 +146,6 @@ public class Parser {
                 if (reduplikasi.charAt(0) == '(') {
                     reduplikasi = reduplikasi.substring(1, reduplikasi.length() - 1);
                 }
-                if (rootWord.equalsIgnoreCase(reduplikasi)) {
-                    reduplikasi = "2";
-                }
                 result += "Reduplikasi [" + reduplikasi + "] + ";
             }
             if (!sufiks.equalsIgnoreCase("")) {
@@ -389,6 +386,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Check if word is reduplication or not based on the present of "-"
+     *
+     * @param word word to check
+     * @param klitika any klitika found
+     * @param prefiks any prefiks found previously
+     * @throws IOException
+     */
     private void redupCheck(String word, String klitika, String prefiks) throws IOException {
         String temp;
         if (word.contains("-")) {
@@ -405,7 +410,10 @@ public class Parser {
                     temp = words[0] + prefiks + klitika + "+^" + words[1];
                     this.parseResult.add(temp);
                 }
-                this.check(words[0], klitika + "+^(" + new Parser().parse(words[1]) + ")", prefiks);
+                temp = new Parser().parse(words[1]);
+                if (temp.charAt(0) != '!') {
+                    this.check(words[0], klitika + "+^(" + temp + ")", prefiks);
+                }
             }
         }
     }
@@ -423,7 +431,7 @@ public class Parser {
             //only sufiks check
             sufiksCheck(word, klitika, prefiks);
 
-            //if word is a reduplication
+            //reduplication check
             redupCheck(word, klitika, prefiks);
         }
     }
