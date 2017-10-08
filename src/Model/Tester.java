@@ -17,11 +17,17 @@ public class Tester {
 
     public static void main(String[] args) throws IOException {
         Parser p = new Parser();
-//        Combiner c = new Combiner();
+        Combiner c = new Combiner();
 //        MorphologicalParser mp = new MorphologicalParser();
 
 //        System.out.println(p.convertToWord("punya", "#me-i"));
-        System.out.print(p.process("makananmu"));
+//        System.out.println(p.process("anak-beranak bersayur-mayur bersalam-salaman"));
+//        System.out.println(p.process("berlari-larian"));
+//        System.out.println(p.process("kaumakan"));
+//        System.out.println(p.process("bersamamu"));
+
+//        System.out.println(c.convertToWord("kejar", "[ber+^(kejar+]an)"));
+          System.out.println(p.process("berkejar-kejaran"));
 
 //          System.out.println(c.convertToWord("pesona", "[me"));
 //        MorphologicalParser mp = new MorphologicalParser();
