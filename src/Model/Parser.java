@@ -13,11 +13,11 @@ public class Parser {
     //an object of a lexicon
     public Lexicon lexicon;
 
-    private final ArrayList<String> tempResult;
+    private final ArrayList<String> parseResult;
 
     public Parser() throws IOException {
         this.lexicon = new Lexicon();
-        this.tempResult = new ArrayList<>();
+        this.parseResult = new ArrayList<>();
     }
 
     /**
@@ -44,9 +44,9 @@ public class Parser {
         boolean valid;
         String[] words;
 
-        for (int i = 0; i < this.tempResult.size(); i++) {
+        for (int i = 0; i < this.parseResult.size(); i++) {
             component = "";
-            line = this.tempResult.get(i);
+            line = this.parseResult.get(i);
             words = line.split("\\+");
             rootWord = words[0];
             for (int j = 1; j < words.length; j++) {
@@ -59,7 +59,7 @@ public class Parser {
                 component = component.substring(0, component.length() - 1);
                 valid = this.lexicon.searchInFile(rootWord, component);
                 if (!valid) {
-                    this.tempResult.remove(line);
+                    this.parseResult.remove(line);
                     i--;
                 }
             }
@@ -70,14 +70,14 @@ public class Parser {
      * To convert from String "malu+#per-kan+[me+$mu" to "Prefiks [me] + Bentuk
      * Dasar [malu] + Konfiks [per-kan] + Klitika [mu]"
      */
-    private void convertToWord() {
+    private void convertToWord() throws IOException {
         String rootWord;
         String komposisi, reduplikasi, prefiks, sufiks, konfiks, proklitika, enklitika;
         String line, result;
         String[] words;
         String[] temp;
 
-        for (int i = 0; i < this.tempResult.size(); i++) {
+        for (int i = 0; i < this.parseResult.size(); i++) {
             komposisi = "";
             reduplikasi = "";
             prefiks = "";
@@ -87,7 +87,12 @@ public class Parser {
             enklitika = "";
             result = "";
 
-            line = this.tempResult.get(i);
+            line = this.parseResult.get(i);
+            if (line.contains("(")) {
+                reduplikasi = line.substring(line.indexOf("("), line.indexOf(")") + 1);
+                line = line.replace("+^" + reduplikasi, "");
+                reduplikasi += "+";
+            }
             words = line.split("\\+");
             rootWord = words[0];
             for (String word : words) {
@@ -138,10 +143,13 @@ public class Parser {
             }
             if (!reduplikasi.equalsIgnoreCase("")) {
                 reduplikasi = reduplikasi.substring(0, reduplikasi.length() - 1);
-                temp = reduplikasi.split("\\+");
-                for (String word : temp) {
-                    result += "Reduplikasi [" + word + "] + ";
+                if (reduplikasi.charAt(0) == '(') {
+                    reduplikasi = reduplikasi.substring(1, reduplikasi.length() - 1);
                 }
+                if (rootWord.equalsIgnoreCase(reduplikasi)) {
+                    reduplikasi = "2";
+                }
+                result += "Reduplikasi [" + reduplikasi + "] + ";
             }
             if (!sufiks.equalsIgnoreCase("")) {
                 sufiks = sufiks.substring(0, sufiks.length() - 1);
@@ -173,8 +181,27 @@ public class Parser {
             }
 
             result = result.substring(0, result.length() - 3);
-            this.tempResult.remove(i);
-            this.tempResult.add(i, result);
+            this.parseResult.remove(i);
+            this.parseResult.add(i, result);
+        }
+    }
+
+    private void removeDuplicateResult() {
+        String l1, l2;
+
+        //remove similar item
+        for (int i = 0; i < this.parseResult.size(); i++) {
+            l1 = this.parseResult.get(i);
+            for (int j = i + 1; j < this.parseResult.size(); j++) {
+                l2 = this.parseResult.get(j);
+                if (l1.equalsIgnoreCase(l2)) {
+                    this.parseResult.remove(j);
+                    if (i > 0) {
+                        i--;
+                    }
+                    j--;
+                }
+            }
         }
     }
 
@@ -192,13 +219,14 @@ public class Parser {
         String word[] = text.split(" ");
 
         for (String word1 : word) {
-            this.tempResult.clear();
+            this.parseResult.clear();
             parse(word1.toLowerCase());
             //this.componentValidator();
             this.convertToWord();
+            this.removeDuplicateResult();
             result += word1.toUpperCase() + ":\n";
-            for (int i = 0; i < this.tempResult.size(); i++) {
-                result += this.tempResult.get(i) + ";\n";
+            for (int i = 0; i < this.parseResult.size(); i++) {
+                result += this.parseResult.get(i) + ";\n";
             }
             result += "\n";
         }
@@ -211,39 +239,28 @@ public class Parser {
      *
      * @param word word to parse
      */
-    private void parse(String word) {
+    private String parse(String word) throws IOException {
         boolean isAWord = true;
         for (int i = 0; i < word.length(); i++) {
             int c = (int) word.charAt(i);
             if (c < 97 || c > 122) {
                 isAWord = false;
             }
+            if (c == 45) {
+                isAWord = true;
+            }
         }
 
         if (isAWord) {
-            //if word is found in lexicon
-            if (isRootWord(word)) {
-                this.tempResult.add(word);
-            }
-
-            //afixed word must be 3 or more letters
-            if (word.length() > 3) {
-                //prefiks check, including sufiks check
-                prefiksCheck(word, "", "");
-
-                //only sufiks check
-                sufiksCheck(word, "", "");
-
-                //if word is a reduplication
-                if (word.contains("-")) {
-
-                }
-            }
+            this.check(word, "", "");
         }
 
-        if (this.tempResult.isEmpty()) {
-            this.tempResult.add("!" + word);
+        if (this.parseResult.isEmpty()) {
+            this.parseResult.add("!" + word);
         }
+
+        String result = this.parseResult.get(this.parseResult.size() - 1);
+        return result;
     }
 
     /**
@@ -252,34 +269,39 @@ public class Parser {
      * @param word word to check
      * @param klitika any klitika found
      */
-    private void prefiksCheck(String word, String klitika, String prefiks) {
-        String c2 = word.substring(0, 2);
-        String c3 = word.substring(0, 3);
+    private void prefiksCheck(String word, String klitika, String prefiks) throws IOException {
+        if (word.length() > 2) {
+            String c2 = word.substring(0, 2);
+            String w2 = word.substring(2);
 
-        String w2 = word.substring(2);
-        String w3 = word.substring(3);
+            if (c2.equalsIgnoreCase("be")) {
+                prefiksBer(w2, klitika, prefiks);
+            } else if (c2.equalsIgnoreCase("me")) {
+                prefiksMe(w2);
+            } else if (c2.equalsIgnoreCase("di")) {
+                prefiksDi(w2);
+            } else if (c2.equalsIgnoreCase("ke")) {
+                prefiksKe(w2);
+            } else if (c2.equalsIgnoreCase("ku")) {
+                prefiksKu(w2);
+            } else if (c2.equalsIgnoreCase("se")) {
+                prefiksSe(w2);
+            } else if (c2.equalsIgnoreCase("pe")) {
+                prefiksPe(w2);
+            } else if (c2.equalsIgnoreCase("te")) {
+                prefiksTer(w2);
+            }
+        }
 
-        //prefix check
-        if (c2.equalsIgnoreCase("be")) {
-            prefiksBer(w2, klitika, prefiks);
-        } else if (c2.equalsIgnoreCase("me")) {
-            prefiksMe(w2);
-        } else if (c2.equalsIgnoreCase("di")) {
-            prefiksDi(w2);
-        } else if (c2.equalsIgnoreCase("ke")) {
-            prefiksKe(w2);
-        } else if (c2.equalsIgnoreCase("ku")) {
-            prefiksKu(w2);
-        } else if (c2.equalsIgnoreCase("se")) {
-            prefiksSe(w2);
-        } else if (c2.equalsIgnoreCase("pe")) {
-            prefiksPe(w2);
-        } else if (c2.equalsIgnoreCase("te")) {
-            prefiksTer(w2);
-        } else if (c3.equalsIgnoreCase("per")) {
-            prefiksPer(w3);
-        } else if (c3.equalsIgnoreCase("kau")) {
-            prefiksKau(w3);
+        if (word.length() > 3) {
+            String c3 = word.substring(0, 3);
+            String w3 = word.substring(3);
+
+            if (c3.equalsIgnoreCase("per")) {
+                prefiksPer(w3);
+            } else if (c3.equalsIgnoreCase("kau")) {
+                prefiksKau(w3);
+            }
         }
     }
 
@@ -291,7 +313,7 @@ public class Parser {
      * @param klitika any klitika found
      * @param prefiks any prefiks found previously
      */
-    private void sufiksCheck(String word, String klitika, String prefiks) {
+    private void sufiksCheck(String word, String klitika, String prefiks) throws IOException {
         String temp;
 
         if (word.length() > 2) {
@@ -302,14 +324,15 @@ public class Parser {
                 temp = sufiksKan(w3);
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w3 + prefiks + temp + klitika;
-                    this.tempResult.add(temp);
+                    this.parseResult.add(temp);
                 }
+                this.redupCheck(w3, klitika + "+]kan", prefiks);
             }
             if (c3.equalsIgnoreCase("nya")) {
                 temp = sufiksNya(w3);
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w3 + temp;
-                    this.tempResult.add(temp);
+                    this.parseResult.add(temp);
                 }
                 sufiksCheck(w3, "+%nya", prefiks);
             }
@@ -317,7 +340,7 @@ public class Parser {
                 temp = sufiksLah(w3);
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w3 + temp;
-                    this.tempResult.add(temp);
+                    this.parseResult.add(temp);
                 }
                 sufiksCheck(w3, "+%lah", prefiks);
             }
@@ -330,14 +353,15 @@ public class Parser {
                 temp = sufiksAn(w2);
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w2 + prefiks + temp + klitika;
-                    this.tempResult.add(temp);
+                    this.parseResult.add(temp);
                 }
+                this.redupCheck(w2, klitika + "+]an", prefiks);
             }
             if (c2.equalsIgnoreCase("ku")) {
                 temp = sufiksKu(w2);
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w2 + temp;
-                    this.tempResult.add(temp);
+                    this.parseResult.add(temp);
                 }
                 sufiksCheck(w2, "+%ku", prefiks);
             }
@@ -345,7 +369,7 @@ public class Parser {
                 temp = sufiksMu(w2);
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w2 + temp;
-                    this.tempResult.add(temp);
+                    this.parseResult.add(temp);
                 }
                 sufiksCheck(w2, "+%mu", prefiks);
             }
@@ -358,29 +382,59 @@ public class Parser {
                 temp = sufiksI(w1);
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w1 + prefiks + temp + klitika;
-                    this.tempResult.add(temp);
+                    this.parseResult.add(temp);
                 }
+                this.redupCheck(w1, klitika + "+]i", prefiks);
             }
         }
     }
 
-    private void prefiksBer(String word, String klitika, String prefiks) {
+    private void redupCheck(String word, String klitika, String prefiks) throws IOException {
         String temp;
+        if (word.contains("-")) {
+            String[] words = word.split("-");
 
-        //ex. beragam
+            if (words[0].equalsIgnoreCase(words[1])) {
+                if (isRootWord(words[0])) {
+                    temp = words[0] + prefiks + klitika + "+^2";
+                    this.parseResult.add(temp);
+                }
+                this.check(words[0], klitika + "+^2", prefiks);
+            } else {
+                if (isRootWord(words[0])) {
+                    temp = words[0] + prefiks + klitika + "+^" + words[1];
+                    this.parseResult.add(temp);
+                }
+                this.check(words[0], klitika + "+^(" + new Parser().parse(words[1]) + ")", prefiks);
+            }
+        }
+    }
+
+    private void check(String word, String klitika, String prefiks) throws IOException {
+        //if word is found in lexicon
         if (isRootWord(word)) {
-            this.tempResult.add(word + "+[ber" + prefiks + klitika);
+            this.parseResult.add(word + prefiks + klitika);
         }
-        prefiksCheck(word, klitika, "+[ber");
-        sufiksCheck(word, klitika, "+[ber");
+        //afixed word must be 3 or more letters
+        if (word.length() > 3) {
+            //prefiks check, including sufiks check
+            prefiksCheck(word, klitika, prefiks);
 
-        temp = word.substring(1);
-        //ex. beranak, belajar
-        if (isRootWord(temp)) {
-            this.tempResult.add(temp + "+[ber" + prefiks + klitika);
+            //only sufiks check
+            sufiksCheck(word, klitika, prefiks);
+
+            //if word is a reduplication
+            redupCheck(word, klitika, prefiks);
         }
-        prefiksCheck(temp, klitika, "+[ber");
-        sufiksCheck(temp, klitika, "+[ber");
+    }
+
+    private void prefiksBer(String word, String klitika, String prefiks) throws IOException {
+        //ex. beragam
+        this.check(word, klitika, "+[ber" + prefiks);
+
+        //ex. beranak, belajar
+        word = word.substring(1);
+        this.check(word, klitika, "+[ber" + prefiks);
     }
 
     private void prefiksMe(String word) {
@@ -407,13 +461,13 @@ public class Parser {
         }
     }
 
-    private void prefiksKu(String word) {
+    private void prefiksKu(String word) throws IOException {
         String result;
 
         if (isRootWord(word)) {
             result = "+$ku";
             result = word + result;
-            this.tempResult.add(result);
+            this.parseResult.add(result);
         }
 
         prefiksCheck(word, "+$ku", "");
@@ -452,13 +506,13 @@ public class Parser {
         }
     }
 
-    private void prefiksKau(String word) {
+    private void prefiksKau(String word) throws IOException {
         String result;
 
         if (isRootWord(word)) {
             result = "+$kau";
             result = word + result;
-            this.tempResult.add(result);
+            this.parseResult.add(result);
         }
 
         prefiksCheck(word, "+$kau", "");
