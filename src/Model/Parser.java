@@ -57,7 +57,6 @@ public class Parser {
 
             if (!component.equalsIgnoreCase("")) {
                 component = component.substring(0, component.length() - 1);
-                konfiksCheck(rootWord, component);
                 valid = this.lexicon.searchInFile(rootWord, component);
                 if (!valid) {
                     this.parseResult.remove(line);
@@ -327,7 +326,9 @@ public class Parser {
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w3 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
+                    this.konfiksCheck();
                 }
+                //cek komposisi
                 this.check(w3, klitika + "+]kan", prefiks);
             }
             if (c3.equalsIgnoreCase("nya")) {
@@ -364,7 +365,9 @@ public class Parser {
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w2 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
+                    this.konfiksCheck();
                 }
+                //cekKomposisi
                 this.check(w2, klitika + "+]an", prefiks);
             }
             if (c2.equalsIgnoreCase("ku")) {
@@ -393,7 +396,9 @@ public class Parser {
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w1 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
+                    this.konfiksCheck();
                 }
+                //cekKomposisi
                 this.check(w1, klitika + "+]i", prefiks);
             }
         }
@@ -624,23 +629,36 @@ public class Parser {
         return result;
     }
 
-    private void konfiksCheck(String rootWord, String component) {
-        String temp;
-        if (component.contains("[ber+]an")) {
-            temp = component.replace("[ber+]an", "#ber-an");
-            this.parseResult.add(rootWord+"+"+temp);
-        } else if (component.contains("[ke+]an")) {
-            temp = component.replace("[ke+]an", "#ke-an");
-            this.parseResult.add(rootWord+"+"+temp);
-        } else if (component.contains("[pe+]an")) {
-            temp = component.replace("[pe+]an", "#pe-an");
-            this.parseResult.add(rootWord+"+"+temp);
-        } else if (component.contains("[per+]an")) {
-            temp = component.replace("[per+]an", "#per-an");
-            this.parseResult.add(rootWord+"+"+temp);
-        } else if (component.contains("[se+]nya")) {
-            temp = component.replace("[se+]nya", "#se-nya");
-            this.parseResult.add(rootWord+"+"+temp);
+    private void konfiksCheck() {
+        String rootWord = "", component, line;
+        if (!this.parseResult.isEmpty()) {
+            for (int i =0; i<this.parseResult.size();i++) {
+                line = this.parseResult.get(i);
+                if (line.contains("+")) {
+                    for (int j = 0; j < line.indexOf("+"); j++) {
+                        rootWord += line.charAt(j);
+                    }
+                    component = line.substring(line.indexOf("+") + 1);
+                    
+                    String temp;
+                    if (component.contains("[ber+]an")) {
+                        temp = component.replace("[ber+]an", "#ber-an");
+                        this.parseResult.add(rootWord + "+" + temp);
+                    } else if (component.contains("[ke+]an")) {
+                        temp = component.replace("[ke+]an", "#ke-an");
+                        this.parseResult.add(rootWord + "+" + temp);
+                    } else if (component.contains("[pe+]an")) {
+                        temp = component.replace("[pe+]an", "#pe-an");
+                        this.parseResult.add(rootWord + "+" + temp);
+                    } else if (component.contains("[per+]an")) {
+                        temp = component.replace("[per+]an", "#per-an");
+                        this.parseResult.add(rootWord + "+" + temp);
+                    } else if (component.contains("[se+]nya")) {
+                        temp = component.replace("[se+]nya", "#se-nya");
+                        this.parseResult.add(rootWord + "+" + temp);
+                    }
+                }
+            }
         }
     }
 }
