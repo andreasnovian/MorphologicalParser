@@ -57,10 +57,12 @@ public class Parser {
 
             if (!component.equalsIgnoreCase("")) {
                 component = component.substring(0, component.length() - 1);
-                valid = this.lexicon.searchInFile(rootWord, component);
-                if (!valid) {
-                    this.parseResult.remove(line);
-                    i--;
+                if (isRootWord(rootWord)) {
+                    valid = this.lexicon.searchInFile(rootWord, component);
+                    if (!valid) {
+                        this.parseResult.remove(line);
+                        i--;
+                    }
                 }
             }
         }
@@ -72,13 +74,14 @@ public class Parser {
      */
     private void convertToWord() throws IOException {
         String rootWord;
-        String komposisi, reduplikasi, prefiks, sufiks, konfiks, proklitika, enklitika;
+        String preKomposisi, postKomposisi, reduplikasi, prefiks, sufiks, konfiks, proklitika, enklitika;
         String line, result;
         String[] words;
         String[] temp;
 
         for (int i = 0; i < this.parseResult.size(); i++) {
-            komposisi = "";
+            preKomposisi = "";
+            postKomposisi = "";
             reduplikasi = "";
             prefiks = "";
             sufiks = "";
@@ -98,7 +101,7 @@ public class Parser {
             for (String word : words) {
                 switch (word.charAt(0)) {
                     case '@':
-                        komposisi += word.substring(1) + "+";
+                        preKomposisi += word.substring(1) + "+";
                         break;
                     case '^':
                         reduplikasi += word.substring(1) + "+";
@@ -118,6 +121,9 @@ public class Parser {
                     case '%':
                         enklitika += word.substring(1) + "+";
                         break;
+                    case '&':
+                        postKomposisi += word.substring(1) + "+";
+                        break;
                     default:
                         break;
                 }
@@ -134,9 +140,9 @@ public class Parser {
             } else {
                 result += "Bentuk Dasar [" + rootWord + "] + ";
             }
-            if (!komposisi.equalsIgnoreCase("")) {
-                komposisi = komposisi.substring(0, komposisi.length() - 1);
-                temp = komposisi.split("\\+");
+            if (!preKomposisi.equalsIgnoreCase("")) {
+                preKomposisi = preKomposisi.substring(0, preKomposisi.length() - 1);
+                temp = preKomposisi.split("\\+");
                 for (String word : temp) {
                     result += "Komposisi [" + word + "] + ";
                 }
@@ -176,6 +182,13 @@ public class Parser {
                     result += "Enklitika [" + word + "] + ";
                 }
             }
+            if (!postKomposisi.equalsIgnoreCase("")) {
+                postKomposisi = postKomposisi.substring(0, postKomposisi.length() - 1);
+                temp = postKomposisi.split("\\+");
+                for (String word : temp) {
+                    result += "Komposisi [" + word + "] + ";
+                }
+            }
 
             result = result.substring(0, result.length() - 3);
             this.parseResult.remove(i);
@@ -213,20 +226,25 @@ public class Parser {
      */
     public String process(String text) throws IOException {
         String result = "";
-        String word[] = text.split(" ");
+        String words[] = text.split(" ");
+        String word;
 
-        for (String word1 : word) {
+        for (int i = 0; i < words.length; i++) {
+            word = words[i];
             this.parseResult.clear();
-            parse(word1.toLowerCase());
+            parse(word.toLowerCase());
+            if (i < words.length - 1) {
+                this.checkKomposisi(words[i + 1]);
+            }
             this.componentValidator();
             this.convertToWord();
             this.removeDuplicateResult();
-            result += word1.toUpperCase() + ":\n";
+            result += word.toUpperCase() + ":\n";
             if (this.parseResult.isEmpty()) {
-                result += "Bentuk Asing [" + word1 + "];";
+                result += "Bentuk Asing [" + word + "];";
             } else {
-                for (int i = 0; i < this.parseResult.size(); i++) {
-                    result += this.parseResult.get(i) + ";\n";
+                for (int j = 0; j < this.parseResult.size(); j++) {
+                    result += this.parseResult.get(j) + ";\n";
                 }
             }
             result += "\n";
@@ -269,8 +287,9 @@ public class Parser {
      *
      * @param word word to check
      * @param klitika any klitika found
+     * @param prefiks any prefiks found previously
      */
-    private void prefiksCheck(String word, String klitika, String prefiks) throws IOException {
+    private void checkPrefiks(String word, String klitika, String prefiks) throws IOException {
         if (word.length() > 2) {
             String c2 = word.substring(0, 2);
             String w2 = word.substring(2);
@@ -314,7 +333,7 @@ public class Parser {
      * @param klitika any klitika found
      * @param prefiks any prefiks found previously
      */
-    private void sufiksCheck(String word, String klitika, String prefiks) throws IOException {
+    private void checkSufiks(String word, String klitika, String prefiks) throws IOException {
         String temp;
 
         if (word.length() > 2) {
@@ -326,9 +345,10 @@ public class Parser {
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w3 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
-                    this.konfiksCheck();
+                    this.checkKonfiks();
                 }
-                //cek komposisi
+                this.checkKomposisi(w3, klitika + "+]kan", prefiks);
+                this.checkKonfiks();
                 this.check(w3, klitika + "+]kan", prefiks);
             }
             if (c3.equalsIgnoreCase("nya")) {
@@ -365,9 +385,10 @@ public class Parser {
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w2 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
-                    this.konfiksCheck();
+                    this.checkKonfiks();
                 }
-                //cekKomposisi
+                this.checkKomposisi(w2, klitika + "+]an", prefiks);
+                this.checkKonfiks();
                 this.check(w2, klitika + "+]an", prefiks);
             }
             if (c2.equalsIgnoreCase("ku")) {
@@ -396,9 +417,10 @@ public class Parser {
                 if (!temp.equalsIgnoreCase("")) {
                     temp = w1 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
-                    this.konfiksCheck();
+                    this.checkKonfiks();
                 }
-                //cekKomposisi
+                this.checkKomposisi(w1, klitika + "+]i", prefiks);
+                this.checkKonfiks();
                 this.check(w1, klitika + "+]i", prefiks);
             }
         }
@@ -412,7 +434,7 @@ public class Parser {
      * @param prefiks any prefiks found previously
      * @throws IOException
      */
-    private void redupCheck(String word, String klitika, String prefiks) throws IOException {
+    private void checkRedup(String word, String klitika, String prefiks) throws IOException {
         String temp;
         if (word.contains("-")) {
             String[] words = word.split("-");
@@ -448,13 +470,13 @@ public class Parser {
         //afixed word must be 3 or more letters
         if (word.length() > 3) {
             //prefiks check, including sufiks check
-            prefiksCheck(word, klitika, prefiks);
+            checkPrefiks(word, klitika, prefiks);
 
             //only sufiks check
-            sufiksCheck(word, klitika, prefiks);
+            checkSufiks(word, klitika, prefiks);
 
             //reduplication check
-            redupCheck(word, klitika, prefiks);
+            checkRedup(word, klitika, prefiks);
         }
     }
 
@@ -500,8 +522,8 @@ public class Parser {
             this.parseResult.add(result);
         }
 
-        prefiksCheck(word, "+$ku", "");
-        sufiksCheck(word, "+$ku", "");
+        checkPrefiks(word, "+$ku", "");
+        checkSufiks(word, "+$ku", "");
     }
 
     private void prefiksSe(String word) {
@@ -545,8 +567,8 @@ public class Parser {
             this.parseResult.add(result);
         }
 
-        prefiksCheck(word, "+$kau", "");
-        sufiksCheck(word, "+$kau", "");
+        checkPrefiks(word, "+$kau", "");
+        checkSufiks(word, "+$kau", "");
     }
 
     private String sufiksKan(String word) {
@@ -629,36 +651,73 @@ public class Parser {
         return result;
     }
 
-    private void konfiksCheck() {
+    private void checkKonfiks() {
         String rootWord = "", component, line;
-        if (!this.parseResult.isEmpty()) {
-            for (int i =0; i<this.parseResult.size();i++) {
-                line = this.parseResult.get(i);
-                if (line.contains("+")) {
-                    for (int j = 0; j < line.indexOf("+"); j++) {
-                        rootWord += line.charAt(j);
-                    }
-                    component = line.substring(line.indexOf("+") + 1);
-                    
-                    String temp;
-                    if (component.contains("[ber+]an")) {
-                        temp = component.replace("[ber+]an", "#ber-an");
-                        this.parseResult.add(rootWord + "+" + temp);
-                    } else if (component.contains("[ke+]an")) {
-                        temp = component.replace("[ke+]an", "#ke-an");
-                        this.parseResult.add(rootWord + "+" + temp);
-                    } else if (component.contains("[pe+]an")) {
-                        temp = component.replace("[pe+]an", "#pe-an");
-                        this.parseResult.add(rootWord + "+" + temp);
-                    } else if (component.contains("[per+]an")) {
-                        temp = component.replace("[per+]an", "#per-an");
-                        this.parseResult.add(rootWord + "+" + temp);
-                    } else if (component.contains("[se+]nya")) {
-                        temp = component.replace("[se+]nya", "#se-nya");
-                        this.parseResult.add(rootWord + "+" + temp);
-                    }
+        for (int i = 0; i < this.parseResult.size(); i++) {
+            rootWord = "";
+            line = this.parseResult.get(i);
+            if (line.contains("+")) {
+                for (int j = 0; j < line.indexOf("+"); j++) {
+                    rootWord += line.charAt(j);
+                }
+                component = line.substring(line.indexOf("+") + 1);
+
+                String temp;
+                if (component.contains("[ber+]an")) {
+                    temp = component.replace("[ber+]an", "#ber-an");
+                    this.parseResult.add(rootWord + "+" + temp);
+                } else if (component.contains("[ke+]an")) {
+                    temp = component.replace("[ke+]an", "#ke-an");
+                    this.parseResult.add(rootWord + "+" + temp);
+                } else if (component.contains("[pe+]an")) {
+                    temp = component.replace("[pe+]an", "#pe-an");
+                    this.parseResult.add(rootWord + "+" + temp);
+                } else if (component.contains("[per+]an")) {
+                    temp = component.replace("[per+]an", "#per-an");
+                    this.parseResult.add(rootWord + "+" + temp);
+                } else if (component.contains("[se+]nya")) {
+                    temp = component.replace("[se+]nya", "#se-nya");
+                    this.parseResult.add(rootWord + "+" + temp);
                 }
             }
+        }
+    }
+
+    /**
+     * To check if a word is first komposisi then afixed ex. pertanggungjawaban
+     *
+     * @param word word to check
+     * @param klitika any klitika found
+     * @param prefiks any prefiks found previously
+     */
+    private void checkKomposisi(String word, String klitika, String prefiks) {
+        String rootWord = "";
+        String temp;
+        for (int i = 0; i < word.length() - 1; i++) {
+            rootWord += word.charAt(i);
+            temp = word.substring(i + 1);
+            if (isRootWord(rootWord)) {
+                temp = rootWord + "+@" + temp + prefiks + klitika;
+                this.parseResult.add(temp);
+            }
+        }
+    }
+
+    /**
+     * To check if a word is first afixed then komposisi
+     */
+    private void checkKomposisi(String nextWord) {
+        //this method called in process method after parse finish
+        //for all parse result, combine each of them with next word
+        //insert all possibility to each parse result
+        //run a validity check on lexicon
+
+        String line, newLine;
+        for (int i = 0; i < this.parseResult.size(); i++) {
+            line = this.parseResult.get(i);
+            newLine = line + "+&" + nextWord;
+            this.parseResult.add(newLine);
+            i++;
         }
     }
 }
