@@ -57,6 +57,7 @@ public class Parser {
 
             if (!component.equalsIgnoreCase("")) {
                 component = component.substring(0, component.length() - 1);
+                konfiksCheck(rootWord, component);
                 valid = this.lexicon.searchInFile(rootWord, component);
                 if (!valid) {
                     this.parseResult.remove(line);
@@ -222,8 +223,12 @@ public class Parser {
             this.convertToWord();
             this.removeDuplicateResult();
             result += word1.toUpperCase() + ":\n";
-            for (int i = 0; i < this.parseResult.size(); i++) {
-                result += this.parseResult.get(i) + ";\n";
+            if (this.parseResult.isEmpty()) {
+                result += "Bentuk Asing [" + word1 + "];";
+            } else {
+                for (int i = 0; i < this.parseResult.size(); i++) {
+                    result += this.parseResult.get(i) + ";\n";
+                }
             }
             result += "\n";
         }
@@ -418,7 +423,7 @@ public class Parser {
                     temp = words[0] + prefiks + klitika + "+^" + words[1];
                     this.parseResult.add(temp);
                 }
-                
+
                 //to do parse on the second word and check each word on the result
                 ArrayList<String> list = new Parser().parse(words[1]);
                 for (String w : list) {
@@ -608,7 +613,7 @@ public class Parser {
 
         return result;
     }
-    
+
     private String sufiksPun(String word) {
         String result = "";
 
@@ -617,5 +622,25 @@ public class Parser {
         }
 
         return result;
+    }
+
+    private void konfiksCheck(String rootWord, String component) {
+        String temp;
+        if (component.contains("[ber+]an")) {
+            temp = component.replace("[ber+]an", "#ber-an");
+            this.parseResult.add(rootWord+"+"+temp);
+        } else if (component.contains("[ke+]an")) {
+            temp = component.replace("[ke+]an", "#ke-an");
+            this.parseResult.add(rootWord+"+"+temp);
+        } else if (component.contains("[pe+]an")) {
+            temp = component.replace("[pe+]an", "#pe-an");
+            this.parseResult.add(rootWord+"+"+temp);
+        } else if (component.contains("[per+]an")) {
+            temp = component.replace("[per+]an", "#per-an");
+            this.parseResult.add(rootWord+"+"+temp);
+        } else if (component.contains("[se+]nya")) {
+            temp = component.replace("[se+]nya", "#se-nya");
+            this.parseResult.add(rootWord+"+"+temp);
+        }
     }
 }
