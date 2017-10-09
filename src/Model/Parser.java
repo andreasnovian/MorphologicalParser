@@ -218,8 +218,8 @@ public class Parser {
         for (String word1 : word) {
             this.parseResult.clear();
             parse(word1.toLowerCase());
-            //this.componentValidator();
-            //this.convertToWord();
+            this.componentValidator();
+            this.convertToWord();
             this.removeDuplicateResult();
             result += word1.toUpperCase() + ":\n";
             for (int i = 0; i < this.parseResult.size(); i++) {
@@ -328,7 +328,7 @@ public class Parser {
             if (c3.equalsIgnoreCase("nya")) {
                 temp = sufiksNya(w3);
                 if (!temp.equalsIgnoreCase("")) {
-                    temp = w3 + temp;
+                    temp = w3 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
                 }
                 this.check(w3, klitika + "+%nya", prefiks);
@@ -336,7 +336,7 @@ public class Parser {
             if (c3.equalsIgnoreCase("lah")) {
                 temp = sufiksLah(w3);
                 if (!temp.equalsIgnoreCase("")) {
-                    temp = w3 + temp;
+                    temp = w3 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
                 }
                 this.check(w3, klitika + "+%lah", prefiks);
@@ -344,7 +344,7 @@ public class Parser {
             if (c3.equalsIgnoreCase("pun")) {
                 temp = sufiksPun(w3);
                 if (!temp.equalsIgnoreCase("")) {
-                    temp = w3 + temp;
+                    temp = w3 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
                 }
                 this.check(w3, klitika + "+%pun", prefiks);
@@ -365,7 +365,7 @@ public class Parser {
             if (c2.equalsIgnoreCase("ku")) {
                 temp = sufiksKu(w2);
                 if (!temp.equalsIgnoreCase("")) {
-                    temp = w2 + temp;
+                    temp = w2 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
                 }
                 this.check(w2, klitika + "+%ku", prefiks);
@@ -373,7 +373,7 @@ public class Parser {
             if (c2.equalsIgnoreCase("mu")) {
                 temp = sufiksMu(w2);
                 if (!temp.equalsIgnoreCase("")) {
-                    temp = w2 + temp;
+                    temp = w2 + prefiks + temp + klitika;
                     this.parseResult.add(temp);
                 }
                 this.check(w2, klitika + "+%mu", prefiks);
