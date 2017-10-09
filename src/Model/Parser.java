@@ -341,6 +341,14 @@ public class Parser {
                 }
                 this.check(w3, klitika + "+%lah", prefiks);
             }
+            if (c3.equalsIgnoreCase("pun")) {
+                temp = sufiksPun(w3);
+                if (!temp.equalsIgnoreCase("")) {
+                    temp = w3 + temp;
+                    this.parseResult.add(temp);
+                }
+                this.check(w3, klitika + "+%pun", prefiks);
+            }
         }
         if (word.length() > 1) {
             String c2 = word.substring(word.length() - 2);
@@ -596,6 +604,16 @@ public class Parser {
 
         if (isRootWord(word)) {
             result = "+%lah";
+        }
+
+        return result;
+    }
+    
+    private String sufiksPun(String word) {
+        String result = "";
+
+        if (isRootWord(word)) {
+            result = "+%pun";
         }
 
         return result;
