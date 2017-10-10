@@ -91,11 +91,17 @@ public class Parser {
             result = "";
 
             line = this.parseResult.get(i);
-            if (line.contains("(")) {
-                reduplikasi = line.substring(line.indexOf("("), line.indexOf(")") + 1);
+            if (line.contains("^(")) {
+                reduplikasi = line.substring(line.indexOf("^")+1, line.indexOf(")") + 1);
                 line = line.replace("+^" + reduplikasi, "");
                 reduplikasi += "+";
             }
+            if (line.contains("&(")) {
+                postKomposisi = line.substring(line.indexOf("&")+1, line.indexOf(")") + 1);
+                line = line.replace("+&" + postKomposisi, "");
+                postKomposisi += "+";
+            }
+            
             words = line.split("\\+");
             rootWord = words[0];
             for (String word : words) {
@@ -184,10 +190,10 @@ public class Parser {
             }
             if (!postKomposisi.equalsIgnoreCase("")) {
                 postKomposisi = postKomposisi.substring(0, postKomposisi.length() - 1);
-                temp = postKomposisi.split("\\+");
-                for (String word : temp) {
-                    result += "Komposisi [" + word + "] + ";
+                if (postKomposisi.charAt(0) == '(') {
+                    postKomposisi = postKomposisi.substring(1, postKomposisi.length() - 1);
                 }
+                result += "Komposisi [" + postKomposisi + "] + ";
             }
 
             result = result.substring(0, result.length() - 3);
@@ -241,7 +247,7 @@ public class Parser {
             this.removeDuplicateResult();
             result += word.toUpperCase() + ":\n";
             if (this.parseResult.isEmpty()) {
-                result += "Bentuk Asing [" + word + "];";
+                result += "Bentuk Asing [" + word + "];\n";
             } else {
                 for (int j = 0; j < this.parseResult.size(); j++) {
                     result += this.parseResult.get(j) + ";\n";
@@ -652,7 +658,7 @@ public class Parser {
     }
 
     private void checkKonfiks() {
-        String rootWord = "", component, line;
+        String rootWord, component, line;
         for (int i = 0; i < this.parseResult.size(); i++) {
             rootWord = "";
             line = this.parseResult.get(i);
@@ -713,11 +719,11 @@ public class Parser {
         //run a validity check on lexicon
 
         String line, newLine;
-        for (int i = 0; i < this.parseResult.size(); i++) {
+        int size = this.parseResult.size();
+        for (int i = 0; i < size; i++) {
             line = this.parseResult.get(i);
-            newLine = line + "+&" + nextWord;
+            newLine = line + "+&(" + nextWord + ")";
             this.parseResult.add(newLine);
-            i++;
         }
     }
 }
