@@ -696,7 +696,7 @@ public class Parser {
             temp = word.substring(i + 1);
             if (isRootWord(rootWord)) {
                 temp = rootWord + "+@" + temp + prefiks + klitika;
-                if (temp.contains("[") && temp.contains("]") && !temp.contains("-")) {
+                if (temp.contains("[") && temp.contains("]") && !rootWord.contains("-")) {
                     this.parseResult.add(temp);
                 }
             }
