@@ -63,6 +63,9 @@ public class Parser {
                         this.parseResult.remove(line);
                         i--;
                     }
+                } else {
+                    this.parseResult.remove(line);
+                    i--;
                 }
             }
         }
@@ -232,6 +235,7 @@ public class Parser {
             oneWord.clear();
             twoWord.clear();
             this.parseResult.clear();
+
             word = words[i];
             parse(word.toLowerCase());
             if (i < words.length - 1) {
@@ -239,7 +243,7 @@ public class Parser {
             }
 
             this.removeDuplicateResult();
-//            this.componentValidator();
+            this.componentValidator();
 
             for (int j = 0; j < this.parseResult.size(); j++) {
                 if (this.parseResult.get(j).contains("&")) {
@@ -248,30 +252,25 @@ public class Parser {
                     oneWord.add(this.parseResult.get(j));
                 }
             }
-            
+
             this.parseResult.clear();
-            this.parseResult.addAll(twoWord);
             this.parseResult.addAll(oneWord);
+            this.parseResult.addAll(twoWord);
 
             this.convertToWord();
-
-            if (this.parseResult.isEmpty()) {
-                result += "Bentuk Asing [" + word + "];\n";
-            } else {
-                if (!twoWord.isEmpty()) {
-                    result += word.toUpperCase() + " " + words[i + 1].toUpperCase() + ":\n";
-                    for (int j = 0; j < twoWord.size(); j++) {
-                        result += this.parseResult.get(j) + ";\n";
-                    }
+            
+            if (!oneWord.isEmpty()) {
+                result += word.toUpperCase() + ":\n";
+                for (int j = 0; j < oneWord.size(); j++) {
+                    result += this.parseResult.get(j) + ";\n";
                 }
                 result += "\n";
-                if (!oneWord.isEmpty()) {
-                    result += word.toUpperCase() + ":\n";
-                    for (int j = twoWord.size(); j < this.parseResult.size(); j++) {
-                        result += this.parseResult.get(j) + ";\n";
-                    }
+            }
+            if (!twoWord.isEmpty()) {
+                result += word.toUpperCase() + " " + words[i + 1].toUpperCase() + ":\n";
+                for (int j = oneWord.size(); j < this.parseResult.size(); j++) {
+                    result += this.parseResult.get(j) + ";\n";
                 }
-                result = result.trim();
             }
             result += "\n";
         }
