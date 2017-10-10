@@ -243,7 +243,7 @@ public class Parser {
             }
 
             this.removeDuplicateResult();
-            this.componentValidator();
+//            this.componentValidator();
 
             for (int j = 0; j < this.parseResult.size(); j++) {
                 if (this.parseResult.get(j).contains("&")) {
@@ -271,8 +271,8 @@ public class Parser {
                 for (int j = oneWord.size(); j < this.parseResult.size(); j++) {
                     result += this.parseResult.get(j) + ";\n";
                 }
+                result += "\n";
             }
-            result += "\n";
         }
         result = result.trim();
         return result;
