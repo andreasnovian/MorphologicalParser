@@ -23,13 +23,19 @@ public class Combiner {
         this.rootWord = rootWord;
         String result = rootWord;
         String redup = "";
+        String postKomposisi = "";
 
-        if (component.contains("(")) {
-            redup = component.substring(component.indexOf("("), component.indexOf(")") + 1);
+        if (component.contains("^(")) {
+            redup = component.substring(component.indexOf("^") + 1, component.indexOf(")") + 1);
             component = component.replace("+^" + redup, "+^");
             component = component.replace("^" + redup, "^");
         }
-        
+        if (component.contains("&(")) {
+            postKomposisi = component.substring(component.indexOf("&") + 2, component.indexOf(")"));
+            component = component.replace("+&" + postKomposisi, "+&");
+            component = component.replace("&" + postKomposisi, "&");
+        }
+
         if (!component.equalsIgnoreCase("")) {
             String[] comp = component.split("\\+");
             char symbol;
@@ -57,6 +63,13 @@ public class Combiner {
                         break;
                     case '#':
                         result = konfiksasi(result, i);
+                        break;
+                    case '&':
+                        if (postKomposisi.equalsIgnoreCase("")) {
+                            result += " " + i;
+                        } else {
+                            result += " " + postKomposisi;
+                        }
                         break;
                     default:
                         break;
