@@ -27,8 +27,11 @@ public class Tester {
 //        System.out.println(p.process("bersamamu"));
 
 //        System.out.println(c.convertToWord("kejar", "[ber+^(kejar+]an)"));
-          System.out.println(p.process("berkejar-kejaran"));
-
+//          System.out.println(p.process("berkejar-kejaran"));
+//System.out.println(p.process("bertanggungjawaban bertanggung jawab"));
+//System.out.println(p.process("bermakan pakaian"));
+//System.out.println(p.process("bersalam-salaman"));
+System.out.println(p.process("makan malam"));
 //          System.out.println(c.convertToWord("pesona", "[me"));
 //        MorphologicalParser mp = new MorphologicalParser();
 //        String text = "Andreas sedang melakukan tari-menari";

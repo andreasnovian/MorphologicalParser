@@ -96,11 +96,6 @@ public class Parser {
                 line = line.replace("+^" + reduplikasi, "");
                 reduplikasi += "+";
             }
-            if (line.contains("&(")) {
-                postKomposisi = line.substring(line.indexOf("&")+1, line.indexOf(")") + 1);
-                line = line.replace("+&" + postKomposisi, "");
-                postKomposisi += "+";
-            }
             
             words = line.split("\\+");
             rootWord = words[0];
@@ -190,9 +185,6 @@ public class Parser {
             }
             if (!postKomposisi.equalsIgnoreCase("")) {
                 postKomposisi = postKomposisi.substring(0, postKomposisi.length() - 1);
-                if (postKomposisi.charAt(0) == '(') {
-                    postKomposisi = postKomposisi.substring(1, postKomposisi.length() - 1);
-                }
                 result += "Komposisi [" + postKomposisi + "] + ";
             }
 
@@ -722,7 +714,7 @@ public class Parser {
         int size = this.parseResult.size();
         for (int i = 0; i < size; i++) {
             line = this.parseResult.get(i);
-            newLine = line + "+&(" + nextWord + ")";
+            newLine = line + "+&" + nextWord + "";
             this.parseResult.add(newLine);
         }
     }

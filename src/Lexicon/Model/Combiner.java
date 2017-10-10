@@ -30,11 +30,6 @@ public class Combiner {
             component = component.replace("+^" + redup, "+^");
             component = component.replace("^" + redup, "^");
         }
-        if (component.contains("&(")) {
-            postKomposisi = component.substring(component.indexOf("&") + 2, component.indexOf(")"));
-            component = component.replace("+&" + postKomposisi, "+&");
-            component = component.replace("&" + postKomposisi, "&");
-        }
 
         if (!component.equalsIgnoreCase("")) {
             String[] comp = component.split("\\+");
@@ -65,11 +60,7 @@ public class Combiner {
                         result = konfiksasi(result, i);
                         break;
                     case '&':
-                        if (postKomposisi.equalsIgnoreCase("")) {
-                            result += " " + i;
-                        } else {
-                            result += " " + postKomposisi;
-                        }
+                        result += " " + i;
                         break;
                     default:
                         break;
