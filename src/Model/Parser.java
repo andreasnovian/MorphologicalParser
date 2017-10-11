@@ -621,20 +621,16 @@ public class Parser {
 
     private void prefiksPer(String word, String klitika, String prefiks) throws IOException {
         this.check(word, klitika, "+[per" + prefiks);
-
-        if (word.length() > 3) {
-            //ex. pelajar
-            word = word.substring(1);
-            this.check(word, klitika, "+[per" + prefiks);
-        }
     }
 
     private void prefiksTer(String word, String klitika, String prefiks) throws IOException {
         this.check(word, klitika, "+[ter" + prefiks);
 
         if (word.length() > 3) {
-            word = word.substring(1);
-            this.check(word, klitika, "+[ter" + prefiks);
+            if (word.charAt(0) == 'r') {
+                word = word.substring(1);
+                this.check(word, klitika, "+[ter" + prefiks);
+            }
         }
     }
 
