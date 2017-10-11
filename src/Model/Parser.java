@@ -243,7 +243,7 @@ public class Parser {
             }
 
             this.removeDuplicateResult();
-//            this.componentValidator();
+            this.componentValidator();
 
             for (int j = 0; j < this.parseResult.size(); j++) {
                 if (this.parseResult.get(j).contains("&")) {
@@ -558,85 +558,77 @@ public class Parser {
                 }
             }
         }
-
-//        if (word.length() > 3) {
-//            //mem..; men..
-//            if (word.charAt(0) == 'm' || word.charAt(0) == 'n') {
-//                word = word.substring(1);
-//                this.check(word, klitika, "+[me" + prefiks);
-//                this.check("p" + word, klitika, "+[me" + prefiks);
-//                this.check("t" + word, klitika, "+[me" + prefiks);
-//
-//                if (word.length() > 3) {
-//                    //meng..; meny..
-//                    if (word.charAt(0) == 'g' || word.charAt(0) == 'y') {
-//                        word = word.substring(1);
-//                        this.check(word, klitika, "+[me" + prefiks);
-//                        this.check("k" + word, klitika, "+[me" + prefiks);
-//                        this.check("s" + word, klitika, "+[me" + prefiks);
-//
-//                        if (word.length() > 3) {
-//                            //menge..
-//                            if (word.charAt(0) == 'e') {
-//                                word = word.substring(1);
-//                                this.check(word, klitika, "+[me" + prefiks);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 
-    private void prefiksDi(String word, String klitika, String prefiks) {
-        String result = "";
-
-        if (isRootWord(word)) {
-            result = "+[di";
-        }
+    private void prefiksDi(String word, String klitika, String prefiks) throws IOException {
+        this.check(word, klitika, "+[di" + prefiks);
     }
 
-    private void prefiksKe(String word, String klitika, String prefiks) {
-        String result = "";
-
-        if (isRootWord(word)) {
-            result = "+[ke";
-        }
+    private void prefiksKe(String word, String klitika, String prefiks) throws IOException {
+        this.check(word, klitika, "+[ke" + prefiks);
     }
 
     private void prefiksKu(String word, String klitika, String prefiks) throws IOException {
         this.check(word, "+$ku" + klitika, prefiks);
     }
 
-    private void prefiksSe(String word, String klitika, String prefiks) {
-        String result = "";
+    private void prefiksSe(String word, String klitika, String prefiks) throws IOException {
+        this.check(word, klitika, "+[se" + prefiks);
+    }
 
-        if (isRootWord(word)) {
-            result = "+[se";
+    private void prefiksPe(String word, String klitika, String prefiks) throws IOException {
+        this.check(word, klitika, "+[pe" + prefiks);
+
+        if (word.length() > 3) {
+            //pem..;
+            if (word.charAt(0) == 'm') {
+                word = word.substring(1);
+                this.check(word, klitika, "+[pe" + prefiks);
+                this.check("p" + word, klitika, "+[pe" + prefiks);
+            }
+
+            //pen..;
+            if (word.charAt(0) == 'n') {
+                word = word.substring(1);
+                this.check(word, klitika, "+[pe" + prefiks);
+                this.check("t" + word, klitika, "+[pe" + prefiks);
+
+                if (word.length() > 3) {
+                    //peng..;
+                    if (word.charAt(0) == 'g') {
+                        word = word.substring(1);
+                        this.check(word, klitika, "+[pe" + prefiks);
+                        this.check("k" + word, klitika, "+[pe" + prefiks);
+
+                        if (word.length() > 3) {
+                            //menge..
+                            if (word.charAt(0) == 'e') {
+                                word = word.substring(1);
+                                this.check(word, klitika, "+[pe" + prefiks);
+                            }
+                        }
+                    }
+                    //peny..;
+                    if (word.charAt(0) == 'y') {
+                        word = word.substring(1);
+                        this.check(word, klitika, "+[pe" + prefiks);
+                        this.check("s" + word, klitika, "+[pe" + prefiks);
+                    }
+                }
+            }
         }
     }
 
-    private void prefiksPe(String word, String klitika, String prefiks) {
-        String result = "";
-
-        if (isRootWord(word)) {
-            result = "+[pe";
-        }
+    private void prefiksPer(String word, String klitika, String prefiks) throws IOException {
+        this.check(word, klitika, "+[per" + prefiks);
     }
 
-    private void prefiksPer(String word, String klitika, String prefiks) {
-        String result = "";
-
-        if (isRootWord(word)) {
-            result = "+[per";
-        }
-    }
-
-    private void prefiksTer(String word, String klitika, String prefiks) {
-        String result = "";
-
-        if (isRootWord(word)) {
-            result = "+[ter";
+    private void prefiksTer(String word, String klitika, String prefiks) throws IOException {
+        this.check(word, klitika, "+[ter" + prefiks);
+        
+        if (word.length() > 3) {
+            word = word.substring(1);
+            this.check(word, klitika, "+[ter" + prefiks);
         }
     }
 
