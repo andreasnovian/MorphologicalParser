@@ -258,7 +258,7 @@ public class Parser {
             this.parseResult.addAll(twoWord);
 
             this.convertToWord();
-            
+
             if (!oneWord.isEmpty()) {
                 result += word.toUpperCase() + ":\n";
                 for (int j = 0; j < oneWord.size(); j++) {
@@ -509,17 +509,83 @@ public class Parser {
         //ex. beragam
         this.check(word, klitika, "+[ber" + prefiks);
 
-        //ex. beranak, belajar
-        word = word.substring(1);
-        this.check(word, klitika, "+[ber" + prefiks);
+        if (word.length() > 3) {
+            //ex. beranak, belajar
+            word = word.substring(1);
+            this.check(word, klitika, "+[ber" + prefiks);
+        }
     }
 
-    private void prefiksMe(String word, String klitika, String prefiks) {
-        String result = "";
+    private void prefiksMe(String word, String klitika, String prefiks) throws IOException {
+        //me..
+        this.check(word, klitika, "+[me" + prefiks);
 
-        if (isRootWord(word)) {
-            result = "+[me";
+        if (word.length() > 3) {
+            //mem..;
+            if (word.charAt(0) == 'm') {
+                word = word.substring(1);
+                this.check(word, klitika, "+[me" + prefiks);
+                this.check("p" + word, klitika, "+[me" + prefiks);
+            }
+
+            //men..;
+            if (word.charAt(0) == 'n') {
+                word = word.substring(1);
+                this.check(word, klitika, "+[me" + prefiks);
+                this.check("t" + word, klitika, "+[me" + prefiks);
+
+                if (word.length() > 3) {
+                    //meng..;
+                    if (word.charAt(0) == 'g') {
+                        word = word.substring(1);
+                        this.check(word, klitika, "+[me" + prefiks);
+                        this.check("k" + word, klitika, "+[me" + prefiks);
+
+                        if (word.length() > 3) {
+                            //menge..
+                            if (word.charAt(0) == 'e') {
+                                word = word.substring(1);
+                                this.check(word, klitika, "+[me" + prefiks);
+                            }
+                        }
+                    }
+                    //meny..;
+                    if (word.charAt(0) == 'y') {
+                        word = word.substring(1);
+                        this.check(word, klitika, "+[me" + prefiks);
+                        this.check("s" + word, klitika, "+[me" + prefiks);
+                    }
+                }
+            }
         }
+
+//        if (word.length() > 3) {
+//            //mem..; men..
+//            if (word.charAt(0) == 'm' || word.charAt(0) == 'n') {
+//                word = word.substring(1);
+//                this.check(word, klitika, "+[me" + prefiks);
+//                this.check("p" + word, klitika, "+[me" + prefiks);
+//                this.check("t" + word, klitika, "+[me" + prefiks);
+//
+//                if (word.length() > 3) {
+//                    //meng..; meny..
+//                    if (word.charAt(0) == 'g' || word.charAt(0) == 'y') {
+//                        word = word.substring(1);
+//                        this.check(word, klitika, "+[me" + prefiks);
+//                        this.check("k" + word, klitika, "+[me" + prefiks);
+//                        this.check("s" + word, klitika, "+[me" + prefiks);
+//
+//                        if (word.length() > 3) {
+//                            //menge..
+//                            if (word.charAt(0) == 'e') {
+//                                word = word.substring(1);
+//                                this.check(word, klitika, "+[me" + prefiks);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     private void prefiksDi(String word, String klitika, String prefiks) {
