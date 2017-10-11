@@ -322,19 +322,19 @@ public class Parser {
             if (c2.equalsIgnoreCase("be")) {
                 prefiksBer(w2, klitika, prefiks);
             } else if (c2.equalsIgnoreCase("me")) {
-                prefiksMe(w2);
+                prefiksMe(w2, klitika, prefiks);
             } else if (c2.equalsIgnoreCase("di")) {
-                prefiksDi(w2);
+                prefiksDi(w2, klitika, prefiks);
             } else if (c2.equalsIgnoreCase("ke")) {
-                prefiksKe(w2);
+                prefiksKe(w2, klitika, prefiks);
             } else if (c2.equalsIgnoreCase("ku")) {
-                prefiksKu(w2);
+                prefiksKu(w2, klitika, prefiks);
             } else if (c2.equalsIgnoreCase("se")) {
-                prefiksSe(w2);
+                prefiksSe(w2, klitika, prefiks);
             } else if (c2.equalsIgnoreCase("pe")) {
-                prefiksPe(w2);
+                prefiksPe(w2, klitika, prefiks);
             } else if (c2.equalsIgnoreCase("te")) {
-                prefiksTer(w2);
+                prefiksTer(w2, klitika, prefiks);
             }
         }
 
@@ -343,9 +343,9 @@ public class Parser {
             String w3 = word.substring(3);
 
             if (c3.equalsIgnoreCase("per")) {
-                prefiksPer(w3);
+                prefiksPer(w3, klitika, prefiks);
             } else if (c3.equalsIgnoreCase("kau")) {
-                prefiksKau(w3);
+                prefiksKau(w3, klitika, prefiks);
             }
         }
     }
@@ -514,7 +514,7 @@ public class Parser {
         this.check(word, klitika, "+[ber" + prefiks);
     }
 
-    private void prefiksMe(String word) {
+    private void prefiksMe(String word, String klitika, String prefiks) {
         String result = "";
 
         if (isRootWord(word)) {
@@ -522,7 +522,7 @@ public class Parser {
         }
     }
 
-    private void prefiksDi(String word) {
+    private void prefiksDi(String word, String klitika, String prefiks) {
         String result = "";
 
         if (isRootWord(word)) {
@@ -530,7 +530,7 @@ public class Parser {
         }
     }
 
-    private void prefiksKe(String word) {
+    private void prefiksKe(String word, String klitika, String prefiks) {
         String result = "";
 
         if (isRootWord(word)) {
@@ -538,20 +538,11 @@ public class Parser {
         }
     }
 
-    private void prefiksKu(String word) throws IOException {
-        String result;
-
-        if (isRootWord(word)) {
-            result = "+$ku";
-            result = word + result;
-            this.parseResult.add(result);
-        }
-
-        checkPrefiks(word, "+$ku", "");
-        checkSufiks(word, "+$ku", "");
+    private void prefiksKu(String word, String klitika, String prefiks) throws IOException {
+        this.check(word, "+$ku" + klitika, prefiks);
     }
 
-    private void prefiksSe(String word) {
+    private void prefiksSe(String word, String klitika, String prefiks) {
         String result = "";
 
         if (isRootWord(word)) {
@@ -559,7 +550,7 @@ public class Parser {
         }
     }
 
-    private void prefiksPe(String word) {
+    private void prefiksPe(String word, String klitika, String prefiks) {
         String result = "";
 
         if (isRootWord(word)) {
@@ -567,7 +558,7 @@ public class Parser {
         }
     }
 
-    private void prefiksPer(String word) {
+    private void prefiksPer(String word, String klitika, String prefiks) {
         String result = "";
 
         if (isRootWord(word)) {
@@ -575,7 +566,7 @@ public class Parser {
         }
     }
 
-    private void prefiksTer(String word) {
+    private void prefiksTer(String word, String klitika, String prefiks) {
         String result = "";
 
         if (isRootWord(word)) {
@@ -583,17 +574,8 @@ public class Parser {
         }
     }
 
-    private void prefiksKau(String word) throws IOException {
-        String result;
-
-        if (isRootWord(word)) {
-            result = "+$kau";
-            result = word + result;
-            this.parseResult.add(result);
-        }
-
-        checkPrefiks(word, "+$kau", "");
-        checkSufiks(word, "+$kau", "");
+    private void prefiksKau(String word, String klitika, String prefiks) throws IOException {
+        this.check(word, "+$kau" + klitika, prefiks);
     }
 
     private String sufiksKan(String word) {
