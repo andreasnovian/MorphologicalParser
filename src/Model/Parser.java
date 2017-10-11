@@ -243,7 +243,7 @@ public class Parser {
             }
 
             this.removeDuplicateResult();
-            this.componentValidator();
+//            this.componentValidator();
 
             for (int j = 0; j < this.parseResult.size(); j++) {
                 if (this.parseResult.get(j).contains("&")) {
@@ -342,7 +342,7 @@ public class Parser {
             String c3 = word.substring(0, 3);
             String w3 = word.substring(3);
 
-            if (c3.equalsIgnoreCase("per")) {
+            if (c3.equalsIgnoreCase("per") || c3.equalsIgnoreCase("pel")) {
                 prefiksPer(w3, klitika, prefiks);
             } else if (c3.equalsIgnoreCase("kau")) {
                 prefiksKau(w3, klitika, prefiks);
@@ -621,11 +621,17 @@ public class Parser {
 
     private void prefiksPer(String word, String klitika, String prefiks) throws IOException {
         this.check(word, klitika, "+[per" + prefiks);
+
+        if (word.length() > 3) {
+            //ex. pelajar
+            word = word.substring(1);
+            this.check(word, klitika, "+[per" + prefiks);
+        }
     }
 
     private void prefiksTer(String word, String klitika, String prefiks) throws IOException {
         this.check(word, klitika, "+[ter" + prefiks);
-        
+
         if (word.length() > 3) {
             word = word.substring(1);
             this.check(word, klitika, "+[ter" + prefiks);
