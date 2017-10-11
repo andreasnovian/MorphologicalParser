@@ -5,19 +5,29 @@
  */
 package View;
 
+import Model.Parser;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Andreas Novian
  */
 public class Home extends javax.swing.JFrame {
 
+    Parser p;
+
     /**
      * Creates new form Home
+     * @throws java.io.IOException
      */
-    public Home() {
+    public Home() throws IOException {
         initComponents();
-        this.setSize(450, 600);
+        this.setSize(1000, 600);
         this.setLocationRelativeTo(null);
+        this.setTitle("MORPHOLOGICAL PARSER");
+        this.p = new Parser();
     }
 
     /**
@@ -29,21 +39,112 @@ public class Home extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        outputTextArea = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        inputTextArea = new javax.swing.JTextArea();
+        parseButton = new javax.swing.JButton();
+        titleLabel1 = new javax.swing.JLabel();
+        titleLabel2 = new javax.swing.JLabel();
+        inputLabel = new javax.swing.JLabel();
+        outputLabel = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        outputTextArea.setColumns(20);
+        outputTextArea.setRows(5);
+        jScrollPane1.setViewportView(outputTextArea);
+
+        inputTextArea.setColumns(20);
+        inputTextArea.setRows(5);
+        jScrollPane2.setViewportView(inputTextArea);
+
+        parseButton.setFont(new java.awt.Font("Constantia", 0, 18)); // NOI18N
+        parseButton.setText("PARSE");
+        parseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                parseButtonActionPerformed(evt);
+            }
+        });
+
+        titleLabel1.setFont(new java.awt.Font("Constantia", 0, 24)); // NOI18N
+        titleLabel1.setText("MORPHOLOGICAL PARSER");
+
+        titleLabel2.setFont(new java.awt.Font("Constantia", 0, 24)); // NOI18N
+        titleLabel2.setText("FOR TEXT IN BAHASA INDONESIA");
+
+        inputLabel.setFont(new java.awt.Font("Constantia", 0, 14)); // NOI18N
+        inputLabel.setText("INPUT:");
+
+        outputLabel.setFont(new java.awt.Font("Constantia", 0, 14)); // NOI18N
+        outputLabel.setText("OUTPUT:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(outputLabel))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(inputLabel)))
+                        .addGap(0, 919, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(titleLabel1)
+                .addGap(345, 345, 345))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(titleLabel2)
+                .addGap(306, 306, 306))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(447, 447, 447)
+                .addComponent(parseButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(titleLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(titleLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(inputLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(parseButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(outputLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void parseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parseButtonActionPerformed
+        try {
+            outputTextArea.setText(p.process(inputTextArea.getText()));
+        } catch (IOException ex) {
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_parseButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -74,12 +175,26 @@ public class Home extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                new Home().setVisible(true);
+                try {
+                    new Home().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel inputLabel;
+    private javax.swing.JTextArea inputTextArea;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel outputLabel;
+    private javax.swing.JTextArea outputTextArea;
+    private javax.swing.JButton parseButton;
+    private javax.swing.JLabel titleLabel1;
+    private javax.swing.JLabel titleLabel2;
     // End of variables declaration//GEN-END:variables
 }

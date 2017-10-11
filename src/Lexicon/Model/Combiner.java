@@ -296,6 +296,10 @@ public class Combiner {
     }
 
     private String sufiksasi(String rootWord, String sufiks) {
+        if (rootWord.contains(" ")) {
+            rootWord = rootWord.replace(" ", "");
+        }
+
         String result = rootWord;
 
         result = result + sufiks;
