@@ -50,7 +50,7 @@ public class Parser {
             words = line.split("\\+");
             rootWord = words[0];
             for (int j = 1; j < words.length; j++) {
-                if (words[j].charAt(0) != '$') {
+                if (words[j].charAt(0) != '$' && words[j].charAt(0) != '%') {
                     component += words[j] + "+";
                 }
             }
@@ -257,7 +257,7 @@ public class Parser {
             this.parseResult.addAll(oneWord);
             this.parseResult.addAll(twoWord);
 
-//            this.convertToWord();
+            this.convertToWord();
             if (!oneWord.isEmpty()) {
                 result += word.toUpperCase() + ":\n";
                 for (int j = 0; j < oneWord.size(); j++) {

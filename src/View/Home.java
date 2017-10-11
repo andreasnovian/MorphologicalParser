@@ -52,10 +52,12 @@ public class Home extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         outputTextArea.setColumns(20);
+        outputTextArea.setFont(new java.awt.Font("Monospaced", 0, 16)); // NOI18N
         outputTextArea.setRows(5);
         jScrollPane1.setViewportView(outputTextArea);
 
         inputTextArea.setColumns(20);
+        inputTextArea.setFont(new java.awt.Font("Monospaced", 0, 16)); // NOI18N
         inputTextArea.setRows(5);
         jScrollPane2.setViewportView(inputTextArea);
 
@@ -84,18 +86,13 @@ public class Home extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2))
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(outputLabel))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(inputLabel)))
+                            .addComponent(outputLabel)
+                            .addComponent(inputLabel))
                         .addGap(0, 919, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
