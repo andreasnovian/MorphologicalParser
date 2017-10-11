@@ -510,9 +510,11 @@ public class Parser {
         this.check(word, klitika, "+[ber" + prefiks);
 
         if (word.length() > 3) {
-            //ex. beranak, belajar
-            word = word.substring(1);
-            this.check(word, klitika, "+[ber" + prefiks);
+            if (word.charAt(0) == 'r' || word.charAt(0) == 'l') {
+                //ex. beranak, belajar
+                word = word.substring(1);
+                this.check(word, klitika, "+[ber" + prefiks);
+            }
         }
     }
 
@@ -601,7 +603,7 @@ public class Parser {
                         this.check("k" + word, klitika, "+[pe" + prefiks);
 
                         if (word.length() > 3) {
-                            //menge..
+                            //penge..
                             if (word.charAt(0) == 'e') {
                                 word = word.substring(1);
                                 this.check(word, klitika, "+[pe" + prefiks);
