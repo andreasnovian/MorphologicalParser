@@ -14,14 +14,14 @@ import javax.swing.JOptionPane;
  */
 public class Create extends javax.swing.JFrame {
 
-    private final Home home;
+    private final LexHome home;
 
     /**
      * Creates new form Create
      *
      * @param home
      */
-    public Create(Home home) {
+    public Create(LexHome home) {
         initComponents();
         this.setSize(450, 600);
         this.setLocationRelativeTo(null);

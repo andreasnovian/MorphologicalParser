@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class Read extends javax.swing.JFrame {
 
-    private final Home home;
+    private final LexHome home;
     private String root;
     private String component;
 
@@ -25,7 +25,7 @@ public class Read extends javax.swing.JFrame {
      * @param root
      * @throws java.io.IOException
      */
-    public Read(Home home, String root) throws IOException {
+    public Read(LexHome home, String root) throws IOException {
         initComponents();
         this.setSize(450, 600);
         this.setLocationRelativeTo(null);

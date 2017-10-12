@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class Update extends javax.swing.JFrame {
 
-    private final Home home;
+    private final LexHome home;
     private String root;
     private String component;
 
@@ -25,7 +25,7 @@ public class Update extends javax.swing.JFrame {
      * @param root
      * @throws java.io.IOException
      */
-    public Update(Home home, String root) throws IOException {
+    public Update(LexHome home, String root) throws IOException {
         initComponents();
         this.setSize(450, 600);
         this.setLocationRelativeTo(null);

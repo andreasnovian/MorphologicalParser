@@ -222,12 +222,12 @@ public class Parser {
      *
      * @param text line of text to parse
      * @param validator
-     * @param convert
+     * @param converter
      * @return a list of all the possible parse of each word in text
      *
      * @throws java.io.IOException
      */
-    public String process(String text, boolean validator, boolean convert) throws IOException {
+    public String process(String text, boolean validator, boolean converter) throws IOException {
         String result = "";
         String words[] = text.split(" ");
         String word;
@@ -266,7 +266,7 @@ public class Parser {
             this.parseResult.addAll(oneWord);
             this.parseResult.addAll(twoWord);
 
-            if (convert) {
+            if (converter) {
                 this.convertToWord();
             }
 
