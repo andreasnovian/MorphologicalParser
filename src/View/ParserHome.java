@@ -194,7 +194,7 @@ public class ParserHome extends javax.swing.JFrame {
         String input = inputTextArea.getText();
         if (!input.equalsIgnoreCase("")) {
             try {
-                outputTextArea.setText(parser.process(inputTextArea.getText(), validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
+                outputTextArea.setText(parser.process(input, validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
             } catch (IOException ex) {
                 Logger.getLogger(ParserHome.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -205,7 +205,7 @@ public class ParserHome extends javax.swing.JFrame {
         String input = inputTextArea.getText();
         if (!input.equalsIgnoreCase("")) {
             try {
-                outputTextArea.setText(parser.process(inputTextArea.getText(), validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
+                outputTextArea.setText(parser.process(input, validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
             } catch (IOException ex) {
                 Logger.getLogger(ParserHome.class.getName()).log(Level.SEVERE, null, ex);
             }
