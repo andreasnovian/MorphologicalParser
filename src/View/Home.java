@@ -20,6 +20,7 @@ public class Home extends javax.swing.JFrame {
 
     /**
      * Creates new form Home
+     *
      * @throws java.io.IOException
      */
     public Home() throws IOException {
@@ -28,6 +29,8 @@ public class Home extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setTitle("MORPHOLOGICAL PARSER");
         this.p = new Parser();
+        this.validatorCheckBox.doClick();
+        this.convertCheckBox.doClick();
     }
 
     /**
@@ -48,6 +51,9 @@ public class Home extends javax.swing.JFrame {
         titleLabel2 = new javax.swing.JLabel();
         inputLabel = new javax.swing.JLabel();
         outputLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        validatorCheckBox = new javax.swing.JCheckBox();
+        convertCheckBox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,50 +87,82 @@ public class Home extends javax.swing.JFrame {
         outputLabel.setFont(new java.awt.Font("Constantia", 0, 14)); // NOI18N
         outputLabel.setText("OUTPUT:");
 
+        jButton1.setFont(new java.awt.Font("Constantia", 0, 14)); // NOI18N
+        jButton1.setText("LEXICON");
+
+        validatorCheckBox.setFont(new java.awt.Font("Constantia", 0, 12)); // NOI18N
+        validatorCheckBox.setText("VALIDATOR");
+        validatorCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                validatorCheckBoxActionPerformed(evt);
+            }
+        });
+
+        convertCheckBox.setFont(new java.awt.Font("Constantia", 0, 12)); // NOI18N
+        convertCheckBox.setText("CONVERT");
+        convertCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                convertCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton1)
+                        .addGap(263, 263, 263)
+                        .addComponent(titleLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(447, 447, 447)
+                        .addComponent(parseButton)
+                        .addGap(36, 36, 36)
+                        .addComponent(validatorCheckBox)
+                        .addGap(18, 18, 18)
+                        .addComponent(convertCheckBox)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(outputLabel)
-                            .addComponent(inputLabel))
-                        .addGap(0, 919, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                            .addComponent(jScrollPane2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(outputLabel)
+                                    .addComponent(inputLabel))
+                                .addGap(0, 919, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(titleLabel1)
-                .addGap(345, 345, 345))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(titleLabel2)
-                .addGap(306, 306, 306))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(447, 447, 447)
-                .addComponent(parseButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(295, 295, 295))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(titleLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(titleLabel1)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(titleLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(inputLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(parseButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(parseButton)
+                    .addComponent(validatorCheckBox)
+                    .addComponent(convertCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(outputLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -137,11 +175,33 @@ public class Home extends javax.swing.JFrame {
 
     private void parseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parseButtonActionPerformed
         try {
-            outputTextArea.setText(p.process(inputTextArea.getText()));
+            outputTextArea.setText(p.process(inputTextArea.getText(), validatorCheckBox.isSelected(), convertCheckBox.isSelected()));
         } catch (IOException ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_parseButtonActionPerformed
+
+    private void validatorCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validatorCheckBoxActionPerformed
+        String input = inputTextArea.getText();
+        if (!input.equalsIgnoreCase("")) {
+            try {
+                outputTextArea.setText(p.process(inputTextArea.getText(), validatorCheckBox.isSelected(), convertCheckBox.isSelected()));
+            } catch (IOException ex) {
+                Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_validatorCheckBoxActionPerformed
+
+    private void convertCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convertCheckBoxActionPerformed
+        String input = inputTextArea.getText();
+        if (!input.equalsIgnoreCase("")) {
+            try {
+                outputTextArea.setText(p.process(inputTextArea.getText(), validatorCheckBox.isSelected(), convertCheckBox.isSelected()));
+            } catch (IOException ex) {
+                Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_convertCheckBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -184,8 +244,10 @@ public class Home extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox convertCheckBox;
     private javax.swing.JLabel inputLabel;
     private javax.swing.JTextArea inputTextArea;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel outputLabel;
@@ -193,5 +255,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton parseButton;
     private javax.swing.JLabel titleLabel1;
     private javax.swing.JLabel titleLabel2;
+    private javax.swing.JCheckBox validatorCheckBox;
     // End of variables declaration//GEN-END:variables
 }

@@ -221,11 +221,13 @@ public class Parser {
      * separated by space character, then parse each word
      *
      * @param text line of text to parse
+     * @param validator
+     * @param convert
      * @return a list of all the possible parse of each word in text
      *
      * @throws java.io.IOException
      */
-    public String process(String text) throws IOException {
+    public String process(String text, boolean validator, boolean convert) throws IOException {
         String result = "";
         String words[] = text.split(" ");
         String word;
@@ -243,7 +245,14 @@ public class Parser {
             }
 
             this.removeDuplicateResult();
-//            this.componentValidator();
+
+            if (validator) {
+                this.componentValidator();
+            }
+            
+            if (this.parseResult.isEmpty()){
+                this.parseResult.add("!"+word);
+            }
 
             for (int j = 0; j < this.parseResult.size(); j++) {
                 if (this.parseResult.get(j).contains("&")) {
@@ -257,7 +266,10 @@ public class Parser {
             this.parseResult.addAll(oneWord);
             this.parseResult.addAll(twoWord);
 
-            this.convertToWord();
+            if (convert) {
+                this.convertToWord();
+            }
+
             if (!oneWord.isEmpty()) {
                 result += word.toUpperCase() + ":\n";
                 for (int j = 0; j < oneWord.size(); j++) {

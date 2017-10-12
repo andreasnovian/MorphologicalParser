@@ -29,7 +29,7 @@ public class Tester {
 //        System.out.println(c.convertToWord("kejar", "[ber+^(kejar+]an)"));
 //          System.out.println(p.process("berkejar-kejaran"));
 //System.out.println(p.process("bertanggungjawaban bertanggung jawab"));
-System.out.println(p.process("setengah"));
+System.out.println(p.process("setengah",true,true));
 //System.out.println(p.process("bertanggungjawaban"));
 //System.out.println(p.process("makanan kaleng"));
 //          System.out.println(c.convertToWord("pesona", "[me"));
