@@ -224,31 +224,35 @@ public class Parser {
      * character a..z, 0..9, and - allowed
      */
     private String[] normalizeInput(String text) {
-        String[] temp;
+        String[] tempArray;
+        String tempWord;
         String input = "";
         String[] words;
         char c;
-        
+
         text = text.toLowerCase();
-        temp = text.split("\\s");
-        for (String word : temp) {
+        tempArray = text.split("\\s");
+        for (String word : tempArray) {
             if (!word.equalsIgnoreCase("")) {
+                tempWord = "";
                 for (int i = 0; i < word.length(); i++) {
                     c = word.charAt(i);
                     //a..z
                     if (c >= 97 && c <= 122) {
-                        input += (char) c;
+                        tempWord += (char) c;
                     }
                     //0..9
                     if (c >= 48 && c <= 57) {
-                        input += (char) c;
+                        tempWord += (char) c;
                     }
                     //symbol - 
                     if (c == 45) {
-                        input += (char) c;
+                        tempWord += (char) c;
                     }
                 }
-                input += " ";
+                if (!tempWord.equalsIgnoreCase("")) {
+                    input += tempWord + " ";
+                }
             }
         }
         System.out.println(input);
