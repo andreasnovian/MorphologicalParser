@@ -217,6 +217,47 @@ public class Parser {
     }
 
     /**
+     * Normalize text before entering parse process
+     *
+     * @param text
+     * @return String[] containing each word in text but in lowercase, and only
+     * character a..z, 0..9, and - allowed
+     */
+    private String[] normalizeInput(String text) {
+        String[] temp;
+        String input = "";
+        String[] words;
+        char c;
+        
+        text = text.toLowerCase();
+        temp = text.split("\\s");
+        for (String word : temp) {
+            if (!word.equalsIgnoreCase("")) {
+                for (int i = 0; i < word.length(); i++) {
+                    c = word.charAt(i);
+                    //a..z
+                    if (c >= 97 && c <= 122) {
+                        input += (char) c;
+                    }
+                    //0..9
+                    if (c >= 48 && c <= 57) {
+                        input += (char) c;
+                    }
+                    //symbol - 
+                    if (c == 45) {
+                        input += (char) c;
+                    }
+                }
+                input += " ";
+            }
+        }
+        System.out.println(input);
+        input = input.trim();
+        words = input.split(" ");
+        return words;
+    }
+
+    /**
      * Method to do parsing process a line of text by divide them into each word
      * separated by space character, then parse each word
      *
@@ -229,7 +270,7 @@ public class Parser {
      */
     public String process(String text, boolean validator, boolean converter) throws IOException {
         String result = "";
-        String words[] = text.split(" ");
+        String words[] = normalizeInput(text);
         String word;
         ArrayList<String> oneWord = new ArrayList<>(), twoWord = new ArrayList<>();
 
@@ -249,9 +290,9 @@ public class Parser {
             if (validator) {
                 this.componentValidator();
             }
-            
-            if (this.parseResult.isEmpty()){
-                this.parseResult.add("!"+word);
+
+            if (this.parseResult.isEmpty()) {
+                this.parseResult.add("!" + word);
             }
 
             for (int j = 0; j < this.parseResult.size(); j++) {
