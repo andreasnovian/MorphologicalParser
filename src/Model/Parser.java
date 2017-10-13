@@ -255,7 +255,6 @@ public class Parser {
                 }
             }
         }
-        System.out.println(input);
         input = input.trim();
         words = input.split(" ");
         return words;
