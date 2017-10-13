@@ -1,6 +1,8 @@
 package Model;
 
 import Lexicon.Model.Lexicon;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -271,8 +273,94 @@ public class Parser {
      *
      * @throws java.io.IOException
      */
-    public String process(String text, boolean validator, boolean converter) throws IOException {
+    public String processFromText(String text, boolean validator, boolean converter) throws IOException {
         String result = "";
+        String words[] = normalizeInput(text);
+        String word;
+        ArrayList<String> oneWord = new ArrayList<>(), twoWord = new ArrayList<>();
+
+        for (int i = 0; i < words.length; i++) {
+            oneWord.clear();
+            twoWord.clear();
+            this.parseResult.clear();
+
+            word = words[i];
+            parse(word.toLowerCase());
+            if (i < words.length - 1) {
+                this.checkKomposisi(words[i + 1]);
+            }
+
+            this.removeDuplicateResult();
+
+            if (validator) {
+                this.componentValidator();
+            }
+
+            if (this.parseResult.isEmpty()) {
+                this.parseResult.add("!" + word);
+            }
+
+            for (int j = 0; j < this.parseResult.size(); j++) {
+                if (this.parseResult.get(j).contains("&")) {
+                    twoWord.add(this.parseResult.get(j));
+                } else {
+                    oneWord.add(this.parseResult.get(j));
+                }
+            }
+
+            this.parseResult.clear();
+            this.parseResult.addAll(oneWord);
+            this.parseResult.addAll(twoWord);
+
+            if (converter) {
+                this.convertToWord();
+            }
+
+            if (!oneWord.isEmpty()) {
+                result += word.toUpperCase() + ":\n";
+                for (int j = 0; j < oneWord.size(); j++) {
+                    result += this.parseResult.get(j) + ";\n";
+                }
+                result += "\n";
+            }
+            if (!twoWord.isEmpty()) {
+                result += word.toUpperCase() + " " + words[i + 1].toUpperCase() + ":\n";
+                for (int j = oneWord.size(); j < this.parseResult.size(); j++) {
+                    result += this.parseResult.get(j) + ";\n";
+                }
+                result += "\n";
+            }
+        }
+        result = result.trim();
+        return result;
+    }
+
+    /**
+     * Method to do parsing process a line of text by divide them into each word
+     * separated by space character, then parse each word
+     *
+     * @param filePath path to the input file
+     * @param validator
+     * @param converter
+     * @return a list of all the possible parse of each word in text
+     *
+     * @throws java.io.IOException
+     */
+    public String processFromFile(String filePath, boolean validator, boolean converter) throws IOException {
+        String result = "";
+        String text = "";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String currentLine;
+            while ((currentLine = br.readLine()) != null) {
+                if (!currentLine.equalsIgnoreCase("")) {
+                    text += currentLine;
+                    text = text.trim();
+                    text += " ";
+                }
+            }
+        }
+
         String words[] = normalizeInput(text);
         String word;
         ArrayList<String> oneWord = new ArrayList<>(), twoWord = new ArrayList<>();
