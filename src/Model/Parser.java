@@ -416,54 +416,24 @@ public class Parser {
      * @param prefiks any prefiks found previously
      */
     private void checkSufiks(String word, String prefiks, String sufiks, String klitika, String duplikasi) throws IOException {
-        String temp;
-
         if (word.length() > 2) {
             String c3 = word.substring(word.length() - 3);
             String w3 = word.substring(0, word.length() - 3);
 
             if (c3.equalsIgnoreCase("kan")) {
-                temp = sufiksKan(w3);
-                if (!temp.equalsIgnoreCase("")) {
-                    temp = w3 + prefiks + sufiks + temp + klitika + duplikasi;
-                    this.parseResult.add(temp);
-                    this.checkKonfiks();
-                }
-                this.checkKomposisi(w3, prefiks, sufiks + "+]kan", klitika, duplikasi);
-                this.checkKonfiks();
-                this.check(w3, prefiks, sufiks + "+]kan", klitika, duplikasi);
+                sufiksKan(w3, prefiks, sufiks, klitika, duplikasi);
             }
             if (c3.equalsIgnoreCase("nya")) {
-                temp = sufiksNya(w3);
-                if (!temp.equalsIgnoreCase("")) {
-                    temp = w3 + prefiks + sufiks + klitika + temp + duplikasi;
-                    this.parseResult.add(temp);
-                }
-                this.check(w3, prefiks, sufiks, klitika + "+%nya", duplikasi);
+                sufiksNya(w3, prefiks, sufiks, klitika, duplikasi);
             }
             if (c3.equalsIgnoreCase("lah")) {
-                temp = sufiksLah(w3);
-                if (!temp.equalsIgnoreCase("")) {
-                    temp = w3 + prefiks + sufiks + klitika + temp + duplikasi;
-                    this.parseResult.add(temp);
-                }
-                this.check(w3, prefiks, sufiks, klitika + "+%lah", duplikasi);
+                sufiksLah(w3, prefiks, sufiks, klitika, duplikasi);
             }
             if (c3.equalsIgnoreCase("pun")) {
-                temp = sufiksPun(w3);
-                if (!temp.equalsIgnoreCase("")) {
-                    temp = w3 + prefiks + sufiks + klitika + temp + duplikasi;
-                    this.parseResult.add(temp);
-                }
-                this.check(w3, prefiks, sufiks, klitika + "+%pun", duplikasi);
+                sufiksPun(w3, prefiks, sufiks, klitika, duplikasi);
             }
             if (c3.equalsIgnoreCase("kah")) {
-                temp = sufiksKah(w3);
-                if (!temp.equalsIgnoreCase("")) {
-                    temp = w3 + prefiks + sufiks + klitika + temp + duplikasi;
-                    this.parseResult.add(temp);
-                }
-                this.check(w3, prefiks, sufiks, klitika + "+%kah", duplikasi);
+                sufiksKah(w3, prefiks, sufiks, klitika, duplikasi);
             }
         }
         if (word.length() > 1) {
@@ -471,31 +441,13 @@ public class Parser {
             String w2 = word.substring(0, word.length() - 2);
 
             if (c2.equalsIgnoreCase("an")) {
-                temp = sufiksAn(w2);
-                if (!temp.equalsIgnoreCase("")) {
-                    temp = w2 + prefiks + sufiks + temp + klitika + duplikasi;
-                    this.parseResult.add(temp);
-                    this.checkKonfiks();
-                }
-                this.checkKomposisi(w2, prefiks, sufiks + "+]an", klitika, duplikasi);
-                this.checkKonfiks();
-                this.check(w2, prefiks, sufiks + "+]an", klitika, duplikasi);
+                sufiksAn(w2, prefiks, sufiks, klitika, duplikasi);
             }
             if (c2.equalsIgnoreCase("ku")) {
-                temp = sufiksKu(w2);
-                if (!temp.equalsIgnoreCase("")) {
-                    temp = w2 + prefiks + sufiks + klitika + temp + duplikasi;
-                    this.parseResult.add(temp);
-                }
-                this.check(w2, prefiks, sufiks, klitika + "+%ku", duplikasi);
+                sufiksKu(w2, prefiks, sufiks, klitika, duplikasi);
             }
             if (c2.equalsIgnoreCase("mu")) {
-                temp = sufiksMu(w2);
-                if (!temp.equalsIgnoreCase("")) {
-                    temp = w2 + prefiks + sufiks + klitika + temp + duplikasi;
-                    this.parseResult.add(temp);
-                }
-                this.check(w2, prefiks, sufiks, klitika + "+%mu", duplikasi);
+                sufiksMu(w2, prefiks, sufiks, klitika, duplikasi);
             }
         }
         if (word.length() > 0) {
@@ -503,15 +455,7 @@ public class Parser {
             String w1 = word.substring(0, word.length() - 1);
 
             if (c1.equalsIgnoreCase("i")) {
-                temp = sufiksI(w1);
-                if (!temp.equalsIgnoreCase("")) {
-                    temp = w1 + prefiks + sufiks + temp + klitika + duplikasi;
-                    this.parseResult.add(temp);
-                    this.checkKonfiks();
-                }
-                this.checkKomposisi(w1, prefiks, sufiks + "+]i", klitika, duplikasi);
-                this.checkKonfiks();
-                this.check(w1, prefiks, sufiks + "+]i", klitika, duplikasi);
+                sufiksI(w1, prefiks, sufiks, klitika, duplikasi);
             }
         }
     }
@@ -705,94 +649,94 @@ public class Parser {
         this.check(word, prefiks, sufiks, "+$kau" + klitika, duplikasi);
     }
 
-    private String sufiksKan(String word) {
-        String result = "";
-
+    private void sufiksKan(String word, String prefiks, String sufiks, String klitika, String duplikasi) throws IOException {
+        String temp;
         if (isRootWord(word)) {
-            result = "+]kan";
+            temp = word + prefiks + sufiks + "+]kan" + klitika + duplikasi;
+            this.parseResult.add(temp);
+            this.checkKonfiks();
         }
-
-        return result;
+        this.checkKomposisi(word, prefiks, sufiks + "+]kan", klitika, duplikasi);
+        this.checkKonfiks();
+        this.check(word, prefiks, sufiks + "+]kan", klitika, duplikasi);
     }
 
-    private String sufiksAn(String word) {
-        String result = "";
-
+    private void sufiksAn(String word, String prefiks, String sufiks, String klitika, String duplikasi) throws IOException {
+        String temp;
         if (isRootWord(word)) {
-            result = "+]an";
+            temp = word + prefiks + sufiks + "+]an" + klitika + duplikasi;
+            this.parseResult.add(temp);
+            this.checkKonfiks();
         }
-
-        return result;
+        this.checkKomposisi(word, prefiks, sufiks + "+]an", klitika, duplikasi);
+        this.checkKonfiks();
+        this.check(word, prefiks, sufiks + "+]an", klitika, duplikasi);
     }
 
-    private String sufiksI(String word) {
-        String result = "";
-
+    private void sufiksI(String word, String prefiks, String sufiks, String klitika, String duplikasi) throws IOException {
+        String temp;
         if (isRootWord(word)) {
-            result = "+]i";
+            temp = word + prefiks + sufiks + "+]i" + klitika + duplikasi;
+            this.parseResult.add(temp);
+            this.checkKonfiks();
         }
-
-        return result;
+        this.checkKomposisi(word, prefiks, sufiks + "+]i", klitika, duplikasi);
+        this.checkKonfiks();
+        this.check(word, prefiks, sufiks + "+]i", klitika, duplikasi);
     }
 
-    private String sufiksKu(String word) {
-        String result = "";
-
+    private void sufiksKu(String word, String prefiks, String sufiks, String klitika, String duplikasi) throws IOException {
+        String temp;
         if (isRootWord(word)) {
-            result = "+%ku";
+            temp = word + prefiks + sufiks + klitika + "+%ku" + duplikasi;
+            this.parseResult.add(temp);
         }
-
-        return result;
+        this.check(word, prefiks, sufiks, klitika + "+%ku", duplikasi);
     }
 
-    private String sufiksMu(String word) {
-        String result = "";
-
+    private void sufiksMu(String word, String prefiks, String sufiks, String klitika, String duplikasi) throws IOException {
+        String temp;
         if (isRootWord(word)) {
-            result = "+%mu";
+            temp = word + prefiks + sufiks + klitika + "+%mu" + duplikasi;
+            this.parseResult.add(temp);
         }
-
-        return result;
+        this.check(word, prefiks, sufiks, klitika + "+%mu", duplikasi);
     }
 
-    private String sufiksNya(String word) {
-        String result = "";
-
+    private void sufiksNya(String word, String prefiks, String sufiks, String klitika, String duplikasi) throws IOException {
+        String temp;
         if (isRootWord(word)) {
-            result = "+%nya";
+            temp = word + prefiks + sufiks + klitika + "+%nya" + duplikasi;
+            this.parseResult.add(temp);
         }
-
-        return result;
+        this.check(word, prefiks, sufiks, klitika + "+%nya", duplikasi);
     }
 
-    private String sufiksLah(String word) {
-        String result = "";
-
+    private void sufiksLah(String word, String prefiks, String sufiks, String klitika, String duplikasi) throws IOException {
+        String temp;
         if (isRootWord(word)) {
-            result = "+%lah";
+            temp = word + prefiks + sufiks + klitika + "+%lah" + duplikasi;
+            this.parseResult.add(temp);
         }
-
-        return result;
+        this.check(word, prefiks, sufiks, klitika + "+%lah", duplikasi);
     }
 
-    private String sufiksPun(String word) {
-        String result = "";
-
+    private void sufiksPun(String word, String prefiks, String sufiks, String klitika, String duplikasi) throws IOException {
+        String temp;
         if (isRootWord(word)) {
-            result = "+%pun";
+            temp = word + prefiks + sufiks + klitika + "+%pun" + duplikasi;
+            this.parseResult.add(temp);
         }
-
-        return result;
+        this.check(word, prefiks, sufiks, klitika + "+%pun", duplikasi);
     }
-    
-    private String sufiksKah(String word) {
-        String result = "";
 
+    private void sufiksKah(String word, String prefiks, String sufiks, String klitika, String duplikasi) throws IOException {
+        String temp;
         if (isRootWord(word)) {
-            result = "+%kah";
+            temp = word + prefiks + sufiks + klitika + "+%kah" + duplikasi;
+            this.parseResult.add(temp);
         }
-
-        return result;
+        this.check(word, prefiks, sufiks, klitika + "+%kah", duplikasi);
     }
 
     private void checkKonfiks() {
