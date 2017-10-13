@@ -457,6 +457,14 @@ public class Parser {
                 }
                 this.check(w3, prefiks, sufiks, klitika + "+%pun", duplikasi);
             }
+            if (c3.equalsIgnoreCase("kah")) {
+                temp = sufiksKah(w3);
+                if (!temp.equalsIgnoreCase("")) {
+                    temp = w3 + prefiks + sufiks + klitika + temp + duplikasi;
+                    this.parseResult.add(temp);
+                }
+                this.check(w3, prefiks, sufiks, klitika + "+%kah", duplikasi);
+            }
         }
         if (word.length() > 1) {
             String c2 = word.substring(word.length() - 2);
@@ -772,6 +780,16 @@ public class Parser {
 
         if (isRootWord(word)) {
             result = "+%pun";
+        }
+
+        return result;
+    }
+    
+    private String sufiksKah(String word) {
+        String result = "";
+
+        if (isRootWord(word)) {
+            result = "+%kah";
         }
 
         return result;
