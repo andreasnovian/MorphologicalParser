@@ -352,71 +352,71 @@ public class Parser {
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String currentLine;
-            while ((currentLine = br.readLine()) != null) {
-                if (!currentLine.equalsIgnoreCase("")) {
-                    text += currentLine;
-                    text = text.trim();
-                    text += " ";
+                while ((currentLine = br.readLine()) != null) {
+                    if (!currentLine.equalsIgnoreCase("")) {
+                        text += currentLine;
+                        text = text.trim();
+                        text += " ";
+                    }
                 }
             }
-        }
 
         String words[] = normalizeInput(text);
         String word;
         ArrayList<String> oneWord = new ArrayList<>(), twoWord = new ArrayList<>();
 
         for (int i = 0; i < words.length; i++) {
-            oneWord.clear();
-            twoWord.clear();
-            this.parseResult.clear();
+                oneWord.clear();
+                twoWord.clear();
+                this.parseResult.clear();
+                
+                word = words[i];
+                parse(word.toLowerCase());
+                if (i < words.length - 1) {
+                    this.checkKomposisi(words[i + 1]);
+                }
+                
+                this.removeDuplicateResult();
+                
+                if (validator) {
+                    this.componentValidator();
+                }
+                
+                if (this.parseResult.isEmpty()) {
+                    this.parseResult.add("!" + word);
+                }
 
-            word = words[i];
-            parse(word.toLowerCase());
-            if (i < words.length - 1) {
-                this.checkKomposisi(words[i + 1]);
-            }
-
-            this.removeDuplicateResult();
-
-            if (validator) {
-                this.componentValidator();
-            }
-
-            if (this.parseResult.isEmpty()) {
-                this.parseResult.add("!" + word);
-            }
-
-            for (int j = 0; j < this.parseResult.size(); j++) {
-                if (this.parseResult.get(j).contains("&")) {
-                    twoWord.add(this.parseResult.get(j));
-                } else {
-                    oneWord.add(this.parseResult.get(j));
+                for (int j = 0; j < this.parseResult.size(); j++) {
+                    if (this.parseResult.get(j).contains("&")) {
+                        twoWord.add(this.parseResult.get(j));
+                    } else {
+                        oneWord.add(this.parseResult.get(j));
+                    }
+                }
+                
+                this.parseResult.clear();
+                this.parseResult.addAll(oneWord);
+                this.parseResult.addAll(twoWord);
+                
+                if (converter) {
+                    this.convertToWord();
+                }
+                
+                if (!oneWord.isEmpty()) {
+                    result += word.toUpperCase() + ":\n";
+                    for (int j = 0; j < oneWord.size(); j++) {
+                        result += this.parseResult.get(j) + ";\n";
+                    }
+                    result += "\n";
+                }
+                if (!twoWord.isEmpty()) {
+                    result += word.toUpperCase() + " " + words[i + 1].toUpperCase() + ":\n";
+                    for (int j = oneWord.size(); j < this.parseResult.size(); j++) {
+                        result += this.parseResult.get(j) + ";\n";
+                    }
+                    result += "\n";
                 }
             }
-
-            this.parseResult.clear();
-            this.parseResult.addAll(oneWord);
-            this.parseResult.addAll(twoWord);
-
-            if (converter) {
-                this.convertToWord();
-            }
-
-            if (!oneWord.isEmpty()) {
-                result += word.toUpperCase() + ":\n";
-                for (int j = 0; j < oneWord.size(); j++) {
-                    result += this.parseResult.get(j) + ";\n";
-                }
-                result += "\n";
-            }
-            if (!twoWord.isEmpty()) {
-                result += word.toUpperCase() + " " + words[i + 1].toUpperCase() + ":\n";
-                for (int j = oneWord.size(); j < this.parseResult.size(); j++) {
-                    result += this.parseResult.get(j) + ";\n";
-                }
-                result += "\n";
-            }
-        }
         result = result.trim();
         return result;
     }

@@ -183,10 +183,13 @@ public class ParserHome extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void parseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parseButtonActionPerformed
-        try {
-            outputTextArea.setText(parser.processFromText(inputTextArea.getText(), validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
-        } catch (IOException ex) {
-            Logger.getLogger(ParserHome.class.getName()).log(Level.SEVERE, null, ex);
+        String input = inputTextArea.getText();
+        if (!input.equalsIgnoreCase("")) {
+            try {
+                outputTextArea.setText(parser.processFromText(input, validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
+            } catch (IOException ex) {
+                Logger.getLogger(ParserHome.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_parseButtonActionPerformed
 
