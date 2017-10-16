@@ -153,13 +153,6 @@ public class Parser {
                     result += "Komposisi [" + word + "] + ";
                 }
             }
-            if (!reduplikasi.equalsIgnoreCase("")) {
-                reduplikasi = reduplikasi.substring(0, reduplikasi.length() - 1);
-                if (reduplikasi.charAt(0) == '(') {
-                    reduplikasi = reduplikasi.substring(1, reduplikasi.length() - 1);
-                }
-                result += "Reduplikasi [" + reduplikasi + "] + ";
-            }
             if (!sufiks.equalsIgnoreCase("")) {
                 sufiks = sufiks.substring(0, sufiks.length() - 1);
                 temp = sufiks.split("\\+");
@@ -173,6 +166,13 @@ public class Parser {
                 for (String word : temp) {
                     result += "Konfiks [" + word + "] + ";
                 }
+            }
+            if (!reduplikasi.equalsIgnoreCase("")) {
+                reduplikasi = reduplikasi.substring(0, reduplikasi.length() - 1);
+                if (reduplikasi.charAt(0) == '(') {
+                    reduplikasi = reduplikasi.substring(1, reduplikasi.length() - 1);
+                }
+                result += "Reduplikasi [" + reduplikasi + "] + ";
             }
             if (!proklitika.equalsIgnoreCase("")) {
                 proklitika = proklitika.substring(0, proklitika.length() - 1);
