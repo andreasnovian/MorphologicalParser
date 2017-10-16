@@ -352,36 +352,37 @@ public class Parser {
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String currentLine;
-                while ((currentLine = br.readLine()) != null) {
-                    if (!currentLine.equalsIgnoreCase("")) {
-                        text += currentLine;
-                        text = text.trim();
-                        text += " ";
-                    }
+            while ((currentLine = br.readLine()) != null) {
+                if (!currentLine.equalsIgnoreCase("")) {
+                    text += currentLine;
+                    text = text.trim();
+                    text += " ";
                 }
             }
+        }
 
-        String words[] = normalizeInput(text);
-        String word;
-        ArrayList<String> oneWord = new ArrayList<>(), twoWord = new ArrayList<>();
+        if (!text.equalsIgnoreCase("")) {
+            String words[] = normalizeInput(text);
+            String word;
+            ArrayList<String> oneWord = new ArrayList<>(), twoWord = new ArrayList<>();
 
-        for (int i = 0; i < words.length; i++) {
+            for (int i = 0; i < words.length; i++) {
                 oneWord.clear();
                 twoWord.clear();
                 this.parseResult.clear();
-                
+
                 word = words[i];
                 parse(word.toLowerCase());
                 if (i < words.length - 1) {
                     this.checkKomposisi(words[i + 1]);
                 }
-                
+
                 this.removeDuplicateResult();
-                
+
                 if (validator) {
                     this.componentValidator();
                 }
-                
+
                 if (this.parseResult.isEmpty()) {
                     this.parseResult.add("!" + word);
                 }
@@ -393,15 +394,15 @@ public class Parser {
                         oneWord.add(this.parseResult.get(j));
                     }
                 }
-                
+
                 this.parseResult.clear();
                 this.parseResult.addAll(oneWord);
                 this.parseResult.addAll(twoWord);
-                
+
                 if (converter) {
                     this.convertToWord();
                 }
-                
+
                 if (!oneWord.isEmpty()) {
                     result += word.toUpperCase() + ":\n";
                     for (int j = 0; j < oneWord.size(); j++) {
@@ -417,7 +418,8 @@ public class Parser {
                     result += "\n";
                 }
             }
-        result = result.trim();
+            result = result.trim();
+        }
         return result;
     }
 
