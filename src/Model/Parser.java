@@ -512,17 +512,13 @@ public class Parser {
 
             if (c3.equalsIgnoreCase("kan")) {
                 sufiksKan(w3, prefiks, sufiks, klitika, duplikasi);
-            }
-            if (c3.equalsIgnoreCase("nya")) {
+            } else if (c3.equalsIgnoreCase("nya")) {
                 sufiksNya(w3, prefiks, sufiks, klitika, duplikasi);
-            }
-            if (c3.equalsIgnoreCase("lah")) {
+            } else if (c3.equalsIgnoreCase("lah")) {
                 sufiksLah(w3, prefiks, sufiks, klitika, duplikasi);
-            }
-            if (c3.equalsIgnoreCase("pun")) {
+            } else if (c3.equalsIgnoreCase("pun")) {
                 sufiksPun(w3, prefiks, sufiks, klitika, duplikasi);
-            }
-            if (c3.equalsIgnoreCase("kah")) {
+            } else if (c3.equalsIgnoreCase("kah")) {
                 sufiksKah(w3, prefiks, sufiks, klitika, duplikasi);
             }
         }
@@ -532,11 +528,9 @@ public class Parser {
 
             if (c2.equalsIgnoreCase("an")) {
                 sufiksAn(w2, prefiks, sufiks, klitika, duplikasi);
-            }
-            if (c2.equalsIgnoreCase("ku")) {
+            } else if (c2.equalsIgnoreCase("ku")) {
                 sufiksKu(w2, prefiks, sufiks, klitika, duplikasi);
-            }
-            if (c2.equalsIgnoreCase("mu")) {
+            } else if (c2.equalsIgnoreCase("mu")) {
                 sufiksMu(w2, prefiks, sufiks, klitika, duplikasi);
             }
         }
