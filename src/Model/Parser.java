@@ -581,7 +581,7 @@ public class Parser {
     }
 
     private void proklitikaKu(String word, String component, String klitika) throws IOException {
-        this.check(word, component, "+$ku" + klitika);
+        this.check(word, component,  klitika + "+$ku");
     }
 
     private void prefiksSe(String word, String component, String klitika) throws IOException {
@@ -647,7 +647,7 @@ public class Parser {
     }
 
     private void proklitikaKau(String word, String component, String klitika) throws IOException {
-        this.check(word, component, "+$kau" + klitika);
+        this.check(word, component, klitika + "+$kau");
     }
 
     private void sufiksKan(String word, String component, String klitika) throws IOException {
