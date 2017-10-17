@@ -399,7 +399,7 @@ public class Parser {
             } else if (c2.equalsIgnoreCase("ke")) {
                 prefiksKe(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("ku")) {
-                prefiksKu(w2, component, klitika);
+                proklitikaKu(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("se")) {
                 prefiksSe(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("pe")) {
@@ -417,7 +417,7 @@ public class Parser {
             if (c3.equalsIgnoreCase("per") || c3.equalsIgnoreCase("pel")) {
                 prefiksPer(w3, component, klitika);
             } else if (c3.equalsIgnoreCase("kau")) {
-                prefiksKau(w3, component, klitika);
+                proklitikaKau(w3, component, klitika);
             }
         }
     }
@@ -438,13 +438,13 @@ public class Parser {
             if (c3.equalsIgnoreCase("kan")) {
                 sufiksKan(w3, component, klitika);
             } else if (c3.equalsIgnoreCase("nya")) {
-                sufiksNya(w3, component, klitika);
+                enklitikaNya(w3, component, klitika);
             } else if (c3.equalsIgnoreCase("lah")) {
-                sufiksLah(w3, component, klitika);
+                enklitikaLah(w3, component, klitika);
             } else if (c3.equalsIgnoreCase("pun")) {
-                sufiksPun(w3, component, klitika);
+                enklitikaPun(w3, component, klitika);
             } else if (c3.equalsIgnoreCase("kah")) {
-                sufiksKah(w3, component, klitika);
+                enklitikaKah(w3, component, klitika);
             }
         }
         if (word.length() > 1) {
@@ -454,9 +454,9 @@ public class Parser {
             if (c2.equalsIgnoreCase("an")) {
                 sufiksAn(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("ku")) {
-                sufiksKu(w2, component, klitika);
+                enklitikaKu(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("mu")) {
-                sufiksMu(w2, component, klitika);
+                enklitikaMu(w2, component, klitika);
             }
         }
         if (word.length() > 0) {
@@ -580,7 +580,7 @@ public class Parser {
         this.check(word, "+[ke" + component, klitika);
     }
 
-    private void prefiksKu(String word, String component, String klitika) throws IOException {
+    private void proklitikaKu(String word, String component, String klitika) throws IOException {
         this.check(word, component, "+$ku" + klitika);
     }
 
@@ -646,7 +646,7 @@ public class Parser {
         }
     }
 
-    private void prefiksKau(String word, String component, String klitika) throws IOException {
+    private void proklitikaKau(String word, String component, String klitika) throws IOException {
         this.check(word, component, "+$kau" + klitika);
     }
 
@@ -686,7 +686,7 @@ public class Parser {
         this.check(word, "+]i" + component, klitika);
     }
 
-    private void sufiksKu(String word, String component, String klitika) throws IOException {
+    private void enklitikaKu(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%ku" + klitika;
@@ -695,7 +695,7 @@ public class Parser {
         this.check(word, component, "+%ku" + klitika);
     }
 
-    private void sufiksMu(String word, String component, String klitika) throws IOException {
+    private void enklitikaMu(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%mu" + klitika;
@@ -704,7 +704,7 @@ public class Parser {
         this.check(word, component, "+%mu" + klitika);
     }
 
-    private void sufiksNya(String word, String component, String klitika) throws IOException {
+    private void enklitikaNya(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%nya" + klitika;
@@ -713,7 +713,7 @@ public class Parser {
         this.check(word, component, "+%nya" + klitika);
     }
 
-    private void sufiksLah(String word, String component, String klitika) throws IOException {
+    private void enklitikaLah(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%lah" + klitika;
@@ -722,7 +722,7 @@ public class Parser {
         this.check(word, component, "+%lah" + klitika);
     }
 
-    private void sufiksPun(String word, String component, String klitika) throws IOException {
+    private void enklitikaPun(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%pun" + klitika;
@@ -731,7 +731,7 @@ public class Parser {
         this.check(word, component, "+%pun" + klitika);
     }
 
-    private void sufiksKah(String word, String component, String klitika) throws IOException {
+    private void enklitikaKah(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%kah" + klitika;
