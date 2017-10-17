@@ -78,119 +78,44 @@ public class Parser {
      * Dasar [malu] + Konfiks [per-kan] + Klitika [mu]"
      */
     private void convertToWord() throws IOException {
-        String rootWord;
-        String preKomposisi, postKomposisi, reduplikasi, prefiks, sufiks, konfiks, proklitika, enklitika;
         String line, result;
         String[] words;
-        String[] temp;
 
         for (int i = 0; i < this.parseResult.size(); i++) {
-            preKomposisi = "";
-            postKomposisi = "";
-            reduplikasi = "";
-            prefiks = "";
-            sufiks = "";
-            konfiks = "";
-            proklitika = "";
-            enklitika = "";
             result = "";
-
             line = this.parseResult.get(i);
-            if (line.contains("^(")) {
-                reduplikasi = line.substring(line.indexOf("^") + 1, line.indexOf(")") + 1);
-                line = line.replace("+^" + reduplikasi, "");
-                reduplikasi += "+";
-            }
-
             words = line.split("\\+");
-            rootWord = words[0];
+
             for (String word : words) {
                 switch (word.charAt(0)) {
                     case '@':
-                        preKomposisi += word.substring(1) + "+";
+                        result += "Komposisi [" + word.substring(1) + "] + ";
                         break;
                     case '^':
-                        reduplikasi += word.substring(1) + "+";
+                        result += "Reduplikasi [" + word.substring(1) + "] + ";
                         break;
                     case '[':
-                        prefiks += word.substring(1) + "+";
+                        result = "Prefiks [" + word.substring(1) + "] + " + result;
                         break;
                     case ']':
-                        sufiks += word.substring(1) + "+";
+                        result += "Sufiks [" + word.substring(1) + "] + ";
                         break;
                     case '#':
-                        konfiks += word.substring(1) + "+";
+                        result += "Konfiks [" + word.substring(1) + "] + ";
                         break;
                     case '$':
-                        proklitika += word.substring(1) + "+";
+                        result = "Proklitika [" + word.substring(1) + "] + " + result;
                         break;
                     case '%':
-                        enklitika += word.substring(1) + "+";
+                        result += "Enklitika [" + word.substring(1) + "] + ";
                         break;
-                    case '&':
-                        postKomposisi += word.substring(1) + "+";
+                    case '!':
+                        result += "Bentuk Asing [" + word.substring(1) + "] + ";
                         break;
                     default:
+                        result += "Bentuk Dasar [" + word + "] + ";
                         break;
                 }
-            }
-            if (!prefiks.equalsIgnoreCase("")) {
-                prefiks = prefiks.substring(0, prefiks.length() - 1);
-                temp = prefiks.split("\\+");
-                for (String word : temp) {
-                    result = "Prefiks [" + word + "] + " + result;
-                }
-            }
-            if (rootWord.charAt(0) == '!') {
-                result += "Bentuk Asing [" + rootWord.substring(1) + "] + ";
-            } else {
-                result += "Bentuk Dasar [" + rootWord + "] + ";
-            }
-            if (!preKomposisi.equalsIgnoreCase("")) {
-                preKomposisi = preKomposisi.substring(0, preKomposisi.length() - 1);
-                temp = preKomposisi.split("\\+");
-                for (String word : temp) {
-                    result += "Komposisi [" + word + "] + ";
-                }
-            }
-            if (!sufiks.equalsIgnoreCase("")) {
-                sufiks = sufiks.substring(0, sufiks.length() - 1);
-                temp = sufiks.split("\\+");
-                for (String word : temp) {
-                    result += "Sufiks [" + word + "] + ";
-                }
-            }
-            if (!konfiks.equalsIgnoreCase("")) {
-                konfiks = konfiks.substring(0, konfiks.length() - 1);
-                temp = konfiks.split("\\+");
-                for (String word : temp) {
-                    result += "Konfiks [" + word + "] + ";
-                }
-            }
-            if (!reduplikasi.equalsIgnoreCase("")) {
-                reduplikasi = reduplikasi.substring(0, reduplikasi.length() - 1);
-                if (reduplikasi.charAt(0) == '(') {
-                    reduplikasi = reduplikasi.substring(1, reduplikasi.length() - 1);
-                }
-                result += "Reduplikasi [" + reduplikasi + "] + ";
-            }
-            if (!proklitika.equalsIgnoreCase("")) {
-                proklitika = proklitika.substring(0, proklitika.length() - 1);
-                temp = proklitika.split("\\+");
-                for (String word : temp) {
-                    result += "Proklitika [" + word + "] + ";
-                }
-            }
-            if (!enklitika.equalsIgnoreCase("")) {
-                enklitika = enklitika.substring(0, enklitika.length() - 1);
-                temp = enklitika.split("\\+");
-                for (String word : temp) {
-                    result += "Enklitika [" + word + "] + ";
-                }
-            }
-            if (!postKomposisi.equalsIgnoreCase("")) {
-                postKomposisi = postKomposisi.substring(0, postKomposisi.length() - 1);
-                result += "Komposisi [" + postKomposisi + "] + ";
             }
 
             result = result.substring(0, result.length() - 3);
