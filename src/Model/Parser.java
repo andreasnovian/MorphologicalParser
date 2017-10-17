@@ -581,7 +581,7 @@ public class Parser {
     }
 
     private void proklitikaKu(String word, String component, String klitika) throws IOException {
-        this.check(word, component,  klitika + "+$ku");
+        this.check(word, component, klitika + "+$ku");
     }
 
     private void prefiksSe(String word, String component, String klitika) throws IOException {
@@ -758,11 +758,11 @@ public class Parser {
                 } else if (component.contains("]an+[ke")) {
                     temp = component.replace("]an+[ke", "#ke-an");
                     this.parseResult.add(rootWord + "+" + temp);
-                } else if (component.contains("]an+[pe")) {
-                    temp = component.replace("]an+[pe", "#pe-an");
-                    this.parseResult.add(rootWord + "+" + temp);
                 } else if (component.contains("]an+[per")) {
                     temp = component.replace("]an+[per", "#per-an");
+                    this.parseResult.add(rootWord + "+" + temp);
+                } else if (component.contains("]an+[pe")) {
+                    temp = component.replace("]an+[pe", "#pe-an");
                     this.parseResult.add(rootWord + "+" + temp);
                 } else if (component.contains("]nya+[se")) {
                     temp = component.replace("]nya+[se", "#se-nya");
