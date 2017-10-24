@@ -95,7 +95,7 @@ public class Parser {
                         result += "Reduplikasi [" + word.substring(1) + "] + ";
                         break;
                     case '[':
-                        result = "Prefiks [" + word.substring(1) + "] + " + result;
+                        result += "Prefiks [" + word.substring(1) + "] + ";
                         break;
                     case ']':
                         result += "Sufiks [" + word.substring(1) + "] + ";
@@ -104,7 +104,7 @@ public class Parser {
                         result += "Konfiks [" + word.substring(1) + "] + ";
                         break;
                     case '$':
-                        result = "Proklitika [" + word.substring(1) + "] + " + result;
+                        result += "Proklitika [" + word.substring(1) + "] + ";
                         break;
                     case '%':
                         result += "Enklitika [" + word.substring(1) + "] + ";
