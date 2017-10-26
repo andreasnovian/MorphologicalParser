@@ -23,13 +23,6 @@ public class Combiner {
         this.rootWord = rootWord;
         String result = rootWord;
         String redup = "";
-        String postKomposisi = "";
-
-        if (component.contains("^(")) {
-            redup = component.substring(component.indexOf("^") + 1, component.indexOf(")") + 1);
-            component = component.replace("+^" + redup, "+^");
-            component = component.replace("^" + redup, "^");
-        }
 
         if (!component.equalsIgnoreCase("")) {
             String[] comp = component.split("\\+");
@@ -44,11 +37,7 @@ public class Combiner {
                         result += " " + i;
                         break;
                     case '^':
-                        if (redup.equalsIgnoreCase("")) {
-                            result = duplikasi(result, i);
-                        } else {
-                            result = duplikasi(result, redup);
-                        }
+                        result = duplikasi(result, i);
                         break;
                     case '[':
                         result = prefiksasi(result, i);
@@ -58,9 +47,6 @@ public class Combiner {
                         break;
                     case '#':
                         result = konfiksasi(result, i);
-                        break;
-                    case '&':
-                        result += " " + i;
                         break;
                     default:
                         break;
@@ -322,28 +308,13 @@ public class Combiner {
 
     private String duplikasi(String rootWord, String duplikasi) {
         String result = rootWord;
-
-        //must convert element in between (..) for reduplication
-        if (duplikasi.charAt(0) == '(') {
-            duplikasi = duplikasi.substring(1, duplikasi.length() - 1);
-            String[] temp = duplikasi.split("\\+");
-            rootWord = temp[0];
-            duplikasi = "";
-            for (int j = 1; j < temp.length; j++) {
-                if (temp[j].charAt(0) != '$') {
-                    duplikasi += temp[j] + "+";
-                }
-            }
-            if (!duplikasi.equalsIgnoreCase("")) {
-                duplikasi = duplikasi.substring(0, duplikasi.length() - 1);
-            }
-            result = result + "-" + this.convertToWord(rootWord, duplikasi);
-        } else if (duplikasi.equalsIgnoreCase("2")) {
+        
+        if (duplikasi.equalsIgnoreCase("2")) {
             result = result + "-" + rootWord;
         } else {
             result = result + "-" + duplikasi;
         }
-
+        
         return result;
     }
 }
