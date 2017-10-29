@@ -89,31 +89,31 @@ public class Parser {
             for (String word : words) {
                 switch (word.charAt(0)) {
                     case '@':
-                        result += "Komposisi [" + word.substring(1) + "] + ";
+                        result += "Komposisi {" + word.substring(1) + "} + ";
                         break;
                     case '^':
-                        result += "Reduplikasi [" + word.substring(1) + "] + ";
+                        result += "Reduplikasi {" + word.substring(1) + "} + ";
                         break;
                     case '[':
-                        result += "Prefiks [" + word.substring(1) + "] + ";
+                        result += "Prefiks {" + word.substring(1) + "} + ";
                         break;
                     case ']':
-                        result += "Sufiks [" + word.substring(1) + "] + ";
+                        result += "Sufiks {" + word.substring(1) + "} + ";
                         break;
                     case '#':
-                        result += "Konfiks [" + word.substring(1) + "] + ";
+                        result += "Konfiks {" + word.substring(1) + "} + ";
                         break;
                     case '$':
-                        result += "Proklitika [" + word.substring(1) + "] + ";
+                        result += "Proklitika {" + word.substring(1) + "} + ";
                         break;
                     case '%':
-                        result += "Enklitika [" + word.substring(1) + "] + ";
+                        result += "Enklitika {" + word.substring(1) + "} + ";
                         break;
                     case '!':
-                        result += "Bentuk Asing [" + word.substring(1) + "] + ";
+                        result += "Bentuk Asing {" + word.substring(1) + "} + ";
                         break;
                     default:
-                        result += "Bentuk Dasar [" + word + "] + ";
+                        result += "Bentuk Dasar {" + word + "} + ";
                         break;
                 }
             }
