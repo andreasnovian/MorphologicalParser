@@ -22,7 +22,6 @@ public class Combiner {
     public String convertToWord(String rootWord, String component) {
         this.rootWord = rootWord;
         String result = rootWord;
-        String redup = "";
 
         if (!component.equalsIgnoreCase("")) {
             String[] comp = component.split("\\+");

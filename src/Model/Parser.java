@@ -368,7 +368,7 @@ public class Parser {
         if (isAWord) {
             this.check(word, "", "");
         }
-
+        
         if (this.parseResult.isEmpty()) {
             this.parseResult.add("!" + word);
         }
