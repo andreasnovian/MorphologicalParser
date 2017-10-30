@@ -786,9 +786,11 @@ public class Parser {
             rootWord += word.charAt(i);
             temp = word.substring(i + 1);
             if (isRootWord(rootWord)) {
-                temp = rootWord + "+@" + temp + component + klitika;
-                if (temp.contains("[") && temp.contains("]") && !temp.contains("-")) {
-                    this.parseResult.add(temp);
+                if (isRootWord(temp)) {
+                    temp = rootWord + "+@" + temp + component + klitika;
+                    if (temp.contains("[") && temp.contains("]") && !temp.contains("-")) {
+                        this.parseResult.add(temp);
+                    }
                 }
             }
         }
@@ -798,17 +800,14 @@ public class Parser {
      * To check if a word is first afixed then komposisi
      */
     private void checkKomposisi(String nextWord) {
-        //this method called in process method after parse finish
-        //for all parse result, combine each of them with next word
-        //insert all possibility to each parse result
-        //run a validity check on lexicon
-
-        String line, newLine;
-        int size = this.parseResult.size();
-        for (int i = 0; i < size; i++) {
-            line = this.parseResult.get(i);
-            newLine = line + "+@" + nextWord + "";
-            this.parseResult.add(newLine);
+        if (isRootWord(nextWord)) {
+            String line, newLine;
+            int size = this.parseResult.size();
+            for (int i = 0; i < size; i++) {
+                line = this.parseResult.get(i);
+                newLine = line + "+@" + nextWord + "";
+                this.parseResult.add(newLine);
+            }
         }
     }
 }
