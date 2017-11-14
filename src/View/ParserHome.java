@@ -10,6 +10,8 @@ import Model.Parser;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -27,7 +29,7 @@ public class ParserHome extends javax.swing.JFrame {
      */
     public ParserHome() throws IOException {
         initComponents();
-        this.setSize(1000, 600);
+        this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
         this.setTitle("MORPHOLOGICAL PARSER");
         this.parser = new Parser();
@@ -58,6 +60,7 @@ public class ParserHome extends javax.swing.JFrame {
         lexiconButton = new javax.swing.JButton();
         validatorCheckBox = new javax.swing.JCheckBox();
         converterCheckBox = new javax.swing.JCheckBox();
+        insertFileButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -83,7 +86,7 @@ public class ParserHome extends javax.swing.JFrame {
         titleLabel1.setText("MORPHOLOGICAL PARSER");
 
         titleLabel2.setFont(new java.awt.Font("Constantia", 0, 24)); // NOI18N
-        titleLabel2.setText("FOR TEXT IN BAHASA INDONESIA");
+        titleLabel2.setText("FOR TEXTS IN BAHASA INDONESIA");
 
         inputLabel.setFont(new java.awt.Font("Constantia", 0, 14)); // NOI18N
         inputLabel.setText("INPUT:");
@@ -115,6 +118,14 @@ public class ParserHome extends javax.swing.JFrame {
             }
         });
 
+        insertFileButton.setFont(new java.awt.Font("Constantia", 0, 14)); // NOI18N
+        insertFileButton.setText("INSERT FROM FILE");
+        insertFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertFileButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,37 +133,39 @@ public class ParserHome extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lexiconButton)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(263, 263, 263)
+                                        .addComponent(titleLabel1))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(227, 227, 227)
+                                        .addComponent(titleLabel2))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(447, 447, 447)
+                                .addComponent(parseButton)
+                                .addGap(36, 36, 36)
+                                .addComponent(validatorCheckBox)
+                                .addGap(18, 18, 18)
+                                .addComponent(converterCheckBox)))
+                        .addGap(0, 203, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lexiconButton)
-                        .addGap(263, 263, 263)
-                        .addComponent(titleLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(447, 447, 447)
-                        .addComponent(parseButton)
-                        .addGap(36, 36, 36)
-                        .addComponent(validatorCheckBox)
-                        .addGap(18, 18, 18)
-                        .addComponent(converterCheckBox)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(outputLabel)
-                                    .addComponent(inputLabel))
-                                .addGap(0, 919, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(titleLabel2)
-                .addGap(295, 295, 295))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(inputLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(insertFileButton)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,8 +176,10 @@ public class ParserHome extends javax.swing.JFrame {
                     .addComponent(lexiconButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(titleLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(inputLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputLabel)
+                    .addComponent(insertFileButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -186,7 +201,7 @@ public class ParserHome extends javax.swing.JFrame {
         String input = inputTextArea.getText();
         if (!input.equalsIgnoreCase("")) {
             try {
-                outputTextArea.setText(parser.processFromText(input, validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
+                outputTextArea.setText(parser.process(input, validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
             } catch (IOException ex) {
                 Logger.getLogger(ParserHome.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -197,7 +212,7 @@ public class ParserHome extends javax.swing.JFrame {
         String input = inputTextArea.getText();
         if (!input.equalsIgnoreCase("")) {
             try {
-                outputTextArea.setText(parser.processFromText(input, validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
+                outputTextArea.setText(parser.process(input, validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
             } catch (IOException ex) {
                 Logger.getLogger(ParserHome.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -208,7 +223,7 @@ public class ParserHome extends javax.swing.JFrame {
         String input = inputTextArea.getText();
         if (!input.equalsIgnoreCase("")) {
             try {
-                outputTextArea.setText(parser.processFromText(input, validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
+                outputTextArea.setText(parser.process(input, validatorCheckBox.isSelected(), converterCheckBox.isSelected()));
             } catch (IOException ex) {
                 Logger.getLogger(ParserHome.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -219,6 +234,23 @@ public class ParserHome extends javax.swing.JFrame {
         this.setVisible(false);
         this.lexicon.setVisible(true);
     }//GEN-LAST:event_lexiconButtonActionPerformed
+
+    private void insertFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertFileButtonActionPerformed
+        String dir, text;
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("txt file", "txt");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            dir = chooser.getCurrentDirectory() + "\\" + chooser.getSelectedFile().getName();
+            try {
+                text = this.parser.readFile(dir);
+                this.inputTextArea.setText(text);
+            } catch (IOException ex) {
+                Logger.getLogger(ParserHome.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_insertFileButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -265,6 +297,7 @@ public class ParserHome extends javax.swing.JFrame {
     private javax.swing.JCheckBox converterCheckBox;
     private javax.swing.JLabel inputLabel;
     private javax.swing.JTextArea inputTextArea;
+    private javax.swing.JButton insertFileButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton lexiconButton;
