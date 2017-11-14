@@ -32,8 +32,8 @@ public class ParserHome extends javax.swing.JFrame {
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
         this.setTitle("MORPHOLOGICAL PARSER");
-        this.parser = new Parser();
         this.lexicon = new LexHome(this);
+        this.parser = new Parser(this.lexicon.lexc);
         this.lexicon.setVisible(false);
         this.validatorCheckBox.doClick();
         this.converterCheckBox.doClick();
@@ -131,52 +131,46 @@ public class ParserHome extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
                                 .addComponent(lexiconButton)
+                                .addGap(229, 229, 229)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(263, 263, 263)
+                                        .addGap(36, 36, 36)
                                         .addComponent(titleLabel1))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(227, 227, 227)
-                                        .addComponent(titleLabel2))))
+                                    .addComponent(titleLabel2)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(447, 447, 447)
+                                .addGap(432, 432, 432)
                                 .addComponent(parseButton)
                                 .addGap(36, 36, 36)
                                 .addComponent(validatorCheckBox)
                                 .addGap(18, 18, 18)
-                                .addComponent(converterCheckBox)))
-                        .addGap(0, 203, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2)
-                            .addComponent(jScrollPane1)
+                                .addComponent(converterCheckBox))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(outputLabel)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(inputLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(insertFileButton)))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addComponent(inputLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(insertFileButton))
+                            .addComponent(outputLabel))
+                        .addGap(0, 193, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(titleLabel1)
-                    .addComponent(lexiconButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(titleLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lexiconButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(titleLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(titleLabel2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputLabel)
                     .addComponent(insertFileButton))
@@ -190,8 +184,8 @@ public class ParserHome extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(outputLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();

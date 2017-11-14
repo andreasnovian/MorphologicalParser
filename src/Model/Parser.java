@@ -17,8 +17,8 @@ public class Parser {
 
     private final ArrayList<String> parseResult;
 
-    public Parser() throws IOException {
-        this.lexicon = new Lexicon();
+    public Parser(Lexicon lexicon) throws IOException {
+        this.lexicon = lexicon;
         this.parseResult = new ArrayList<>();
     }
 
