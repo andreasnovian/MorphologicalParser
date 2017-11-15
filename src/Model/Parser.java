@@ -529,6 +529,7 @@ public class Parser {
 
     private void prefiksPe(String word, String component, String klitika) throws IOException {
         this.check(word, "+[pe" + component, klitika);
+        prefiksPer(word, component, klitika);
 
         if (word.length() > 3) {
             //pem..;

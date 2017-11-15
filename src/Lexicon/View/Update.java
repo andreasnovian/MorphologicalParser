@@ -197,11 +197,18 @@ public class Update extends javax.swing.JFrame {
 
     private void updateComponentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateComponentButtonActionPerformed
         String selectedComponent, newComponent;
-
+        boolean isComponent = false;
         if (this.componentList.getSelectedIndex() >= 0) {
             selectedComponent = this.componentList.getSelectedValue();
             newComponent = JOptionPane.showInputDialog(this, "Type updated component for " + selectedComponent).toLowerCase();
-            if (this.component.contains(newComponent)) {
+            String[] searchComponent = this.component.split("\n");
+            for (String searchComponent1 : searchComponent) {
+                if (searchComponent1.equalsIgnoreCase(newComponent)) {
+                    isComponent = true;
+                    break;
+                }
+            }
+            if (isComponent) {
                 JOptionPane.showMessageDialog(this, "Component already exist");
             } else {
                 try {
@@ -244,8 +251,16 @@ public class Update extends javax.swing.JFrame {
 
     private void addComponentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addComponentButtonActionPerformed
         String newComponent;
+        boolean isComponent = false;
         newComponent = JOptionPane.showInputDialog(this, "Type new component for " + this.root).toLowerCase();
-        if (this.component.contains(newComponent)) {
+        String[] searchComponent = this.component.split("\n");
+        for (String searchComponent1 : searchComponent) {
+            if (searchComponent1.equalsIgnoreCase(newComponent)) {
+                isComponent = true;
+                break;
+            }
+        }
+        if (isComponent) {
             JOptionPane.showMessageDialog(this, "Component already exist");
         } else {
             try {
@@ -262,7 +277,7 @@ public class Update extends javax.swing.JFrame {
     private void updateRootButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateRootButtonActionPerformed
         String oldRoot = this.root;
         String newRoot = this.rootField.getText().toLowerCase();
-        if (this.home.lexc.searchInTree(newRoot)){
+        if (this.home.lexc.searchInTree(newRoot)) {
             JOptionPane.showMessageDialog(this, "Root already exist");
         } else if (!newRoot.equalsIgnoreCase(oldRoot) && !newRoot.equalsIgnoreCase("")) {
             try {
