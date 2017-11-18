@@ -39,7 +39,7 @@ public class Parser {
      *
      * @throws IOException
      */
-    private void componentValidator() throws IOException {
+    private void validateComponent() throws IOException {
         String rootWord;
         String component;
         String line;
@@ -218,7 +218,7 @@ public class Parser {
             this.removeDuplicateResult();
 
             if (validator) {
-                this.componentValidator();
+                this.validateComponent();
             }
 
             if (this.parseResult.isEmpty()) {
