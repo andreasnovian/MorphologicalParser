@@ -292,7 +292,7 @@ public class Parser {
      *
      * @param word word to parse
      */
-    private ArrayList<String> parse(String word) throws IOException {
+    private void parse(String word) throws IOException {
         boolean isAWord = true;
         for (int i = 0; i < word.length(); i++) {
             int c = (int) word.charAt(i);
@@ -311,9 +311,6 @@ public class Parser {
         if (this.parseResult.isEmpty()) {
             this.parseResult.add("!" + word);
         }
-
-        ArrayList<String> result = this.parseResult;
-        return result;
     }
 
     /**
