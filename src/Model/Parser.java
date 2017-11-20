@@ -30,7 +30,12 @@ public class Parser {
      * @return true if and only if word is a valid root word in lexicon tree
      */
     private boolean isRootWord(String word) {
-        return lexicon.searchInTree(word.toLowerCase());
+        if (!word.equalsIgnoreCase("")) {
+            return lexicon.searchInTree(word.toLowerCase());
+        }
+        else {
+            return false;
+        }
     }
 
     /**
@@ -183,6 +188,7 @@ public class Parser {
             }
         }
         input = input.trim();
+        System.out.println(input);
         words = input.split(" ");
         return words;
     }
@@ -282,9 +288,9 @@ public class Parser {
                 }
             }
         }
-        
+
         return text.trim();
-        
+
     }
 
     /**
@@ -307,7 +313,7 @@ public class Parser {
         if (isAWord) {
             this.check(word, "", "");
         }
-        
+
         if (this.parseResult.isEmpty()) {
             this.parseResult.add("!" + word);
         }
