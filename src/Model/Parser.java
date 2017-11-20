@@ -180,10 +180,6 @@ public class Parser {
                     if (c == 45) {
                         tempWord += (char) c;
                     }
-                    //symbol , 
-                    if (c == 44) {
-                        tempWord += ' ';
-                    }
                 }
                 if (!tempWord.equalsIgnoreCase("")) {
                     input += tempWord + " ";
