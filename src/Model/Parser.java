@@ -32,8 +32,7 @@ public class Parser {
     private boolean isRootWord(String word) {
         if (!word.equalsIgnoreCase("")) {
             return lexicon.searchInTree(word.toLowerCase());
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -181,6 +180,10 @@ public class Parser {
                     if (c == 45) {
                         tempWord += (char) c;
                     }
+                    //symbol , 
+                    if (c == 44) {
+                        tempWord += ' ';
+                    }
                 }
                 if (!tempWord.equalsIgnoreCase("")) {
                     input += tempWord + " ";
@@ -189,7 +192,7 @@ public class Parser {
         }
         input = input.trim();
         System.out.println(input);
-        words = input.split(" ");
+        words = input.split("\\s");
         return words;
     }
 
@@ -216,50 +219,52 @@ public class Parser {
             this.parseResult.clear();
 
             word = words[i];
-            parse(word.toLowerCase());
-            if (i < words.length - 1) {
-                this.checkKomposisi(words[i + 1]);
-            }
-
-            this.removeDuplicateResult();
-
-            if (validator) {
-                this.validateComponent();
-            }
-
-            if (this.parseResult.isEmpty()) {
-                this.parseResult.add("!" + word);
-            }
-
-            for (int j = 0; j < this.parseResult.size(); j++) {
-                if (this.parseResult.get(j).contains("&")) {
-                    twoWord.add(this.parseResult.get(j));
-                } else {
-                    oneWord.add(this.parseResult.get(j));
+            if (!word.equalsIgnoreCase("")) {
+                parse(word.toLowerCase());
+                if (i < words.length - 1) {
+                    this.checkKomposisi(words[i + 1]);
                 }
-            }
 
-            this.parseResult.clear();
-            this.parseResult.addAll(oneWord);
-            this.parseResult.addAll(twoWord);
+                this.removeDuplicateResult();
 
-            if (converter) {
-                this.convertToWord();
-            }
-
-            if (!oneWord.isEmpty()) {
-                result += word.toUpperCase() + ":\n";
-                for (int j = 0; j < oneWord.size(); j++) {
-                    result += this.parseResult.get(j) + ";\n";
+                if (validator) {
+                    this.validateComponent();
                 }
-                result += "\n";
-            }
-            if (!twoWord.isEmpty()) {
-                result += word.toUpperCase() + " " + words[i + 1].toUpperCase() + ":\n";
-                for (int j = oneWord.size(); j < this.parseResult.size(); j++) {
-                    result += this.parseResult.get(j) + ";\n";
+
+                if (this.parseResult.isEmpty()) {
+                    this.parseResult.add("!" + word);
                 }
-                result += "\n";
+
+                for (int j = 0; j < this.parseResult.size(); j++) {
+                    if (this.parseResult.get(j).contains("&")) {
+                        twoWord.add(this.parseResult.get(j));
+                    } else {
+                        oneWord.add(this.parseResult.get(j));
+                    }
+                }
+
+                this.parseResult.clear();
+                this.parseResult.addAll(oneWord);
+                this.parseResult.addAll(twoWord);
+
+                if (converter) {
+                    this.convertToWord();
+                }
+
+                if (!oneWord.isEmpty()) {
+                    result += word.toUpperCase() + ":\n";
+                    for (int j = 0; j < oneWord.size(); j++) {
+                        result += this.parseResult.get(j) + ";\n";
+                    }
+                    result += "\n";
+                }
+                if (!twoWord.isEmpty()) {
+                    result += word.toUpperCase() + " " + words[i + 1].toUpperCase() + ":\n";
+                    for (int j = oneWord.size(); j < this.parseResult.size(); j++) {
+                        result += this.parseResult.get(j) + ";\n";
+                    }
+                    result += "\n";
+                }
             }
         }
         result = result.trim();
