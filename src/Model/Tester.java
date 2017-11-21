@@ -6,8 +6,11 @@
 package Model;
 
 import Lexicon.Model.Combiner;
+import Lexicon.Model.Lexicon;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,21 +18,32 @@ import java.util.ArrayList;
  */
 public class Tester {
 
-    public static void main(String[] args) throws IOException {
-        Parser p = new Parser();
-        Combiner c = new Combiner();
+    public static void main(String[] args) {
+        try {
+            Parser p = new Parser(new Lexicon());
+            Combiner c = new Combiner();
+            Lexicon l = new Lexicon();
+
+            for (int t = 1; t <= 3; t++) {
+                l.insertRoot("andreas");
+                long a = System.currentTimeMillis();
+                l.deleteRoot("andreas");
+                long b = System.currentTimeMillis();
+
+                System.out.println("waktu " + t + " : " + (b - a));
+            }
 //        MorphologicalParser mp = new MorphologicalParser();
 
-//        System.out.println(p.convertToWord("punya", "#me-i"));
+            //        System.out.println(p.convertToWord("punya", "#me-i"));
 //        System.out.println(p.process("anak-beranak bersayur-mayur bersalam-salaman"));
 //        System.out.println(p.process("berlari-larian"));
 //        System.out.println(p.process("kaumakan"));
 //        System.out.println(p.process("bersamamu"));
-
 //        System.out.println(c.convertToWord("kejar", "[ber+^(kejar+]an)"));
 //          System.out.println(p.process("berkejar-kejaran"));
 //System.out.println(p.process("bertanggungjawaban bertanggung jawab"));
-System.out.println(p.process("setengah",true,true));
+//System.out.println(p.processFromText("memperindah",true,true));
+//            System.out.println(p.readFile("tester.txt"));
 //System.out.println(p.process("bertanggungjawaban"));
 //System.out.println(p.process("makanan kaleng"));
 //          System.out.println(c.convertToWord("pesona", "[me"));
@@ -43,5 +57,8 @@ System.out.println(p.process("setengah",true,true));
 //            System.out.println(i + ": "+ parseResult.toString());
 //            System.out.println("");
 //        }
+        } catch (IOException ex) {
+            System.out.println("hahaha");
+        }
     }
 }

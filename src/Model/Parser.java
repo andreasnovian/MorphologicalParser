@@ -187,7 +187,7 @@ public class Parser {
             }
         }
         input = input.trim();
-        System.out.println(input);
+        //System.out.println(input);
         words = input.split("\\s");
         return words;
     }
@@ -430,11 +430,50 @@ public class Parser {
                     temp = words[0] + "+^2" + component + klitika;
                     this.parseResult.add(temp);
                 }
-                this.check(words[0], component + "+^2", klitika);
+                //this.check(words[0], component + "+^2", klitika);
             } else {
                 if (isRootWord(words[0])) {
-                    temp = words[0] + "+^" + words[1] + component + klitika;
-                    this.parseResult.add(temp);
+                    String c1 = words[0].substring(0, 1); //first word first letter
+                    String c2 = words[1].substring(0, 1); //second word first letter
+                    String c3 = words[1].substring(0, 2); //second word first two letters
+                    String w1 = words[1].substring(1); //second word minus c2
+                    String w2 = words[1].substring(2); //second word minus c3
+
+                    if (isRootWord(words[1])) {
+                        temp = words[0] + "+^" + words[1] + component + klitika;
+                        this.parseResult.add(temp);
+                    } else if (c1.equalsIgnoreCase("k")) {
+                        if (c3.equalsIgnoreCase("ng")) {
+                            if (words[0].equalsIgnoreCase("k" + w2)) {
+                                temp = words[0] + "+^2" + component + klitika;
+                                this.parseResult.add(temp);
+                            }
+                        }
+                    } else if (c1.equalsIgnoreCase("t")) {
+                        if (c2.equalsIgnoreCase("n")) {
+                            if (words[0].equalsIgnoreCase("t" + w1)) {
+                                temp = words[0] + "+^2" + component + klitika;
+                                this.parseResult.add(temp);
+                            }
+                        }
+                    } else if (c1.equalsIgnoreCase("s")) {
+                        if (c3.equalsIgnoreCase("ny")) {
+                            if (words[0].equalsIgnoreCase("s" + w2)) {
+                                temp = words[0] + "+^2" + component + klitika;
+                                this.parseResult.add(temp);
+                            }
+                        }
+                    } else if (c1.equalsIgnoreCase("p")) {
+                        if (c2.equalsIgnoreCase("m")) {
+                            if (words[0].equalsIgnoreCase("p" + w1)) {
+                                temp = words[0] + "+^2" + component + klitika;
+                                this.parseResult.add(temp);
+                            }
+                        }
+                    } else {
+                        temp = words[0] + "+^" + words[1] + component + klitika;
+                        this.parseResult.add(temp);
+                    }
                 }
             }
         }
@@ -507,7 +546,7 @@ public class Parser {
                     //meny..;
                     if (word.charAt(0) == 'y') {
                         word = word.substring(1);
-                        this.check(word, "+[me" + component, klitika);
+                        //this.check(word, "+[me" + component, klitika);
                         this.check("s" + word, "+[me" + component, klitika);
                     }
                 }
@@ -567,7 +606,7 @@ public class Parser {
                     //peny..;
                     if (word.charAt(0) == 'y') {
                         word = word.substring(1);
-                        this.check(word, "+[pe" + component, klitika);
+                        //this.check(word, "+[pe" + component, klitika);
                         this.check("s" + word, "+[pe" + component, klitika);
                     }
                 }
