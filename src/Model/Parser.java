@@ -422,6 +422,7 @@ public class Parser {
      */
     private void checkRedup(String word, String component, String klitika) throws IOException {
         String temp;
+        boolean haveResult = false;
         if (word.contains("-")) {
             String[] words = word.split("-");
 
@@ -429,6 +430,7 @@ public class Parser {
                 if (isRootWord(words[0])) {
                     temp = words[0] + "+^2" + component + klitika;
                     this.parseResult.add(temp);
+                    haveResult = true;
                 }
                 //this.check(words[0], component + "+^2", klitika);
             } else {
@@ -447,6 +449,7 @@ public class Parser {
                             if (words[0].equalsIgnoreCase("k" + w2)) {
                                 temp = words[0] + "+^2" + component + klitika;
                                 this.parseResult.add(temp);
+                                haveResult = true;
                             }
                         }
                     } else if (c1.equalsIgnoreCase("t")) {
@@ -454,6 +457,7 @@ public class Parser {
                             if (words[0].equalsIgnoreCase("t" + w1)) {
                                 temp = words[0] + "+^2" + component + klitika;
                                 this.parseResult.add(temp);
+                                haveResult = true;
                             }
                         }
                     } else if (c1.equalsIgnoreCase("s")) {
@@ -461,6 +465,7 @@ public class Parser {
                             if (words[0].equalsIgnoreCase("s" + w2)) {
                                 temp = words[0] + "+^2" + component + klitika;
                                 this.parseResult.add(temp);
+                                haveResult = true;
                             }
                         }
                     } else if (c1.equalsIgnoreCase("p")) {
@@ -468,9 +473,12 @@ public class Parser {
                             if (words[0].equalsIgnoreCase("p" + w1)) {
                                 temp = words[0] + "+^2" + component + klitika;
                                 this.parseResult.add(temp);
+                                haveResult = true;
                             }
                         }
-                    } else {
+                    }
+                    
+                    if (!haveResult) {
                         temp = words[0] + "+^" + words[1] + component + klitika;
                         this.parseResult.add(temp);
                     }
