@@ -8,7 +8,7 @@ import java.util.HashMap;
  */
 public class Node {
 
-    public Boolean endOfWord;
+    public boolean endOfWord;
     public HashMap<Character, Node> children;
     public Node parent;
 
