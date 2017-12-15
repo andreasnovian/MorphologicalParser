@@ -40,20 +40,16 @@ public class Lexicon {
     }
 
     /**
-     * Method to initialize the lexicon tree based on roots in the "roots" file
+     * Method to initialize the lexicon tree based on file list in directory "folder"
      *
      * @throws FileNotFoundException
      * @throws IOException
      */
     private void load() throws FileNotFoundException, IOException {
-        this.br = new BufferedReader(new FileReader(folder + "roots.lxc"));
-        String currentLine;
-        while ((currentLine = br.readLine()) != null) {
-            if (!currentLine.equalsIgnoreCase("")) {
-                this.insertToTree(currentLine);
-            }
+        String[] list = new File(this.folder).list();
+        for (String line : list) {
+            this.insertToTree(line.substring(0, line.length()-4));
         }
-        this.br.close();
     }
 
     /**
@@ -235,11 +231,6 @@ public class Lexicon {
         if (!this.searchInTree(root)) {
             this.insertToTree(root);
 
-            //refresh the roots file
-            this.clearFile("roots");
-            String allWords = this.printAllWordInTree();
-            this.writeToFile("roots", allWords);
-
             this.createFile(root);
             this.writeToFile(root, root);
         }
@@ -305,11 +296,6 @@ public class Lexicon {
     public void deleteRoot(String root) throws IOException {
         this.deleteFile(root);
         deleteRec(root.substring(1), roots.get(root.charAt(0)));
-
-        this.clearFile("roots");
-        String allWords = this.printAllWordInTree();
-        this.writeToFile("roots", allWords);
-
     }
 
     /**
