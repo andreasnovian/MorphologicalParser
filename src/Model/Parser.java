@@ -312,7 +312,7 @@ public class Parser {
         }
 
         if (isAWord) {
-            this.check(word, "", "");
+            this.checkAll(word, "", "");
         }
 
         if (this.parseResult.isEmpty()) {
@@ -334,21 +334,21 @@ public class Parser {
             String w2 = word.substring(2);
 
             if (c2.equalsIgnoreCase("be")) {
-                prefiksBer(w2, component, klitika);
+                checkPrefiksBer(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("me")) {
-                prefiksMe(w2, component, klitika);
+                checkPrefiksMe(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("di")) {
-                prefiksDi(w2, component, klitika);
+                checkPrefiksDi(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("ke")) {
-                prefiksKe(w2, component, klitika);
+                checkPrefiksKe(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("ku")) {
-                proklitikaKu(w2, component, klitika);
+                checkProklitikaKu(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("se")) {
-                prefiksSe(w2, component, klitika);
+                checkPrefiksSe(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("pe")) {
-                prefiksPe(w2, component, klitika);
+                checkPrefiksPe(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("te")) {
-                prefiksTer(w2, component, klitika);
+                checkPrefiksTer(w2, component, klitika);
             }
         }
 
@@ -358,9 +358,9 @@ public class Parser {
             String w3 = word.substring(3);
 
             if (c3.equalsIgnoreCase("per") || c3.equalsIgnoreCase("pel")) {
-                prefiksPer(w3, component, klitika);
+                checkPrefiksPer(w3, component, klitika);
             } else if (c3.equalsIgnoreCase("kau")) {
-                proklitikaKau(w3, component, klitika);
+                checkProklitikaKau(w3, component, klitika);
             }
         }
     }
@@ -379,15 +379,15 @@ public class Parser {
             String w3 = word.substring(0, word.length() - 3);
 
             if (c3.equalsIgnoreCase("kan")) {
-                sufiksKan(w3, component, klitika);
+                checkSufiksKan(w3, component, klitika);
             } else if (c3.equalsIgnoreCase("nya")) {
-                enklitikaNya(w3, component, klitika);
+                checkEnklitikaNya(w3, component, klitika);
             } else if (c3.equalsIgnoreCase("lah")) {
-                enklitikaLah(w3, component, klitika);
+                checkEnklitikaLah(w3, component, klitika);
             } else if (c3.equalsIgnoreCase("pun")) {
-                enklitikaPun(w3, component, klitika);
+                checkEnklitikaPun(w3, component, klitika);
             } else if (c3.equalsIgnoreCase("kah")) {
-                enklitikaKah(w3, component, klitika);
+                checkEnklitikaKah(w3, component, klitika);
             }
         }
         if (word.length() > 1) {
@@ -395,11 +395,11 @@ public class Parser {
             String w2 = word.substring(0, word.length() - 2);
 
             if (c2.equalsIgnoreCase("an")) {
-                sufiksAn(w2, component, klitika);
+                checkSufiksAn(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("ku")) {
-                enklitikaKu(w2, component, klitika);
+                checkEnklitikaKu(w2, component, klitika);
             } else if (c2.equalsIgnoreCase("mu")) {
-                enklitikaMu(w2, component, klitika);
+                checkEnklitikaMu(w2, component, klitika);
             }
         }
         if (word.length() > 0) {
@@ -407,7 +407,7 @@ public class Parser {
             String w1 = word.substring(0, word.length() - 1);
 
             if (c1.equalsIgnoreCase("i")) {
-                sufiksI(w1, component, klitika);
+                checkSufiksI(w1, component, klitika);
             }
         }
     }
@@ -487,7 +487,7 @@ public class Parser {
         }
     }
 
-    private void check(String word, String component, String klitika) throws IOException {
+    private void checkAll(String word, String component, String klitika) throws IOException {
         //if word is found in lexicon
         if (isRootWord(word)) {
             this.parseResult.add(word + component + klitika);
@@ -505,49 +505,49 @@ public class Parser {
         }
     }
 
-    private void prefiksBer(String word, String component, String klitika) throws IOException {
+    private void checkPrefiksBer(String word, String component, String klitika) throws IOException {
         //ex. beragam
-        this.check(word, "+[ber" + component, klitika);
+        this.checkAll(word, "+[ber" + component, klitika);
 
         if (word.length() > 3) {
             if (word.charAt(0) == 'r' || word.charAt(0) == 'l') {
                 //ex. beranak, belajar
                 word = word.substring(1);
-                this.check(word, "+[ber" + component, klitika);
+                this.checkAll(word, "+[ber" + component, klitika);
             }
         }
     }
 
-    private void prefiksMe(String word, String component, String klitika) throws IOException {
+    private void checkPrefiksMe(String word, String component, String klitika) throws IOException {
         //me..
-        this.check(word, "+[me" + component, klitika);
+        this.checkAll(word, "+[me" + component, klitika);
 
         if (word.length() > 3) {
             //mem..;
             if (word.charAt(0) == 'm') {
                 word = word.substring(1);
-                this.check(word, "+[me" + component, klitika);
-                this.check("p" + word, "+[me" + component, klitika);
+                this.checkAll(word, "+[me" + component, klitika);
+                this.checkAll("p" + word, "+[me" + component, klitika);
             }
 
             //men..;
             if (word.charAt(0) == 'n') {
                 word = word.substring(1);
-                this.check(word, "+[me" + component, klitika);
-                this.check("t" + word, "+[me" + component, klitika);
+                this.checkAll(word, "+[me" + component, klitika);
+                this.checkAll("t" + word, "+[me" + component, klitika);
 
                 if (word.length() > 3) {
                     //meng..;
                     if (word.charAt(0) == 'g') {
                         word = word.substring(1);
-                        this.check(word, "+[me" + component, klitika);
-                        this.check("k" + word, "+[me" + component, klitika);
+                        this.checkAll(word, "+[me" + component, klitika);
+                        this.checkAll("k" + word, "+[me" + component, klitika);
 
                         if (word.length() > 3) {
                             //menge..
                             if (word.charAt(0) == 'e') {
                                 word = word.substring(1);
-                                this.check(word, "+[me" + component, klitika);
+                                this.checkAll(word, "+[me" + component, klitika);
                             }
                         }
                     }
@@ -555,59 +555,59 @@ public class Parser {
                     if (word.charAt(0) == 'y') {
                         word = word.substring(1);
                         //this.check(word, "+[me" + component, klitika);
-                        this.check("s" + word, "+[me" + component, klitika);
+                        this.checkAll("s" + word, "+[me" + component, klitika);
                     }
                 }
             }
         }
     }
 
-    private void prefiksDi(String word, String component, String klitika) throws IOException {
-        this.check(word, "+[di" + component, klitika);
+    private void checkPrefiksDi(String word, String component, String klitika) throws IOException {
+        this.checkAll(word, "+[di" + component, klitika);
     }
 
-    private void prefiksKe(String word, String component, String klitika) throws IOException {
-        this.check(word, "+[ke" + component, klitika);
+    private void checkPrefiksKe(String word, String component, String klitika) throws IOException {
+        this.checkAll(word, "+[ke" + component, klitika);
     }
 
-    private void proklitikaKu(String word, String component, String klitika) throws IOException {
-        this.check(word, component, klitika + "+$ku");
+    private void checkProklitikaKu(String word, String component, String klitika) throws IOException {
+        this.checkAll(word, component, klitika + "+$ku");
     }
 
-    private void prefiksSe(String word, String component, String klitika) throws IOException {
-        this.check(word, "+[se" + component, klitika);
+    private void checkPrefiksSe(String word, String component, String klitika) throws IOException {
+        this.checkAll(word, "+[se" + component, klitika);
     }
 
-    private void prefiksPe(String word, String component, String klitika) throws IOException {
-        this.check(word, "+[pe" + component, klitika);
-        prefiksPer(word, component, klitika);
+    private void checkPrefiksPe(String word, String component, String klitika) throws IOException {
+        this.checkAll(word, "+[pe" + component, klitika);
+        checkPrefiksPer(word, component, klitika);
 
         if (word.length() > 3) {
             //pem..;
             if (word.charAt(0) == 'm') {
                 word = word.substring(1);
-                this.check(word, "+[pe" + component, klitika);
-                this.check("p" + word, "+[pe" + component, klitika);
+                this.checkAll(word, "+[pe" + component, klitika);
+                this.checkAll("p" + word, "+[pe" + component, klitika);
             }
 
             //pen..;
             if (word.charAt(0) == 'n') {
                 word = word.substring(1);
-                this.check(word, "+[pe" + component, klitika);
-                this.check("t" + word, "+[pe" + component, klitika);
+                this.checkAll(word, "+[pe" + component, klitika);
+                this.checkAll("t" + word, "+[pe" + component, klitika);
 
                 if (word.length() > 3) {
                     //peng..;
                     if (word.charAt(0) == 'g') {
                         word = word.substring(1);
-                        this.check(word, "+[pe" + component, klitika);
-                        this.check("k" + word, "+[pe" + component, klitika);
+                        this.checkAll(word, "+[pe" + component, klitika);
+                        this.checkAll("k" + word, "+[pe" + component, klitika);
 
                         if (word.length() > 3) {
                             //penge..
                             if (word.charAt(0) == 'e') {
                                 word = word.substring(1);
-                                this.check(word, "+[pe" + component, klitika);
+                                this.checkAll(word, "+[pe" + component, klitika);
                             }
                         }
                     }
@@ -615,33 +615,33 @@ public class Parser {
                     if (word.charAt(0) == 'y') {
                         word = word.substring(1);
                         //this.check(word, "+[pe" + component, klitika);
-                        this.check("s" + word, "+[pe" + component, klitika);
+                        this.checkAll("s" + word, "+[pe" + component, klitika);
                     }
                 }
             }
         }
     }
 
-    private void prefiksPer(String word, String component, String klitika) throws IOException {
-        this.check(word, "+[per" + component, klitika);
+    private void checkPrefiksPer(String word, String component, String klitika) throws IOException {
+        this.checkAll(word, "+[per" + component, klitika);
     }
 
-    private void prefiksTer(String word, String component, String klitika) throws IOException {
-        this.check(word, "+[ter" + component, klitika);
+    private void checkPrefiksTer(String word, String component, String klitika) throws IOException {
+        this.checkAll(word, "+[ter" + component, klitika);
 
         if (word.length() > 3) {
             if (word.charAt(0) == 'r') {
                 word = word.substring(1);
-                this.check(word, "+[ter" + component, klitika);
+                this.checkAll(word, "+[ter" + component, klitika);
             }
         }
     }
 
-    private void proklitikaKau(String word, String component, String klitika) throws IOException {
-        this.check(word, component, klitika + "+$kau");
+    private void checkProklitikaKau(String word, String component, String klitika) throws IOException {
+        this.checkAll(word, component, klitika + "+$kau");
     }
 
-    private void sufiksKan(String word, String component, String klitika) throws IOException {
+    private void checkSufiksKan(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + "+]kan" + component + klitika;
@@ -650,10 +650,10 @@ public class Parser {
         }
         this.checkKomposisi(word, "+]kan" + component, klitika);
         this.checkKonfiks();
-        this.check(word, "+]kan" + component, klitika);
+        this.checkAll(word, "+]kan" + component, klitika);
     }
 
-    private void sufiksAn(String word, String component, String klitika) throws IOException {
+    private void checkSufiksAn(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + "+]an" + component + klitika;
@@ -662,10 +662,10 @@ public class Parser {
         }
         this.checkKomposisi(word, "+]an" + component, klitika);
         this.checkKonfiks();
-        this.check(word, "+]an" + component, klitika);
+        this.checkAll(word, "+]an" + component, klitika);
     }
 
-    private void sufiksI(String word, String component, String klitika) throws IOException {
+    private void checkSufiksI(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + "+]i" + component + klitika;
@@ -674,61 +674,61 @@ public class Parser {
         }
         this.checkKomposisi(word, "+]i" + component, klitika);
         this.checkKonfiks();
-        this.check(word, "+]i" + component, klitika);
+        this.checkAll(word, "+]i" + component, klitika);
     }
 
-    private void enklitikaKu(String word, String component, String klitika) throws IOException {
+    private void checkEnklitikaKu(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%ku" + klitika;
             this.parseResult.add(temp);
         }
-        this.check(word, component, "+%ku" + klitika);
+        this.checkAll(word, component, "+%ku" + klitika);
     }
 
-    private void enklitikaMu(String word, String component, String klitika) throws IOException {
+    private void checkEnklitikaMu(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%mu" + klitika;
             this.parseResult.add(temp);
         }
-        this.check(word, component, "+%mu" + klitika);
+        this.checkAll(word, component, "+%mu" + klitika);
     }
 
-    private void enklitikaNya(String word, String component, String klitika) throws IOException {
+    private void checkEnklitikaNya(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%nya" + klitika;
             this.parseResult.add(temp);
         }
-        this.check(word, component, "+%nya" + klitika);
+        this.checkAll(word, component, "+%nya" + klitika);
     }
 
-    private void enklitikaLah(String word, String component, String klitika) throws IOException {
+    private void checkEnklitikaLah(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%lah" + klitika;
             this.parseResult.add(temp);
         }
-        this.check(word, component, "+%lah" + klitika);
+        this.checkAll(word, component, "+%lah" + klitika);
     }
 
-    private void enklitikaPun(String word, String component, String klitika) throws IOException {
+    private void checkEnklitikaPun(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%pun" + klitika;
             this.parseResult.add(temp);
         }
-        this.check(word, component, "+%pun" + klitika);
+        this.checkAll(word, component, "+%pun" + klitika);
     }
 
-    private void enklitikaKah(String word, String component, String klitika) throws IOException {
+    private void checkEnklitikaKah(String word, String component, String klitika) throws IOException {
         String temp;
         if (isRootWord(word)) {
             temp = word + component + "+%kah" + klitika;
             this.parseResult.add(temp);
         }
-        this.check(word, component, "+%kah" + klitika);
+        this.checkAll(word, component, "+%kah" + klitika);
     }
 
     private void checkKonfiks() {
